@@ -8,7 +8,7 @@ on:
 
 env:
   MIRROR_URL: "git@github.com:EpitechPromo2027/B-CPE-200-PAR-2-1-corewar-martin.fillon.git"
-  MIRROR_URL_IT: "git@github.com:EpitechPromo2027/B-CPE-200-PAR-2-2-corewar-lou.onezime.git.git"
+  MIRROR_URL_IT: "git@github.com:EpitechPromo2027/B-CPE-200-PAR-2-2-corewar-lou.onezime.git"
   EXECUTABLES: "asm/asm,corewar/corewar"
   REPORT_FILE: "coding-style-reports.log"
 
