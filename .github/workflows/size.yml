@@ -1,0 +1,25 @@
+name: Check repo size
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths-ignore:
+      - "ga-ignore-**"
+
+jobs:
+  check_repo_size:
+    runs-on: ubuntu-latest
+    container:
+      image: epitechcontent/epitest-docker
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - run: |
+          MAXSIZE=30000
+          SIZE=$(du -s --exclude .git | cut -f1)
+          if [[ $SIZE -gt $MAXSIZE ]]; then
+            echo "::error file=Makefile,title=Repo size error::Repo size is too big ($SIZE > $MAXSIZE)"
+            exit 1
+          fi

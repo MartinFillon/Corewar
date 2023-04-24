@@ -1,0 +1,5 @@
+*.o
+.clang-format
+lib/libmy.a
+asm/asm
+corewar/corewar
