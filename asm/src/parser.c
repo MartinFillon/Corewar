@@ -12,6 +12,9 @@
 #include "corewar/corewar.h"
 #include "corewar/op.h"
 
+static const int LENGTH_NAME = 7;
+static const int LENGTH_COMMENT = 10;
+
 static int error_from_path(int ac)
 {
     if (ac != 2)
@@ -23,10 +26,10 @@ static void fill_struct(vec_str_t *champ, header_t *header)
 {
     for (size_t i = 0; i < champ->size; ++i) {
         if (str_startswith(champ->data[i], STR(".name"))) {
-            my_strcpy(header->prog_name, champ->data[i]->data + 7);
+            my_strcpy(header->prog_name, champ->data[i]->data + LENGTH_NAME);
         }
         if (str_startswith(champ->data[i], STR(".comment"))) {
-            my_strcpy(header->comment, champ->data[i]->data + 10);
+            my_strcpy(header->comment, champ->data[i]->data + LENGTH_COMMENT);
         }
     }
     for (int i = 0; header->prog_name[i] != '\0'; i++)
@@ -35,9 +38,6 @@ static void fill_struct(vec_str_t *champ, header_t *header)
     for (int i = 0; header->comment[i] != '\0'; i++)
         if (header->comment[i] == '"')
             header->comment[i] = '\0';
-
-    my_printf("[%s]\n", header->prog_name);
-    my_printf("[%s]\n", header->comment);
 }
 
 static str_t *parse_header(char *champ_path, header_t *header)
