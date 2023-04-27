@@ -5,21 +5,22 @@
 ## Makefile
 ##
 
-SRC = src/main.c
+SRC 	= 	src/main.c		\
+			src/parser.c
 
 NAME = asm
 
 OBJ = $(SRC:.c=.o)
 
 CFLAGS += -Wall -Wextra -Werror
-CPPFLAGS += -Iinclude
+CPPFLAGS += -I../include
 LDLIBS += -L../lib
 LDFLAGS += -lmy
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) -o $(NAME) $(OBJ) $(LDLIBS)
+	$(CC) -o $(NAME) $(OBJ) $(LDLIBS) $(LDFLAGS)
 
 clean:
 	rm -f $(OBJ)
