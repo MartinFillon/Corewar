@@ -5,11 +5,9 @@
 ** parser
 */
 
-#include <stddef.h>
 #include "my_cstr.h"
-#include "my_str.h"
 #include "my_stdio.h"
-#include <string.h>
+#include "my_str.h"
 
 #include "corewar/corewar.h"
 #include "corewar/op.h"
@@ -47,15 +45,21 @@ static void fill_static_comment(str_t *str, header_t *header)
 static void fill_struct(vec_str_t *champ, header_t *header)
 {
     for (size_t i = 0; i < champ->size; ++i) {
-            //fill_static_name(champ->data[i], header);
-        if (str_startswith(champ->data[i], STR(".name")))
-            my_strcpy(header->prog_name, champ->data[i]->data + 5);/*
-        if (!my_strncmp(COMMENT, champ->data[i]->data, LENGTH_COMMENT)) {
-            fill_static_comment(champ->data[i], header);
-        }*/
+        // fill_static_name(champ->data[i], header)
+
+        // en gros le startswith retournait 1 quand la ligne etait vide
+        // donc le header->prog_name etait overwrite par du vide
+        if (str_startswith(champ->data[i], STR(".name"))) {
+            my_strcpy(header->prog_name, champ->data[i]->data + 5);
+        }
+
+        /*
+     if (!my_strncmp(COMMENT, champ->data[i]->data, LENGTH_COMMENT)) {
+         fill_static_comment(champ->data[i], header);
+     }*/
     }
-    my_printf("%s\n", header->prog_name);
-    //my_printf("%s\n", header->comment);
+    my_printf("[%s]\n", header->prog_name);
+    // my_printf("%s\n", header->comment);
 }
 
 static str_t *parse_header(char *champ_path, header_t *header)
@@ -78,6 +82,6 @@ void launch_parser(int ac, char **argv)
     str_t *champ = NULL;
 
     if (error_from_path(ac) == ERROR ||
-    (champ = parse_header(argv[1], &header)) == NULL)
+        (champ = parse_header(argv[1], &header)) == NULL)
         return;
 }

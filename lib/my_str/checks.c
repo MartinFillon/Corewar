@@ -19,6 +19,9 @@ int str_contains(str_t *str, char c)
 
 int str_startswith(str_t *str, str_t *start)
 {
+    if (str->length < start->length)
+        return 0;
+
     return (str_ncompare(str, start, start->length) == 0);
 }
 
