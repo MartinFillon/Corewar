@@ -2,31 +2,40 @@
 ## EPITECH PROJECT, 2023
 ## Corewar
 ## File description:
-## Makefile
+## Makefile for asm
 ##
 
-SRC 	= 	src/main.c		\
-			src/parser.c
+CC	=	gcc
+RM	=	rm -f
+
+SRC	=	src/main.c	\
+		src/parser.c
 
 NAME = asm
 
 OBJ = $(SRC:.c=.o)
 
-CFLAGS += -Wall -Wextra -Werror
-CPPFLAGS += -I../include
-LDLIBS += -L../lib
-LDFLAGS += -lmy
+CFLAGS		+=	-Wall -Wextra -Werror
+CPPFLAGS	+=	-I../include
+LDFLAGS		+=	-L../lib
+LDLIBS		+=	-lmy
+
+ifeq ($(DEBUG),1)
+	CC = clang
+	CFLAGS += -g3 -fsanitize=address
+	LDFLAGS += -fsanitize=address
+endif
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) -o $(NAME) $(OBJ) $(LDLIBS) $(LDFLAGS)
+	$(CC) -o $(NAME) $(OBJ) $(LDFLAGS) $(LDLIBS)
 
 clean:
-	rm -f $(OBJ)
+	$(RM) $(OBJ)
 
 fclean: clean
-	rm -f $(NAME)
+	$(RM) $(NAME)
 
 re: fclean all
 
