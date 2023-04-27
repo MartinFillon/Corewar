@@ -5,7 +5,8 @@
 ## the makefile for my_vec
 ##
 
-CC = gcc
+CC	=	gcc
+RM	=	rm -f
 
 INCLUDE	=	-I../../include
 
@@ -35,7 +36,7 @@ all:	$(OBJ)
 	@ar cq $(NAME) $(OBJ)
 
 clean:
-	@rm -f $(OBJ)
+	$(RM) $(OBJ)
 
 re:	clean all
 
