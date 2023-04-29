@@ -5,7 +5,10 @@
 ** main
 */
 
-int main(void)
+#include "corewar/corewar.h"
+
+int main(int ac, char **argv)
 {
+    launch_parser(ac, argv);
     return 0;
 }
