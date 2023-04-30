@@ -15,15 +15,6 @@
 static const int LENGTH_NAME = 7;
 static const int LENGTH_COMMENT = 10;
 
-static int error_from_path(int ac)
-{
-    if (ac != 2){
-        write(2, "Usage: ./asm file_name[.s]\n", 28);
-        return ERROR;
-    }
-    return SUCESS;
-}
-
 static void fill_struct(vec_str_t *champ, header_t *header)
 {
     for (size_t i = 0; i < champ->size; ++i) {
@@ -56,13 +47,13 @@ static str_t *parse_header(char const *champ_path, header_t *header)
     return content;
 }
 
-void launch_parser(int ac, char **argv)
+int launch_parser(header_t *header, char const *filepath)
 {
-    header_t header = {0};
     str_t *champ = NULL;
 
-    if (error_from_path(ac) == ERROR ||
-        (champ = parse_header(argv[1], &header)) == NULL)
-        return;
-    write_file(&header, argv[1]);
+    champ = parse_header(filepath, header);
+    if (champ == NULL){
+        return ERROR;
+    }
+    return SUCCESS;
 }

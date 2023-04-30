@@ -9,9 +9,10 @@
     #define COREWAR_H_
     #include "op.h"
     #define ERROR 84
-    #define SUCESS 0
+    #define SUCCESS 0
 
-void launch_parser(int ac, char **argv);
-void write_file(header_t *header, const char *filepath);
+int launch_parser(header_t *header, char const *filepath);
+
+int write_file(header_t *header, const char *filepath);
 
 #endif /* !COREWAR_H_ */
