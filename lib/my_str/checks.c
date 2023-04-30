@@ -19,17 +19,21 @@ int str_contains(str_t *str, char c)
 
 int str_startswith(str_t *str, str_t *start)
 {
-    int status = str_ncompare(str, start, start->length) == 0;
+    if (str->length < start->length)
+        return 0;
 
-    return status;
+    return (str_ncompare(str, start, start->length) == 0);
 }
 
 int str_endswith(str_t *str, str_t *end)
 {
-    size_t i = str->length - end->length - 1;
+    size_t i = str->length - end->length;
+    size_t j = 0;
 
-    while (i < str->length - 1 && str->data[i] == end->data[i])
+    while (i < str->length && j < end->length && str->data[i] == end->data[j]) {
         i++;
+        j++;
+    }
 
     return i == str->length;
 }
