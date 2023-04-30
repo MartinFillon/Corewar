@@ -12,5 +12,6 @@
     #define SUCESS 0
 
 void launch_parser(int ac, char **argv);
+void write_file(header_t *header, const char *filepath);
 
 #endif /* !COREWAR_H_ */

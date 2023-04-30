@@ -8,8 +8,9 @@
 CC	=	gcc
 RM	=	rm -f
 
-SRC	=	src/main.c	\
-		src/parser.c
+SRC	=	src/main.c		\
+		src/parser.c	\
+		src/create_file.c
 
 NAME = asm
 
