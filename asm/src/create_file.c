@@ -8,34 +8,39 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include "corewar/corewar.h"
+#include "corewar/asm.h"
 #include "corewar/op.h"
 #include "my_str.h"
+#include "my_stdio.h"
 
 str_t *convert_file(char const *filepath)
 {
     str_t *new_file = str_create(filepath);
-    str_t *original = str_create(".s");
-    const str_t *final = str_create(".cor");
 
-    if (str_endswith(new_file, original) == 0){
-        write(2, "Error: File must be a .s\n", 26);
+    if (str_endswith(new_file, STR(".s")) == 0){
+        my_dprintf(2, "Error: File must be a .s\n", 26);
+        return NULL;
     }
-    str_replace(&new_file, original, final);
+
+    str_replace(&new_file, STR(".s"), STR(".cor"));
     return new_file;
 }
 
-int write_file(header_t *header, char const *filepath)
+void write_file(header_t *header, char const *filepath)
 {
     str_t *new_file = convert_file(filepath);
-    int fd = open(new_file->data, O_CREAT | O_WRONLY, 0666);
+    int fd = 0;
 
-    if (fd < 0){
-        write(2, "Error: Can't open file\n", 24);
-        return ERROR;
-    } else {
-        write(fd, header, sizeof(header_t));
+    if (new_file == NULL){
+        return;
     }
+
+    fd = open(new_file->data, O_CREAT | O_WRONLY, 0644);
+    if (fd < 0){
+        my_dprintf(2, "Error: Can't open file\n");
+        return;
+    }
+
+    write(fd, header, sizeof(header_t));
     close(fd);
-    return SUCCESS;
 }

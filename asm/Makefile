@@ -7,9 +7,10 @@
 
 CC	=	gcc
 
-SRC	=	src/main.c		\
-		src/parser.c	\
-		src/create_file.c
+SRC	=	src/main.c			\
+		src/parser.c		\
+		src/create_file.c	\
+		src/handle_errors.c
 
 NAME = asm
 
