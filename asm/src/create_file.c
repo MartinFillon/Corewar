@@ -8,17 +8,18 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include "corewar/asm.h"
-#include "corewar/op.h"
 #include "my_str.h"
 #include "my_stdio.h"
+
+#include "corewar/op.h"
+#include "asm/asm.h"
 
 str_t *convert_file(char const *filepath)
 {
     str_t *new_file = str_create(filepath);
 
     if (str_endswith(new_file, STR(".s")) == 0){
-        my_dprintf(2, "Error: File must be a .s\n", 26);
+        my_dprintf(2, "Error: File must be a .s\n");
         return NULL;
     }
 

@@ -5,9 +5,9 @@
 ** corewar
 */
 
-#ifndef COREWAR_H_
-    #define COREWAR_H_
-    #include "op.h"
+#ifndef ASM_H_
+    #define ASM_H_
+    #include "corewar/op.h"
     #define ERROR 84
     #define SUCCESS 0
 
@@ -21,4 +21,4 @@ int check_args(int argc);
 /* CONVERSION */
 void write_file(header_t *header, const char *filepath);
 
-#endif /* !COREWAR_H_ */
+#endif /* !ASM_H_ */

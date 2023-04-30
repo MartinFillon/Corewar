@@ -9,7 +9,7 @@
 #include "my_stdio.h"
 #include "my_str.h"
 
-#include "corewar/asm.h"
+#include "asm/asm.h"
 #include "corewar/op.h"
 
 static const int LENGTH_NAME = 7;

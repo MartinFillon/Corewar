@@ -7,7 +7,7 @@
 
 #include <unistd.h>
 
-#include "corewar/asm.h"
+#include "asm/asm.h"
 
 int main(int argc, char **argv)
 {

@@ -8,7 +8,8 @@
 #include <unistd.h>
 
 #include "my_stdio.h"
-#include "corewar/asm.h"
+
+#include "asm/asm.h"
 
 int check_args(int argc)
 {
