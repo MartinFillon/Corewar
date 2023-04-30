@@ -6,7 +6,6 @@
 ##
 
 CC	=	gcc
-RM	=	rm -f
 
 SRC	=	src/main.c		\
 		src/parser.c	\
