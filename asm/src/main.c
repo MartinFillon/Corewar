@@ -5,10 +5,19 @@
 ** main
 */
 
-#include "corewar/corewar.h"
+#include <unistd.h>
 
-int main(int ac, char **argv)
+#include "asm/asm.h"
+
+int main(int argc, char **argv)
 {
-    launch_parser(ac, argv);
-    return 0;
+    header_t header;
+
+    if (check_args(argc) == ERROR)
+        return ERROR;
+    if (launch_parser(&header, argv[1]) == ERROR)
+        return ERROR;
+
+    write_file(&header, argv[1]);
+    return SUCCESS;
 }

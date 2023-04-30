@@ -7,10 +7,7 @@
 
 #ifndef COREWAR_H_
     #define COREWAR_H_
-    #include "op.h"
     #define ERROR 84
-    #define SUCESS 0
-
-void launch_parser(int ac, char **argv);
+    #define SUCCESS 0
 
 #endif /* !COREWAR_H_ */

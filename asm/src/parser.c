@@ -9,18 +9,11 @@
 #include "my_stdio.h"
 #include "my_str.h"
 
-#include "corewar/corewar.h"
+#include "asm/asm.h"
 #include "corewar/op.h"
 
 static const int LENGTH_NAME = 7;
 static const int LENGTH_COMMENT = 10;
-
-static int error_from_path(int ac)
-{
-    if (ac != 2)
-        return ERROR;
-    return SUCESS;
-}
 
 static void fill_struct(vec_str_t *champ, header_t *header)
 {
@@ -40,7 +33,7 @@ static void fill_struct(vec_str_t *champ, header_t *header)
             header->comment[i] = '\0';
 }
 
-static str_t *parse_header(char *champ_path, header_t *header)
+static str_t *parse_header(char const *champ_path, header_t *header)
 {
     str_t *content = read_file(champ_path);
 
@@ -54,12 +47,13 @@ static str_t *parse_header(char *champ_path, header_t *header)
     return content;
 }
 
-void launch_parser(int ac, char **argv)
+int launch_parser(header_t *header, char const *filepath)
 {
-    header_t header = {0};
     str_t *champ = NULL;
 
-    if (error_from_path(ac) == ERROR ||
-        (champ = parse_header(argv[1], &header)) == NULL)
-        return;
+    champ = parse_header(filepath, header);
+    if (champ == NULL){
+        return ERROR;
+    }
+    return SUCCESS;
 }
