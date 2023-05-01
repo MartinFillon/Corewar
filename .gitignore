@@ -14,6 +14,7 @@ compile_commands.json
 .clang-tidy
 
 # junk
+champions
 coding-style-reports.log
 vgcore*
 *.log

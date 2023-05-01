@@ -31,6 +31,7 @@ static void fill_struct(vec_str_t *champ, header_t *header)
     for (int i = 0; header->comment[i] != '\0'; i++)
         if (header->comment[i] == '"')
             header->comment[i] = '\0';
+    header->magic = COREWAR_EXEC_MAGIC;
 }
 
 static str_t *parse_header(char const *champ_path, header_t *header)
@@ -44,6 +45,7 @@ static str_t *parse_header(char const *champ_path, header_t *header)
         str_ltrim(&champ->data[i], '\t');
     }
     fill_struct(champ, header);
+    parse_body(champ);
     return content;
 }
 
