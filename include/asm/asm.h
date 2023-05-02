@@ -18,6 +18,8 @@ int launch_parser(header_t *header, char const *filepath);
 // BASE
 int check_args(int argc);
 
+int convert_big_endian(int little);
+
 /* CONVERSION */
 void write_file(header_t *header, const char *filepath);
 

@@ -7,6 +7,7 @@
 
 #include <fcntl.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 #include "my_str.h"
 #include "my_stdio.h"
@@ -43,5 +44,6 @@ void write_file(header_t *header, char const *filepath)
     }
 
     write(fd, header, sizeof(header_t));
+    free(new_file);
     close(fd);
 }
