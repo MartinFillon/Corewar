@@ -20,12 +20,12 @@ long my_str_find(str_t *str, str_t *find, size_t start)
 {
     if (find->length > str->length)
         return -1;
-
     if (start >= str->length)
         return -1;
-
     for (size_t i = start; i < str->length - find->length; ++i) {
-        if (my_strncmp(str->data + i, find->data, find->length) == 0 && (str->data[i + find->length] == ' ' || str->data[i + find->length] == '\t'))
+        if (my_strncmp(str->data + i, find->data, find->length) ==
+        0 && (str->data[i + find->length] == ' ' ||
+        str->data[i + find->length] == '\t'))
             return i;
         }
     return -1;
@@ -64,7 +64,8 @@ int get_instruction_name(str_t *line)
 int parse_body(vec_str_t *champ)
 {
     for (size_t i = 0; i < champ->size; i++) {
-        if (champ->data[i]->data[0] == '#' || champ->data[i]->length == 0 || champ->data[i]->data[0] == '.') {
+        if (champ->data[i]->data[0] == '#' ||
+        champ->data[i]->length == 0 || champ->data[i]->data[0] == '.') {
             vec_remove(champ, i);
             i--;
         }
@@ -72,6 +73,6 @@ int parse_body(vec_str_t *champ)
     for (size_t i = 0; i < champ->size; i++) {
         if (get_instruction_name(champ->data[i]) == ERROR)
             return ERROR;
-    }                                 
+    }
     return SUCCESS;
 }

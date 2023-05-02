@@ -12,17 +12,25 @@
 #include "asm/asm.h"
 #include "corewar/op.h"
 
-static const int LENGTH_NAME = 7;
-static const int LENGTH_COMMENT = 10;
+int get_index(str_t *line)
+{
+    for (size_t i = 0; line->data[i] != '\0'; i++) {
+        if (line->data[i] == '"')
+            return i + 1;
+    }
+    return ERROR;
+}
 
 static void fill_struct(vec_str_t *champ, header_t *header)
 {
     for (size_t i = 0; i < champ->size; ++i) {
         if (str_startswith(champ->data[i], STR(".name"))) {
-            my_strcpy(header->prog_name, champ->data[i]->data + LENGTH_NAME);
+            my_strcpy(header->prog_name, champ->data[i]->data
+            + get_index(champ->data[i]));
         }
         if (str_startswith(champ->data[i], STR(".comment"))) {
-            my_strcpy(header->comment, champ->data[i]->data + LENGTH_COMMENT);
+            my_strcpy(header->comment, champ->data[i]->data
+            + get_index(champ->data[i]));
         }
     }
     for (int i = 0; header->prog_name[i] != '\0'; i++)
@@ -31,8 +39,6 @@ static void fill_struct(vec_str_t *champ, header_t *header)
     for (int i = 0; header->comment[i] != '\0'; i++)
         if (header->comment[i] == '"')
             header->comment[i] = '\0';
-    my_printf("name = %s\n", header->prog_name);
-    my_printf("comment = %s\n", header->comment);
     header->magic = COREWAR_EXEC_MAGIC;
     header->prog_size = 0;
 }
@@ -58,7 +64,7 @@ int launch_parser(header_t *header, char const *filepath)
     str_t *champ = NULL;
 
     champ = parse_header(filepath, header);
-    if (champ == NULL){
+    if (champ == NULL) {
         return ERROR;
     }
     return SUCCESS;

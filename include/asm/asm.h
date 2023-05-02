@@ -8,7 +8,7 @@
 #ifndef ASM_H_
     #define ASM_H_
     #include <stdint.h>
-#include "my_str.h"
+    #include "my_str.h"
     #include "corewar/op.h"
     #define ERROR 84
     #define SUCCESS 0
