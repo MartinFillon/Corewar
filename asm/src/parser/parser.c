@@ -13,7 +13,7 @@
 #include "asm/asm.h"
 #include "corewar/op.h"
 
-int get_index(str_t *line)
+int nb_char_to_skip(str_t *line)
 {
     for (size_t i = 0; line->data[i] != '\0'; i++) {
         if (line->data[i] == '"')
@@ -42,11 +42,11 @@ static void fill_struct(vec_str_t *champ, header_t *header)
     for (size_t i = 0; i < champ->size; ++i) {
         if (str_startswith(champ->data[i], STR(".name"))) {
             my_strcpy(header->prog_name, champ->data[i]->data
-            + get_index(champ->data[i]));
+            + nb_char_to_skip(champ->data[i]));
         }
         if (str_startswith(champ->data[i], STR(".comment"))) {
             my_strcpy(header->comment, champ->data[i]->data
-            + get_index(champ->data[i]));
+            + nb_char_to_skip(champ->data[i]));
         }
     }
     cleanup_header(header);

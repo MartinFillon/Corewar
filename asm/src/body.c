@@ -31,7 +31,7 @@ long my_str_find(str_t *str, str_t *find, size_t start)
     return -1;
 }
 
-static int nb_occurrence(str_t *str, char c)
+static int str_count(str_t *str, char c)
 {
     int count = 0;
     for (size_t i = 0; i < str->length; i++) {
@@ -43,8 +43,8 @@ static int nb_occurrence(str_t *str, char c)
 
 static int get_coding_byte(str_t *line, int i)
 {
-    if (nb_occurrence(line, ',') != OP_NAME[i].nb_param) {
-        my_printf("erreur nb parametre\n");
+    if (str_count(line, ',') != OP_NAME[i].nb_param) {
+        my_printf("error nb parameter\n");
         return ERROR;
     }
     return SUCCESS;

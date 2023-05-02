@@ -10,7 +10,7 @@ CC	=	gcc
 SRC	=	src/main.c							\
 		src/create_file.c					\
 		src/parser/parser.c					\
-		src
+		src/body.c							\
 		src/error_handling/handle_errors.c	\
 		src/error_handling/big_endian.c
 
