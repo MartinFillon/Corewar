@@ -25,9 +25,6 @@ long my_str_find(str_t *str, str_t *find, size_t start)
         return -1;
 
     for (size_t i = start; i < str->length - find->length; ++i) {
-        //if (i + 1 == str->length || i - find->length <= 0)
-            //continue;
-        //my_printf("avant = %c et apres = %c\n", str->data[i - 1], str->data[i + find->length]);
         if (my_strncmp(str->data + i, find->data, find->length) == 0 && (str->data[i + find->length] == ' ' || str->data[i + find->length] == '\t'))
             return i;
         }
@@ -44,18 +41,27 @@ static int nb_occurrence(str_t *str, char c)
     return count;
 }
 
-void get_instruction_name(str_t *line)
+static int get_coding_byte(str_t *line, int i)
+{
+    if (nb_occurrence(line, ',') != OP_NAME[i].nb_param) {
+        my_printf("erreur nb parametre\n");
+        return ERROR;
+    }
+    return SUCCESS;
+}
+
+int get_instruction_name(str_t *line)
 {
     for (size_t i = 0; i <= AFF; i++) {
         if (my_str_find(line, str_create(OP_NAME[i].name), 0) != -1) {
             my_printf("%s\n", OP_NAME[i].name);
-            if (nb_occurrence(line, ',') != OP_NAME[i].nb_param)
-                my_printf("erreur zebi\n");
+            return get_coding_byte(line, i);
         }
     }
+    return SUCCESS;
 }
 
-str_t *parse_body(vec_str_t *champ)
+int parse_body(vec_str_t *champ)
 {
     for (size_t i = 0; i < champ->size; i++) {
         if (champ->data[i]->data[0] == '#' || champ->data[i]->length == 0 || champ->data[i]->data[0] == '.') {
@@ -64,7 +70,8 @@ str_t *parse_body(vec_str_t *champ)
         }
     }
     for (size_t i = 0; i < champ->size; i++) {
-        get_instruction_name(champ->data[i]);
+        if (get_instruction_name(champ->data[i]) == ERROR)
+            return ERROR;
     }                                 
-    return NULL;
+    return SUCCESS;
 }

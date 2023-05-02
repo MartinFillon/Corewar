@@ -31,7 +31,10 @@ static void fill_struct(vec_str_t *champ, header_t *header)
     for (int i = 0; header->comment[i] != '\0'; i++)
         if (header->comment[i] == '"')
             header->comment[i] = '\0';
+    my_printf("name = %s\n", header->prog_name);
+    my_printf("comment = %s\n", header->comment);
     header->magic = COREWAR_EXEC_MAGIC;
+    header->prog_size = 0;
 }
 
 static str_t *parse_header(char const *champ_path, header_t *header)
@@ -43,6 +46,7 @@ static str_t *parse_header(char const *champ_path, header_t *header)
     vec_str_t *champ = str_split(content, STR("\n"));
     for (size_t i = 0; i < champ->size; i++) {
         str_ltrim(&champ->data[i], '\t');
+        str_ltrim(&champ->data[i], ' ');
     }
     fill_struct(champ, header);
     parse_body(champ);

@@ -151,7 +151,7 @@
 
 /* PARSER */
 int launch_parser(header_t *header, char const *filepath);
-str_t *parse_body(vec_str_t *champ);
+int parse_body(vec_str_t *champ);
 
 /* ERROR HANDLING */
 // BASE
