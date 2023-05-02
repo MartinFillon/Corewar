@@ -10,6 +10,8 @@
     #include "corewar/op.h"
     #define ERROR 84
     #define SUCCESS 0
+    #define INNER_NUM 8;
+    #define OUTER_NUM 24;
 
 /* PARSER */
 int launch_parser(header_t *header, char const *filepath);
@@ -17,6 +19,8 @@ int launch_parser(header_t *header, char const *filepath);
 /* ERROR HANDLING */
 // BASE
 int check_args(int argc);
+
+int convert_big_endian(int little);
 
 /* CONVERSION */
 void write_file(header_t *header, const char *filepath);

@@ -55,5 +55,6 @@ int launch_parser(header_t *header, char const *filepath)
     if (champ == NULL){
         return ERROR;
     }
+    header->magic = COREWAR_EXEC_MAGIC;
     return SUCCESS;
 }
