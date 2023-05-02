@@ -30,8 +30,8 @@ static void cleanup_header(header_t *header)
 
 static void fill_struct(vec_str_t *champ, header_t *header)
 {
-    my_memset(header->prog_name, 0, PROG_NAME_LENGTH);
-    my_memset(header->comment, 0, COMMENT_LENGTH);
+    my_memset(header->prog_name, 0, PROG_NAME_LENGTH + 1);
+    my_memset(header->comment, 0, COMMENT_LENGTH + 1);
 
     for (size_t i = 0; i < champ->size; ++i) {
         if (str_startswith(champ->data[i], STR(".name"))) {
@@ -52,7 +52,6 @@ static str_t *parse_header(char const *champ_path, header_t *header)
         return NULL;
 
     vec_str_t *champ = str_split(content, STR("\n"));
-    free(content);
     for (size_t i = 0; i < champ->size; i++) {
         str_ltrim(&champ->data[i], '\t');
     }
@@ -70,6 +69,7 @@ int launch_parser(header_t *header, char const *filepath)
     if (champ == NULL){
         return ERROR;
     }
+    free(champ);
 
     header->magic = convert_big_endian(COREWAR_EXEC_MAGIC);
     return SUCCESS;
