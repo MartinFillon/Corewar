@@ -7,7 +7,8 @@
 
 CC	=	gcc
 
-SRC = src/main.c
+SRC = 	src/main.c 							\
+		src/arguments/parse_arguments.c
 
 NAME = corewar
 
@@ -23,6 +24,8 @@ ifeq ($(DEBUG),1)
 	CFLAGS += -g3 -fsanitize=address
 	LDFLAGS += -fsanitize=address
 endif
+
+OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
 

@@ -7,11 +7,12 @@
 
 CC	=	gcc
 
-SRC	=	src/main.c			\
-		src/parser.c		\
-		src/create_file.c	\
-		src/handle_errors.c	\
-		src/body.c			\
+SRC	=	src/main.c							\
+		src/create_file.c					\
+		src/parser/parser.c					\
+		src
+		src/error_handling/handle_errors.c	\
+		src/error_handling/big_endian.c
 
 NAME = asm
 

@@ -157,6 +157,8 @@ int parse_body(vec_str_t *champ);
 // BASE
 int check_args(int argc);
 
+int convert_big_endian(int little);
+
 /* CONVERSION */
 void write_file(header_t *header, const char *filepath);
 
