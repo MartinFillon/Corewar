@@ -7,6 +7,7 @@
 
 #include "my_cstr.h"
 #include "my_stdio.h"
+#include "my_stdlib.h"
 #include "my_str.h"
 
 #include "asm/asm.h"
@@ -15,8 +16,22 @@
 static const int LENGTH_NAME = 7;
 static const int LENGTH_COMMENT = 10;
 
+static void cleanup_header(header_t *header)
+{
+    for (int i = 0; header->prog_name[i] != '\0'; i++){
+        if (header->prog_name[i] == '"')
+            header->prog_name[i] = 0;
+    }
+    for (int i = 0; header->comment[i] != '\0'; i++){
+        if (header->comment[i] == '"')
+            header->comment[i] = 0;
+    }
+}
+
 static void fill_struct(vec_str_t *champ, header_t *header)
 {
+    my_memset(header->prog_name, 0, PROG_NAME_LENGTH);
+    my_memset(header->comment, 0, COMMENT_LENGTH);
     for (size_t i = 0; i < champ->size; ++i) {
         if (str_startswith(champ->data[i], STR(".name"))) {
             my_strcpy(header->prog_name, champ->data[i]->data + LENGTH_NAME);
@@ -25,12 +40,7 @@ static void fill_struct(vec_str_t *champ, header_t *header)
             my_strcpy(header->comment, champ->data[i]->data + LENGTH_COMMENT);
         }
     }
-    for (int i = 0; header->prog_name[i] != '\0'; i++)
-        if (header->prog_name[i] == '"')
-            header->prog_name[i] = '\0';
-    for (int i = 0; header->comment[i] != '\0'; i++)
-        if (header->comment[i] == '"')
-            header->comment[i] = '\0';
+    cleanup_header(header);
 }
 
 static str_t *parse_header(char const *champ_path, header_t *header)
@@ -39,10 +49,12 @@ static str_t *parse_header(char const *champ_path, header_t *header)
 
     if (content == NULL)
         return NULL;
+
     vec_str_t *champ = str_split(content, STR("\n"));
     for (size_t i = 0; i < champ->size; i++) {
         str_ltrim(&champ->data[i], '\t');
     }
+
     fill_struct(champ, header);
     return content;
 }
@@ -55,6 +67,7 @@ int launch_parser(header_t *header, char const *filepath)
     if (champ == NULL){
         return ERROR;
     }
-    header->magic = COREWAR_EXEC_MAGIC;
+
+    header->magic = convert_big_endian(COREWAR_EXEC_MAGIC);
     return SUCCESS;
 }

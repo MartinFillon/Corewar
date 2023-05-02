@@ -10,8 +10,6 @@
     #include "corewar/op.h"
     #define ERROR 84
     #define SUCCESS 0
-    #define INNER_NUM 8;
-    #define OUTER_NUM 24;
 
 /* PARSER */
 int launch_parser(header_t *header, char const *filepath);

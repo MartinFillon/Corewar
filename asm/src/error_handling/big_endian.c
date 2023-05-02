@@ -7,6 +7,9 @@
 
 #include "asm/asm.h"
 
+static const int OUTER_NUM = 24;
+static const int INNER_NUM = 8;
+
 int convert_big_endian(int little)
 {
     int pos[4] = {0, 0, 0, 0};
