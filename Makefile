@@ -5,7 +5,7 @@
 ## Makefile
 ##
 
-SRC = asm corewar lib
+SRC = lib asm corewar
 
 all:
 	@for i in $(SRC); do make -C $$i; done

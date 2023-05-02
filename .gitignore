@@ -3,3 +3,5 @@
 lib/libmy.a
 asm/asm
 corewar/corewar
+corewar_binaries
+coding-style-reports.log
