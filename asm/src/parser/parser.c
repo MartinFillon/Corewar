@@ -54,8 +54,6 @@ static str_t *parse_header(char const *champ_path, header_t *header)
     vec_str_t *champ = str_split(content, STR("\n"));
     for (size_t i = 0; i < champ->size; i++) {
         str_ltrim(&champ->data[i], '\t');
-        str_ltrim(&champ->data[i], ' ');
-
     }
 
     fill_struct(champ, header);
