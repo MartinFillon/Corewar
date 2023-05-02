@@ -1,6 +1,29 @@
+# coverage
+*.gcno
+*.gcda
+
+# compiled
 *.o
+*.a
+*.out
+
+# clangd
+compile_commands.json
 .clang-format
-lib/libmy.a
+.clangd
+.clang-tidy
+
+# junk
+coding-style-reports.log
+vgcore*
+*.log
+.bash_history
+.DS_Store
+.cache
+.vscode
+.idea
+
+# project bin
 asm/asm
 corewar/corewar
 corewar_binaries

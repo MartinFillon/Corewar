@@ -1,8 +1,8 @@
 ##
 ## EPITECH PROJECT, 2022
-## Makefile
+## my_lib
 ## File description:
-## the makefile for my_lib
+## Makefile for my_lib
 ##
 
 # Modules available:
@@ -21,8 +21,7 @@ all:
 	@for i in $(LIB); do make -C $$i; done
 
 clean:
-	@for i in $(LIB); do make -C $$i clean >/dev/null; done
-# @../scripts/clean.sh
+	@for i in $(LIB); do make -C $$i clean; done
 
 fclean:	clean
 	@rm -f $(NAME)

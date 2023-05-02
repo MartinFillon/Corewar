@@ -11,10 +11,10 @@ all:
 	@for i in $(SRC); do make -C $$i; done
 
 clean:
-	@for i in $(SRC); do make -C $$i clean >/dev/null; done
+	@for i in $(SRC); do make -C $$i clean; done
 
 fclean:	clean
-	@for i in $(SRC); do make -C $$i fclean >/dev/null; done
+	@for i in $(SRC); do make -C $$i fclean; done
 
 re:	fclean all
 

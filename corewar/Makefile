@@ -2,31 +2,41 @@
 ## EPITECH PROJECT, 2023
 ## Corewar
 ## File description:
-## Makefile
+## Makefile for corewar
 ##
+
+CC	=	gcc
 
 SRC = 	src/main.c 							\
 		src/arguments/parse_arguments.c
 
 NAME = corewar
 
-CFLAGS += -Wall -Wextra -Werror
-CPPFLAGS += -I./include
-LDLIBS += -L../lib
-LDFLAGS += -lmy
+OBJ = $(SRC:.c=.o)
+
+CFLAGS		+=	-Wall -Wextra -Werror
+CPPFLAGS	+=	-I../include
+LDFLAGS		+=	-L../lib
+LDLIBS		+=	-lmy
+
+ifeq ($(DEBUG),1)
+	CC = clang
+	CFLAGS += -g3 -fsanitize=address
+	LDFLAGS += -fsanitize=address
+endif
 
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) -o $(NAME) $(OBJ) $(LDLIBS) $(LDFLAGS)
+	$(CC) -o $(NAME) $(OBJ) $(LDFLAGS) $(LDLIBS)
 
 clean:
-	rm -f $(OBJ)
+	$(RM) $(OBJ)
 
 fclean: clean
-	rm -f $(NAME)
+	$(RM) $(NAME)
 
 re: fclean all
 
