@@ -13,10 +13,10 @@
 #include "asm/asm.h"
 #include "corewar/op.h"
 
-int nb_char_to_skip(str_t *line)
+int nb_char_to_skip(str_t *line, char delimiter, int start)
 {
-    for (size_t i = 0; line->data[i] != '\0'; i++) {
-        if (line->data[i] == '"')
+    for (size_t i = start; line->data[i] != '\0'; i++) {
+        if (line->data[i] == delimiter)
             return i + 1;
     }
     return ERROR;
@@ -40,13 +40,13 @@ static void fill_struct(vec_str_t *champ, header_t *header)
     my_memset(header->comment, 0, COMMENT_LENGTH + 1);
 
     for (size_t i = 0; i < champ->size; ++i) {
-        if (str_startswith(champ->data[i], STR(".name"))) {
+        if (str_startswith(champ->data[i], STR(NAME_CMD_STRING))) {
             my_strcpy(header->prog_name, champ->data[i]->data
-            + nb_char_to_skip(champ->data[i]));
+            + nb_char_to_skip(champ->data[i], '"', 0));
         }
-        if (str_startswith(champ->data[i], STR(".comment"))) {
+        if (str_startswith(champ->data[i], STR(COMMENT_CMD_STRING))) {
             my_strcpy(header->comment, champ->data[i]->data
-            + nb_char_to_skip(champ->data[i]));
+            + nb_char_to_skip(champ->data[i], '"', 0));
         }
     }
     cleanup_header(header);
@@ -64,9 +64,9 @@ static str_t *parse_header(char const *champ_path, header_t *header)
         str_ltrim(&champ->data[i], '\t');
         str_ltrim(&champ->data[i], ' ');
     }
-
     fill_struct(champ, header);
-    parse_body(champ);
+    if (parse_body(champ) == 84)
+        return NULL;
     vec_free(champ);
     return content;
 }

@@ -16,7 +16,7 @@ str_t **str_slice(str_t **str, size_t start, size_t end)
         (*str)->data[i] = (*str)->data[start + i];
 
     (*str)->length = end - start;
-
+    (*str)->data[(*str)->length] = '\0';
     return str;
 }
 

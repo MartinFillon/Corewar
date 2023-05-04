@@ -10,14 +10,19 @@
     #include <stdint.h>
     #include "my_str.h"
     #include "corewar/op.h"
+    #define UNUSED __attribute__((unused))
+
     #define ERROR 84
     #define SUCCESS 0
+
+    #define REG "01"
+    #define DIRECT "10"
+    #define INDIRECT "11"
 
     typedef struct op_name_s {
         int id;
         const int nb_param;
         const uint8_t hex;
-        const int *param_type;
         const char *name;
     }op_name_t;
 
@@ -40,21 +45,11 @@
         AFF,
     };
 
-    enum {
-        REG,
-        DIRECT,
-        INDIRECT,
-    };
-
     static const op_name_t OP_NAME[] = {
         {
             .id = LIVE,
             .nb_param = 0,
             .hex = 0x01,
-            .param_type =
-            (int[]) {
-
-            },
             .name = "live",
         },
         {
@@ -152,6 +147,12 @@
 /* PARSER */
 int launch_parser(header_t *header, char const *filepath);
 int parse_body(vec_str_t *champ);
+long find_name(str_t *str, str_t *find);
+void parse_instruction_parameter(str_t *param, int UNUSED index);
+void get_coding_byte(str_t *param_type);
+
+/* UTILS */
+int nb_char_to_skip(str_t *line, char delimiter, int start);
 
 /* ERROR HANDLING */
 // BASE

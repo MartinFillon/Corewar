@@ -13,9 +13,9 @@
     #define MAX_ARGS_NUMBER 4     /* this may not be changed 2^*IND_SIZE */
 
     #define COMMENT_CHAR '#'
-    #define LABEL_CHAR ':'
-    #define DIRECT_CHAR '%'
-    #define SEPARATOR_CHAR ','
+    #define LABEL_CHAR ":"
+    #define DIRECT_CHAR "%"
+    #define SEPARATOR_CHAR ","
 
     #define LABEL_CHARS "abcdefghijklmnopqrstuvwxyz_0123456789"
 
@@ -42,12 +42,10 @@ typedef char    args_type_t;
     #define T_LAB 8       /* LABEL */
 
 typedef struct op_s {
-    char *mnemonique;
     char nbr_args;
     args_type_t type[MAX_ARGS_NUMBER];
     char code;
     int nbr_cycles;
-    char *comment;
 } op_t;
 
 /*
