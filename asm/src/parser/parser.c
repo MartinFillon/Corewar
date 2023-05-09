@@ -13,40 +13,28 @@
 #include "asm/asm.h"
 #include "corewar/op.h"
 
-int nb_char_to_skip(str_t *line, char delimiter, int start)
-{
-    for (size_t i = start; line->data[i] != '\0'; i++) {
-        if (line->data[i] == delimiter)
-            return i + 1;
-    }
-    return ERROR;
-}
-
 static void cleanup_header(header_t *header)
 {
     for (int i = 0; header->prog_name[i] != '\0'; i++){
         if (header->prog_name[i] == '"')
-            header->prog_name[i] = 0;
+            header->prog_name[i] = '\0';
     }
     for (int i = 0; header->comment[i] != '\0'; i++){
         if (header->comment[i] == '"')
-            header->comment[i] = 0;
+            header->comment[i] = '\0';
     }
 }
 
 static void fill_struct(vec_str_t *champ, header_t *header)
 {
-    my_memset(header->prog_name, 0, PROG_NAME_LENGTH + 1);
-    my_memset(header->comment, 0, COMMENT_LENGTH + 1);
-
     for (size_t i = 0; i < champ->size; ++i) {
         if (str_startswith(champ->data[i], STR(NAME_CMD_STRING))) {
             my_strcpy(header->prog_name, champ->data[i]->data
-            + nb_char_to_skip(champ->data[i], '"', 0));
+            + str_find(champ->data[i], STR("\""), 0));
         }
         if (str_startswith(champ->data[i], STR(COMMENT_CMD_STRING))) {
             my_strcpy(header->comment, champ->data[i]->data
-            + nb_char_to_skip(champ->data[i], '"', 0));
+            + str_find(champ->data[i], STR("\""), 0));
         }
     }
     cleanup_header(header);
@@ -65,8 +53,10 @@ static str_t *parse_header(char const *champ_path, header_t *header)
         str_ltrim(&champ->data[i], ' ');
     }
     fill_struct(champ, header);
-    if (parse_body(champ, champ_path, header) == ERROR)
+    if (parse_body(champ, champ_path, header) == ERROR) {
+        vec_free(champ);
         return NULL;
+    }
     vec_free(champ);
     return content;
 }
