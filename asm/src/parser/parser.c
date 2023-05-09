@@ -13,32 +13,28 @@
 #include "asm/asm.h"
 #include "corewar/op.h"
 
-static const int LENGTH_NAME = 7;
-static const int LENGTH_COMMENT = 10;
-
 static void cleanup_header(header_t *header)
 {
     for (int i = 0; header->prog_name[i] != '\0'; i++){
         if (header->prog_name[i] == '"')
-            header->prog_name[i] = 0;
+            header->prog_name[i] = '\0';
     }
     for (int i = 0; header->comment[i] != '\0'; i++){
         if (header->comment[i] == '"')
-            header->comment[i] = 0;
+            header->comment[i] = '\0';
     }
 }
 
 static void fill_struct(vec_str_t *champ, header_t *header)
 {
-    my_memset(header->prog_name, 0, PROG_NAME_LENGTH + 1);
-    my_memset(header->comment, 0, COMMENT_LENGTH + 1);
-
     for (size_t i = 0; i < champ->size; ++i) {
-        if (str_startswith(champ->data[i], STR(".name"))) {
-            my_strcpy(header->prog_name, champ->data[i]->data + LENGTH_NAME);
+        if (str_startswith(champ->data[i], STR(NAME_CMD_STRING))) {
+            my_strcpy(header->prog_name, champ->data[i]->data
+            + str_find(champ->data[i], STR("\""), 0));
         }
-        if (str_startswith(champ->data[i], STR(".comment"))) {
-            my_strcpy(header->comment, champ->data[i]->data + LENGTH_COMMENT);
+        if (str_startswith(champ->data[i], STR(COMMENT_CMD_STRING))) {
+            my_strcpy(header->comment, champ->data[i]->data
+            + str_find(champ->data[i], STR("\""), 0));
         }
     }
     cleanup_header(header);
@@ -54,9 +50,13 @@ static str_t *parse_header(char const *champ_path, header_t *header)
     vec_str_t *champ = str_split(content, STR("\n"));
     for (size_t i = 0; i < champ->size; i++) {
         str_ltrim(&champ->data[i], '\t');
+        str_ltrim(&champ->data[i], ' ');
     }
-
     fill_struct(champ, header);
+    if (parse_body(champ, champ_path, header) == ERROR) {
+        vec_free(champ);
+        return NULL;
+    }
     vec_free(champ);
     return content;
 }
@@ -66,7 +66,7 @@ int launch_parser(header_t *header, char const *filepath)
     str_t *champ = NULL;
 
     champ = parse_header(filepath, header);
-    if (champ == NULL){
+    if (champ == NULL) {
         return ERROR;
     }
     free(champ);

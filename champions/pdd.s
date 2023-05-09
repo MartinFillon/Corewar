@@ -1,4 +1,4 @@
-.name    "pdd"
+	.name    "pdd"
 .comment "pdd"
 
 	sti	r1, %:live, %1

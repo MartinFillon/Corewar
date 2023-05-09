@@ -24,7 +24,7 @@ str_t **str_resize(str_t **str, size_t new_size)
     return str;
 }
 
-long str_find(str_t *str, str_t *find, size_t start)
+long str_find(str_t const *str, str_t const *find, size_t start)
 {
     if (find->length > str->length)
         return -1;
