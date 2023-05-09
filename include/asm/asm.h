@@ -172,7 +172,7 @@
 int launch_parser(header_t *header, char const *filepath);
 int parse_body(vec_str_t *champ, char const *filepath, header_t *header);
 long find_name(str_t *str, str_t *find);
-int parse_instruction_parameter(str_t *param, int index, str_t *buffer);
+int parse_instruction_parameter(str_t *param, int index, str_t **buffer);
 
 /* UTILS */
 int nb_char_to_skip(str_t *line, char delimiter, int start);
@@ -184,6 +184,8 @@ int check_args(int argc);
 int convert_big_endian(int little);
 
 /* CONVERSION */
-void write_file(header_t const *header, const char *filepath, str_t const *buffer);
+void write_file(
+    header_t const *header,const char *filepath, str_t const *buffer
+);
 
 #endif /* !ASM_H_ */

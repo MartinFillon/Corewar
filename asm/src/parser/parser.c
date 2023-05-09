@@ -13,24 +13,15 @@
 #include "asm/asm.h"
 #include "corewar/op.h"
 
-int nb_char_to_skip(str_t *line, char delimiter, int start)
-{
-    for (size_t i = start; i < line->length; i++) {
-        if (line->data[i] == delimiter)
-            return i + 1;
-    }
-    return ERROR;
-}
-
 static void cleanup_header(header_t *header)
 {
     for (int i = 0; header->prog_name[i] != '\0'; i++){
         if (header->prog_name[i] == '"')
-            header->prog_name[i] = 0;
+            header->prog_name[i] = '\0';
     }
     for (int i = 0; header->comment[i] != '\0'; i++){
         if (header->comment[i] == '"')
-            header->comment[i] = 0;
+            header->comment[i] = '\0';
     }
 }
 
@@ -39,11 +30,11 @@ static void fill_struct(vec_str_t *champ, header_t *header)
     for (size_t i = 0; i < champ->size; ++i) {
         if (str_startswith(champ->data[i], STR(NAME_CMD_STRING))) {
             my_strcpy(header->prog_name, champ->data[i]->data
-            + nb_char_to_skip(champ->data[i], '"', 0));
+            + str_find(champ->data[i], STR("\""), 0));
         }
         if (str_startswith(champ->data[i], STR(COMMENT_CMD_STRING))) {
             my_strcpy(header->comment, champ->data[i]->data
-            + nb_char_to_skip(champ->data[i], '"', 0));
+            + str_find(champ->data[i], STR("\""), 0));
         }
     }
     cleanup_header(header);

@@ -28,7 +28,7 @@ static int str_count(str_t *str, char c)
     return count;
 }
 
-static void get_coding_byte(str_t *param_type, str_t *buffer, int index)
+static void get_coding_byte(str_t *param_type, str_t **buffer, int index)
 {
     unsigned char coding_byte = 0;
 
@@ -42,16 +42,16 @@ static void get_coding_byte(str_t *param_type, str_t *buffer, int index)
             coding_byte |= 1;
         }
     }
-    str_cadd(&buffer, coding_byte);
+    str_cadd(buffer, coding_byte);
 }
 
-int parse_instruction_parameter(str_t *param, int index, str_t *buffer)
+int parse_instruction_parameter(str_t *param, int index, str_t **buffer)
 {
     vec_str_t *params = str_split(param, STR(SEPARATOR_CHAR));
     str_t *param_type = str_create("");
     if (str_count(param, ',') != OP_NAME[index].nb_param)
         return ERROR;
-    str_cadd(&buffer, ((char) OP_NAME[index].hex));
+    str_cadd(buffer, ((char) OP_NAME[index].hex));
     for (size_t i = 0; i < params->size; i++) {
         str_ltrim(&params->data[i], ' ');
         str_ltrim(&params->data[i], '\t');

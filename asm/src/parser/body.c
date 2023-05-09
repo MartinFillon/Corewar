@@ -26,14 +26,14 @@ static int find_instruction(str_t *line, str_t const *op_name)
     for (size_t i = 0; i < line->length; i++) {
         if ((callback = str_find(line, op_name, i)) != -1 &&
             (line->data[callback + op_name->length] == ' ' ||
-             line->data[callback + op_name->length] == '\t')) {
+            line->data[callback + op_name->length] == '\t')) {
             return callback;
         }
     }
     return -1;
 }
 
-static int manage_instruction(str_t *line, str_t *buffer)
+static int manage_instruction(str_t *line, str_t **buffer)
 {
     str_t *name = str_create("");
     str_t *temp;
@@ -65,7 +65,7 @@ int parse_body(vec_str_t *champ, char const *filepath, header_t *header)
         }
     }
     for (size_t i = 0; i < champ->size; i++) {
-        if (manage_instruction(champ->data[i], buffer) == ERROR)
+        if (manage_instruction(champ->data[i], &buffer) == ERROR)
             return ERROR;
     }
     header->prog_size = buffer->length;
