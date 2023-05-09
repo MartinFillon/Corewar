@@ -86,7 +86,7 @@
             .id = OR,
             .nb_param = 2,
             .hex = 0x07,
-            .name = "OR",
+            .name = "or",
         },
         {
             .id = XOR,
@@ -148,7 +148,7 @@
 int launch_parser(header_t *header, char const *filepath);
 int parse_body(vec_str_t *champ);
 long find_name(str_t *str, str_t *find);
-void parse_instruction_parameter(str_t *param, int UNUSED index);
+int parse_instruction_parameter(str_t *param, int UNUSED index);
 void get_coding_byte(str_t *param_type);
 
 /* UTILS */

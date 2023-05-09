@@ -17,6 +17,16 @@
 #include "asm/asm.h"
 #include "corewar/op.h"
 
+static int str_count(str_t *str, char c)
+{
+    int count = 0;
+    for (size_t i = 0; i < str->length; i++) {
+        if (str->data[i] == c)
+            count++;
+    }
+    return count;
+}
+
 void get_coding_byte(str_t *param_type)
 {
     unsigned char coding_byte;
@@ -30,8 +40,11 @@ void get_coding_byte(str_t *param_type)
     }
 }
 
-void parse_instruction_parameter(str_t *param, int UNUSED index)
+int parse_instruction_parameter(str_t *param, int index)
 {
+    if (str_count(param, ',') != OP_NAME[index].nb_param)
+        return ERROR;
+
     vec_str_t *params = str_split(param, STR(SEPARATOR_CHAR));
     str_t *param_type = str_create("");
 
@@ -43,22 +56,9 @@ void parse_instruction_parameter(str_t *param, int UNUSED index)
         if (str_startswith(params->data[i], STR("r")))
             str_sadd(&param_type, STR(REG));
         if (!str_startswith(params->data[i], STR("r")) &&
-        !str_startswith(params->data[i], STR(DIRECT_CHAR)))
+            !str_startswith(params->data[i], STR(DIRECT_CHAR)))
             str_sadd(&param_type, STR(INDIRECT));
     }
     get_coding_byte(param_type);
-}
-
-long find_name(str_t *str, str_t *find)
-{
-    if (find->length > str->length)
-        return ERROR;
-    for (size_t i = 0; i < str->length - find->length; ++i) {
-        if (my_strncmp(str->data + i, find->data, find->length) == 0 &&
-            (str->data[i + find->length] == ' ' ||
-            str->data[i + find->length] == '\t')) {
-            return (i + find->length + 1);
-        }
-    }
-    return ERROR;
+    return SUCCESS;
 }

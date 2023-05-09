@@ -16,7 +16,7 @@ compile_commands.json
 # junk
 *.cor
 *.s
-champions
+champions/
 coding-style-reports.log
 vgcore*
 *.log

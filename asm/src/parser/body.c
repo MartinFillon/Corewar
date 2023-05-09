@@ -17,35 +17,33 @@
 #include "asm/asm.h"
 #include "corewar/op.h"
 
-static int str_count(str_t *str, char c)
+static int find_instruction(str_t *line, size_t index)
 {
-    int count = 0;
-    for (size_t i = 0; i < str->length; i++) {
-        if (str->data[i] == c)
-            count++;
+    int callback = 0;
+
+    for (size_t i = 0; i < line->length; i++) {
+        if ((callback = str_find(line, str_create(OP_NAME[index].name), i)) !=
+                -1 &&
+            (line->data[callback + my_strlen(OP_NAME[index].name)] == ' ' ||
+            line->data[callback + my_strlen(OP_NAME[index].name)] == '\t'))
+            return callback;
     }
-    return count;
+    return -1;
 }
 
-int to_define(str_t *line, size_t i)
+static int manage_instruction(str_t *line)
 {
-    size_t to_skip = 0;
+    int callback = 0;
 
-    if ((to_skip = find_name(line, str_create(OP_NAME[i].name))) != 84) {
-        if (str_count(line, ',') != OP_NAME[i].nb_param)
-            return ERROR;
-        parse_instruction_parameter(str_create(&line->data[to_skip]), i);
-    }
-    return SUCCESS;
-}
-
-int get_instruction_data(str_t *line)
-{
     for (size_t i = 0; i <= AFF; i++) {
-        if (to_define(line, i) == ERROR)
-            return ERROR;
+        if ((callback = find_instruction(line, i)) != -1) {
+            return parse_instruction_parameter(
+                str_create(&line->data[callback + my_strlen(OP_NAME[i].name)]),
+                i
+            );
+        }
     }
-    return SUCCESS;
+    return ERROR;
 }
 
 int parse_body(vec_str_t *champ)
@@ -58,7 +56,7 @@ int parse_body(vec_str_t *champ)
         }
     }
     for (size_t i = 0; i < champ->size; i++) {
-        if (get_instruction_data(champ->data[i]) == ERROR)
+        if (manage_instruction(champ->data[i]) == ERROR)
             return ERROR;
     }
     return SUCCESS;
