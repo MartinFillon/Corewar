@@ -28,7 +28,7 @@ str_t *convert_file(char const *filepath)
     return new_file;
 }
 
-void write_file(header_t *header, char const *filepath, str_t *buffer)
+void write_file(header_t const *header, char const *filepath, str_t const *buffer)
 {
     str_t *new_file = convert_file(filepath);
     int fd = 0;

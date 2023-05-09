@@ -184,6 +184,6 @@ int check_args(int argc);
 int convert_big_endian(int little);
 
 /* CONVERSION */
-void write_file(header_t *header, const char *filepath, str_t *buffer);
+void write_file(header_t const *header, const char *filepath, str_t const *buffer);
 
 #endif /* !ASM_H_ */

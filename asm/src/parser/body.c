@@ -12,43 +12,43 @@
 
 #include "my_cstr.h"
 #include "my_stdio.h"
+#include "my_stdlib.h"
 #include "my_str.h"
 #include "my_vec.h"
 
 #include "asm/asm.h"
 #include "corewar/op.h"
 
-static int find_instruction(str_t *line, size_t index)
+static int find_instruction(str_t *line, str_t const *op_name)
 {
-    str_t *temp = str_create(OP_NAME[index].name);
     int callback = 0;
 
     for (size_t i = 0; i < line->length; i++) {
-        if ((callback = str_find(line, temp, i)) != -1 &&
-            (line->data[callback + my_strlen(OP_NAME[index].name)] == ' ' ||
-            line->data[callback + my_strlen(OP_NAME[index].name)] == '\t')) {
-            free(temp);
+        if ((callback = str_find(line, op_name, i)) != -1 &&
+            (line->data[callback + op_name->length] == ' ' ||
+             line->data[callback + op_name->length] == '\t')) {
             return callback;
         }
     }
-    free(temp);
     return -1;
 }
 
 static int manage_instruction(str_t *line, str_t *buffer)
 {
+    str_t *name = str_create("");
     str_t *temp;
     int callback = 0;
 
     for (size_t i = 0; i <= AFF; i++) {
-        if ((callback = find_instruction(line, i)) != -1) {
-            temp =
-                str_create(&line->data[callback + my_strlen(OP_NAME[i].name)]);
+        str_add(str_clear(&name), OP_NAME[i].name);
+        if ((callback = find_instruction(line, name)) != -1) {
+            temp = str_create(&line->data[callback + name->length]);
             callback = parse_instruction_parameter(temp, i, buffer);
-            free(temp);
+            my_vfree(2, temp, name);
             return callback;
         }
     }
+    free(name);
     return ERROR;
 }
 

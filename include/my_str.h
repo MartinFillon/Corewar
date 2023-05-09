@@ -84,7 +84,7 @@ vec_str_t *str_split(str_t *str, str_t *delims);
  * @param start  the index to start searching from
  * @return the index of the first occurence of find in str
  */
-long str_find(str_t *str, str_t *find, size_t start);
+long str_find(str_t const *str, str_t const *find, size_t start);
 
 /**
  * @brief adds formatted data to a string
