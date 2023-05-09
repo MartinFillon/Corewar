@@ -27,9 +27,12 @@ static int str_count(str_t *str, char c)
     return count;
 }
 
-static void get_coding_byte(str_t *param_type, str_t *buffer)
+static void get_coding_byte(str_t *param_type, str_t *buffer, int index)
 {
     unsigned char coding_byte;
+
+    if (index == LIVE || index == ZJMP || index == FORK || index == LFORK )
+        return;
     for (size_t i = 0; i <= 7; i++) {
         coding_byte <<= 1;
         if (i > param_type->length)
@@ -38,6 +41,7 @@ static void get_coding_byte(str_t *param_type, str_t *buffer)
             coding_byte |= 1;
         }
     }
+    printf("%x\n", coding_byte);
     str_cadd(&buffer, coding_byte);
 }
 
@@ -60,6 +64,6 @@ int parse_instruction_parameter(str_t *param, int index, str_t *buffer)
             !str_startswith(params->data[i], STR(DIRECT_CHAR)))
             str_sadd(&param_type, STR(INDIRECT));
     }
-    get_coding_byte(param_type, buffer);
+    get_coding_byte(param_type, buffer, index);
     return SUCCESS;
 }

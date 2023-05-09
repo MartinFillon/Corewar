@@ -61,6 +61,7 @@ int parse_body(vec_str_t *champ, char const *filepath, header_t *header)
         if (manage_instruction(champ->data[i], buffer) == ERROR)
             return ERROR;
     }
+    header->prog_size = buffer->length;
     write_file(header, filepath, buffer);
     return SUCCESS;
 }
