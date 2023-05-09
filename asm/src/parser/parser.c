@@ -36,9 +36,6 @@ static void cleanup_header(header_t *header)
 
 static void fill_struct(vec_str_t *champ, header_t *header)
 {
-    my_memset(header->prog_name, 0, PROG_NAME_LENGTH);
-    my_memset(header->comment, 0, COMMENT_LENGTH);
-
     for (size_t i = 0; i < champ->size; ++i) {
         if (str_startswith(champ->data[i], STR(NAME_CMD_STRING))) {
             my_strcpy(header->prog_name, champ->data[i]->data

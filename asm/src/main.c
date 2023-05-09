@@ -11,7 +11,7 @@
 
 int main(int argc, char **argv)
 {
-    header_t header;
+    header_t header = {0};
 
     if (check_args(argc) == ERROR)
         return ERROR;
