@@ -43,8 +43,12 @@ static int manage_instruction(str_t *line, str_t *buffer)
             );
         }
     }
+    printf("mmmm\n");
+    printf("%d<-\n", callback);
+    printf("%s<-\n", line->data);
     return ERROR;
 }
+
 
 int parse_body(vec_str_t *champ, char const *filepath, header_t *header)
 {
@@ -58,8 +62,9 @@ int parse_body(vec_str_t *champ, char const *filepath, header_t *header)
         }
     }
     for (size_t i = 0; i < champ->size; i++) {
-        if (manage_instruction(champ->data[i], buffer) == ERROR)
+        if (manage_instruction(champ->data[i], buffer) == ERROR){
             return ERROR;
+        }
     }
     write_file(header, filepath, buffer);
     return SUCCESS;

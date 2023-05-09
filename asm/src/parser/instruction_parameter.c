@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#include "my_stdlib.h"
 #include "my_cstr.h"
 #include "my_stdio.h"
 #include "my_str.h"
@@ -41,13 +42,39 @@ static void get_coding_byte(str_t *param_type, str_t *buffer)
     str_cadd(&buffer, coding_byte);
 }
 
+static void get_parameters(vec_str_t *params, str_t *buffer)
+{
+    str_t *tmp = NULL;
+
+    for (size_t i = 0; i < params->size; i++) {
+        if (str_startswith(params->data[i], STR(DIRECT_CHAR))) {
+            tmp = str_create(params->data[i]->data + 1);
+            int value = my_atoi(tmp->data);
+            str_cadd(&buffer, (value >> 8) & 0xFF);
+            str_cadd(&buffer, value & 0xFF);
+        }
+        if (str_startswith(params->data[i], STR("r"))) {
+            int value = my_atoi(params->data[i]->data + 1);
+            str_cadd(&buffer, value);
+        }
+        if (!str_startswith(params->data[i], STR("r")) &&
+            !str_startswith(params->data[i], STR(DIRECT_CHAR))) {
+            int value = my_atoi(params->data[i]->data);
+            str_cadd(&buffer, (value >> 8) & 0xFF);
+            str_cadd(&buffer, value & 0xFF);
+        }
+    }
+}
+
 int parse_instruction_parameter(str_t *param, int index, str_t *buffer)
 {
     vec_str_t *params = str_split(param, STR(SEPARATOR_CHAR));
     str_t *param_type = str_create("");
 
-    if (str_count(param, ',') != OP_NAME[index].nb_param)
+    if (str_count(param, ',') != OP_NAME[index].nb_param){
+        printf("yur\n");
         return ERROR;
+    }
     str_cadd(&buffer, ((char) OP_NAME[index].hex));
     for (size_t i = 0; i < params->size; i++) {
         str_ltrim(&params->data[i], ' ');
@@ -61,5 +88,6 @@ int parse_instruction_parameter(str_t *param, int index, str_t *buffer)
             str_sadd(&param_type, STR(INDIRECT));
     }
     get_coding_byte(param_type, buffer);
+    get_parameters(params, buffer);
     return SUCCESS;
 }
