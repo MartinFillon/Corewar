@@ -7,6 +7,7 @@
 
 #include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 #include "my_cstr.h"
@@ -19,28 +20,33 @@
 
 static int find_instruction(str_t *line, size_t index)
 {
+    str_t *temp = str_create(OP_NAME[index].name);
     int callback = 0;
 
     for (size_t i = 0; i < line->length; i++) {
-        if ((callback = str_find(line, str_create(OP_NAME[index].name), i)) !=
-                -1 &&
+        if ((callback = str_find(line, temp, i)) != -1 &&
             (line->data[callback + my_strlen(OP_NAME[index].name)] == ' ' ||
-            line->data[callback + my_strlen(OP_NAME[index].name)] == '\t'))
+            line->data[callback + my_strlen(OP_NAME[index].name)] == '\t')) {
+            free(temp);
             return callback;
+        }
     }
+    free(temp);
     return -1;
 }
 
 static int manage_instruction(str_t *line, str_t *buffer)
 {
+    str_t *temp;
     int callback = 0;
 
     for (size_t i = 0; i <= AFF; i++) {
         if ((callback = find_instruction(line, i)) != -1) {
-            return parse_instruction_parameter(
-                str_create(&line->data[callback + my_strlen(OP_NAME[i].name)]),
-                i, buffer
-            );
+            temp =
+                str_create(&line->data[callback + my_strlen(OP_NAME[i].name)]);
+            callback = parse_instruction_parameter(temp, i, buffer);
+            free(temp);
+            return callback;
         }
     }
     return ERROR;
@@ -63,5 +69,6 @@ int parse_body(vec_str_t *champ, char const *filepath, header_t *header)
     }
     header->prog_size = buffer->length;
     write_file(header, filepath, buffer);
+    free(buffer);
     return SUCCESS;
 }

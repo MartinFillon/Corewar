@@ -15,7 +15,7 @@
 
 int nb_char_to_skip(str_t *line, char delimiter, int start)
 {
-    for (size_t i = start; line->data[i] != '\0'; i++) {
+    for (size_t i = start; i < line->length; i++) {
         if (line->data[i] == delimiter)
             return i + 1;
     }
@@ -62,8 +62,10 @@ static str_t *parse_header(char const *champ_path, header_t *header)
         str_ltrim(&champ->data[i], ' ');
     }
     fill_struct(champ, header);
-    if (parse_body(champ, champ_path, header) == ERROR)
+    if (parse_body(champ, champ_path, header) == ERROR) {
+        vec_free(champ);
         return NULL;
+    }
     vec_free(champ);
     return content;
 }
