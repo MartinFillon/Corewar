@@ -48,6 +48,7 @@ static int fill_header(vec_str_t *champ, header_t *header)
 static str_t *parse_header(char const *champ_path, header_t *header)
 {
     str_t *content = read_file(champ_path);
+    header->magic = convert_big_endian(COREWAR_EXEC_MAGIC);
 
     if (content == NULL)
         return NULL;
@@ -76,7 +77,5 @@ int launch_parser(header_t *header, char const *filepath)
         return ERROR;
     }
     free(champ);
-
-    header->magic = convert_big_endian(COREWAR_EXEC_MAGIC);
     return SUCCESS;
 }
