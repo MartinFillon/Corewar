@@ -31,7 +31,7 @@ static int find_instruction(str_t *line, size_t index)
     return -1;
 }
 
-static int manage_instruction(str_t *line)
+static int manage_instruction(str_t *line, str_t *buffer)
 {
     int callback = 0;
 
@@ -39,15 +39,17 @@ static int manage_instruction(str_t *line)
         if ((callback = find_instruction(line, i)) != -1) {
             return parse_instruction_parameter(
                 str_create(&line->data[callback + my_strlen(OP_NAME[i].name)]),
-                i
+                i, buffer
             );
         }
     }
     return ERROR;
 }
 
-int parse_body(vec_str_t *champ)
+int parse_body(vec_str_t *champ, char const *filepath, header_t *header)
 {
+    str_t *buffer = str_create("");
+
     for (size_t i = 0; i < champ->size; i++) {
         if (champ->data[i]->data[0] == COMMENT_CHAR ||
             champ->data[i]->length == 0 || champ->data[i]->data[0] == '.') {
@@ -56,8 +58,9 @@ int parse_body(vec_str_t *champ)
         }
     }
     for (size_t i = 0; i < champ->size; i++) {
-        if (manage_instruction(champ->data[i]) == ERROR)
+        if (manage_instruction(champ->data[i], buffer) == ERROR)
             return ERROR;
     }
+    write_file(header, filepath, buffer);
     return SUCCESS;
 }

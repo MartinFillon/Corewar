@@ -65,7 +65,7 @@ static str_t *parse_header(char const *champ_path, header_t *header)
         str_ltrim(&champ->data[i], ' ');
     }
     fill_struct(champ, header);
-    if (parse_body(champ) == 84)
+    if (parse_body(champ, champ_path, header) == ERROR)
         return NULL;
     vec_free(champ);
     return content;

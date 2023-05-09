@@ -27,7 +27,7 @@ static int str_count(str_t *str, char c)
     return count;
 }
 
-void get_coding_byte(str_t *param_type)
+static void get_coding_byte(str_t *param_type, str_t *buffer)
 {
     unsigned char coding_byte;
     for (size_t i = 0; i <= 7; i++) {
@@ -38,16 +38,17 @@ void get_coding_byte(str_t *param_type)
             coding_byte |= 1;
         }
     }
+    str_cadd(&buffer, coding_byte);
 }
 
-int parse_instruction_parameter(str_t *param, int index)
+int parse_instruction_parameter(str_t *param, int index, str_t *buffer)
 {
-    if (str_count(param, ',') != OP_NAME[index].nb_param)
-        return ERROR;
-
     vec_str_t *params = str_split(param, STR(SEPARATOR_CHAR));
     str_t *param_type = str_create("");
 
+    if (str_count(param, ',') != OP_NAME[index].nb_param)
+        return ERROR;
+    str_cadd(&buffer, ((char) OP_NAME[index].hex));
     for (size_t i = 0; i < params->size; i++) {
         str_ltrim(&params->data[i], ' ');
         str_ltrim(&params->data[i], '\t');
@@ -59,6 +60,6 @@ int parse_instruction_parameter(str_t *param, int index)
             !str_startswith(params->data[i], STR(DIRECT_CHAR)))
             str_sadd(&param_type, STR(INDIRECT));
     }
-    get_coding_byte(param_type);
+    get_coding_byte(param_type, buffer);
     return SUCCESS;
 }

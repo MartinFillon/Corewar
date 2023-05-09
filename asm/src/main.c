@@ -18,6 +18,5 @@ int main(int argc, char **argv)
     if (launch_parser(&header, argv[1]) == ERROR)
         return ERROR;
 
-    write_file(&header, argv[1]);
     return SUCCESS;
 }

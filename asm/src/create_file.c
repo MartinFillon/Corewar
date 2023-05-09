@@ -28,7 +28,7 @@ str_t *convert_file(char const *filepath)
     return new_file;
 }
 
-void write_file(header_t *header, char const *filepath)
+void write_file(header_t *header, char const *filepath, str_t *buffer)
 {
     str_t *new_file = convert_file(filepath);
     int fd = 0;
@@ -44,6 +44,7 @@ void write_file(header_t *header, char const *filepath)
     }
 
     write(fd, header, sizeof(header_t));
+    write(fd, buffer->data, buffer->length);
     free(new_file);
     close(fd);
 }
