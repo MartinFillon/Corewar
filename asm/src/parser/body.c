@@ -59,6 +59,7 @@ int parse_body(vec_str_t *champ, char const *filepath, header_t *header)
     for (size_t i = 0; i < champ->size; i++) {
         if (champ->data[i]->data[0] == COMMENT_CHAR ||
             champ->data[i]->length == 0 || champ->data[i]->data[0] == '.') {
+            free(champ->data[i]);
             vec_remove(champ, i);
             i--;
         }
