@@ -13,36 +13,42 @@
 #include "asm/asm.h"
 #include "corewar/op.h"
 
-static void cleanup_header(header_t *header)
+static int cleanup_header(header_t *header)
 {
-    for (int i = 0; header->prog_name[i] != '\0'; i++){
-        if (header->prog_name[i] == '"')
-            header->prog_name[i] = '\0';
-    }
-    for (int i = 0; header->comment[i] != '\0'; i++){
-        if (header->comment[i] == '"')
-            header->comment[i] = '\0';
-    }
+    char *comment_temp = my_strchr(header->comment, '"');
+    char *name_temp = my_strchr(header->prog_name, '"');
+
+    if (name_temp == NULL || comment_temp == NULL)
+        return ERROR;
+    *comment_temp = '\0';
+    *name_temp = '\0';
+    return SUCCESS;
 }
 
-static void fill_struct(vec_str_t *champ, header_t *header)
+static int fill_header(vec_str_t *champ, header_t *header)
 {
+    int quote_idx = 0;
+
     for (size_t i = 0; i < champ->size; ++i) {
-        if (str_startswith(champ->data[i], STR(NAME_CMD_STRING))) {
+        if (str_startswith(champ->data[i], STR(NAME_CMD_STRING)) &&
+        (quote_idx = str_find(champ->data[i], STR("\""), 0)) != -1)
             my_strcpy(header->prog_name, champ->data[i]->data
-            + str_find(champ->data[i], STR("\""), 0));
-        }
-        if (str_startswith(champ->data[i], STR(COMMENT_CMD_STRING))) {
+            + quote_idx + 1);
+        if (str_startswith(champ->data[i], STR(COMMENT_CMD_STRING )) &&
+        (quote_idx = str_find(champ->data[i], STR("\""), 0)) != -1)
             my_strcpy(header->comment, champ->data[i]->data
-            + str_find(champ->data[i], STR("\""), 0));
-        }
+            + quote_idx + 1);
     }
-    cleanup_header(header);
+    if (header->comment[0] == '\0' || header->prog_name[0] == '\0' ||
+    cleanup_header(header) == ERROR)
+        return ERROR;
+    return SUCCESS;
 }
 
 static str_t *parse_header(char const *champ_path, header_t *header)
 {
     str_t *content = read_file(champ_path);
+    header->magic = convert_big_endian(COREWAR_EXEC_MAGIC);
 
     if (content == NULL)
         return NULL;
@@ -52,7 +58,8 @@ static str_t *parse_header(char const *champ_path, header_t *header)
         str_ltrim(&champ->data[i], '\t');
         str_ltrim(&champ->data[i], ' ');
     }
-    fill_struct(champ, header);
+    if (fill_header(champ, header) == ERROR)
+        return NULL;
     if (parse_body(champ, champ_path, header) == ERROR) {
         vec_free(champ);
         return NULL;
@@ -70,7 +77,5 @@ int launch_parser(header_t *header, char const *filepath)
         return ERROR;
     }
     free(champ);
-
-    header->magic = convert_big_endian(COREWAR_EXEC_MAGIC);
     return SUCCESS;
 }
