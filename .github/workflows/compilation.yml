@@ -16,12 +16,15 @@ jobs:
       image: epitechcontent/epitest-docker
 
     steps:
-      - uses: actions/checkout@v3
+      - name: checkout the repo
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - run: |
+      - name: compile project
+        run: |
           timeout 120 make && make clean
-      - run: |
+      - name: check presence of executables
+        run: |
           for EXECUTABLE in $(echo $EXECUTABLES | tr "," "\n"); do
             if [[ ! -f $EXECUTABLE ]]; then
               echo "::error file=Makefile,title=Makefile error::Missing executable $EXECUTABLE"

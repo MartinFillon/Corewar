@@ -11,13 +11,12 @@
 
 int main(int argc, char **argv)
 {
-    header_t header;
+    header_t header = {0};
 
     if (check_args(argc) == ERROR)
         return ERROR;
     if (launch_parser(&header, argv[1]) == ERROR)
         return ERROR;
 
-    write_file(&header, argv[1]);
     return SUCCESS;
 }
