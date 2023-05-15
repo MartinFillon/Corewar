@@ -13,4 +13,5 @@
 
 int parse_cycles(char **av, arguments_t *args);
 int parse_prog(char **av, int ac, arguments_t *args, int *i);
+int read_program(prog_t *prog);
 #endif /* !COREWAR_H_ */

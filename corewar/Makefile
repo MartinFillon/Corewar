@@ -8,7 +8,8 @@
 CC	=	gcc
 
 SRC = 	src/main.c 							\
-		src/arguments/parse_arguments.c
+		src/arguments/parse_arguments.c 	\
+		src/programs/read_program.c
 
 NAME = corewar
 
