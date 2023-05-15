@@ -15,6 +15,7 @@ typedef struct prog_s {
     size_t adress;
     size_t number;
     char *path;
+    int fd;
 } prog_t;
 
 VEC_DEF(prog_t, prog);

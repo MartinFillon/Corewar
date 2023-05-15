@@ -40,5 +40,8 @@ int my_str_isnum(char const *str);
 int my_str_islower(char const *str);
 int my_str_isupper(char const *str);
 
+int my_strstartwith(char const *str, char const *start);
+int my_strendwith(char const *str, char const *end);
+
 
 #endif /* INCLUDE_MY_CSTR_ */
