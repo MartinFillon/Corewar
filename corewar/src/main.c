@@ -27,7 +27,8 @@ int main(int ac, char **av)
             return ERROR;
     }
     for (size_t i = 0; i < args.programs->size; i++)
-        read_program(&args.programs->data[i]);
+        if (read_program(&args.programs->data[i]) == ERROR)
+            return ERROR;
     for (size_t i = 0; i < args.programs->size; i++)
         free(args.programs->data[i].path);
     free(args.programs);

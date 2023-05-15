@@ -7,6 +7,8 @@
 
 #ifndef COREWAR_H_
     #define COREWAR_H_
+    #include <sys/types.h>
+    #include "my_vec.h"
     #define ERROR 84
     #define SUCCESS 0
     #include "corewar/arguments.h"
