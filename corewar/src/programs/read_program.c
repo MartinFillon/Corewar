@@ -16,6 +16,7 @@
 #include "my_stdio.h"
 
 #include "asm/asm.h"
+#include "my_stdlib.h"
 #include "my_str.h"
 #include "my_vec.h"
 
@@ -40,24 +41,18 @@ u_char get_bits(u_char byte, int start, int count)
 
 int get_arg(cmd_t *cmd, size_t arg_type, int fd)
 {
-    static int i = 0;
-
-    if (read(fd, &cmd->params[i], arg_type) < 0)
+    if (read(fd, &cmd->param[cmd->nb_param], arg_type) < 0)
         return (1);
-    i++;
+    cmd->nb_param++;
     return (0);
 }
 
 int parse_arguments(cmd_t *cmd, u_char coding_byte, int fd)
 {
-    int arg_type;
-    (void)cmd;
-    (void)fd;
-    dprintf(2, "%d\n", coding_byte);
+    int arg_type = 0b0;
 
     for (int i = 3; i >= 0; i--) {
         arg_type = get_bits(coding_byte, i * 2, 2);
-        dprintf(2, "%d\n", arg_type);
         if (arg_type == 0b0)
             continue;
         if (arg_type == 0b01)
@@ -73,17 +68,41 @@ int parse_arguments(cmd_t *cmd, u_char coding_byte, int fd)
     return 0;
 }
 
+int handle_special(cmd_t *cmd, int fd)
+{
+    if (cmd->command == 0x01)
+        return get_arg(cmd, DIR_SIZE, fd);
+    if (cmd->command == 0x09)
+        return get_arg(cmd, IND_SIZE, fd);
+    if (cmd->command == 0x0c)
+        return get_arg(cmd, IND_SIZE, fd);
+    if (cmd->command == 0x0f)
+        return get_arg(cmd, IND_SIZE, fd);
+    return 0;
+}
+
 int parse_instruction(vec_cmd_t **commands, char c, int fd)
 {
-    cmd_t cmd;
-    char coding_byte;
+    cmd_t cmd = {0};
+    char coding_byte = 0;
 
     cmd.command = c;
+    if (c == 0x1 || c == 0x9 || c == 0xc || c == 0xf) {
+        if (handle_special(&cmd, fd))
+            return 1;
+        vec_pushback(commands, &cmd);
+        return 0;
+    }
     if (read(fd, &coding_byte, sizeof(char)) < 0)
         return 1;
     parse_arguments(&cmd, coding_byte, fd);
+    for (size_t j = 0; j < 16; j++) {
+        if (cmd.command == OP_NAME[j].hex) {
+            dprintf(2, "%s\n", OP_NAME[j].name);
+            break;
+        }
+    }
     vec_pushback(commands, &cmd);
-    exit(0);
     return 0;
 }
 
@@ -96,7 +115,6 @@ int read_program(prog_t *prog)
 
     if (read(fd, &header, sizeof(header_t)) < 0)
         return (ERROR);
-    // write(1, &header, sizeof(header_t));
     for (int i = 0; i < swap_endian(header.prog_size); i++) {
         if (read(fd, &c, sizeof(char)) < 0)
             return ERROR;
@@ -104,6 +122,13 @@ int read_program(prog_t *prog)
             return ERROR;
     }
     close(fd);
-    // dprintf(1, "%s\n", commands->data);
+    for (size_t i = 0; i < commands->size; i++) {
+        for (size_t j = 0; j < 16; j++) {
+            if (commands->data[i].command == OP_NAME[j].hex) {
+                dprintf(2, "%s\n", OP_NAME[j].name);
+                break;
+            }
+        }
+    }
     return (0);
 }

@@ -12,10 +12,9 @@
     #include "my_vec.h"
     #include "asm/asm.h"
 
-typedef struct command_s {
+typedef struct cmd_s {
     u_char command;
     u_char nb_param;
-    u_char params[4];
     union {
         u_int value;
         u_char reg;
