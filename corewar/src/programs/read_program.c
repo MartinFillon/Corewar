@@ -40,22 +40,17 @@ u_char get_bits(u_char byte, int start, int count)
 
 int read_program(prog_t *prog)
 {
-    char c;
-    prog->instructions = str_create("");
-
-    if (read(prog->fd, &prog->header, sizeof(header_t)) < 0) {
+    if (read(prog->fd, &prog->program.header, sizeof(header_t)) < 0) {
         dprintf(2, "Error: read failed header\n");
         return ERROR;
     }
-    for (int i = 0; i < swap_endian(prog->header.prog_size); i++) {
-        if (read(prog->fd, &c, sizeof(char)) < 0) {
-            dprintf(2, "Error: read failed\n");
-            return ERROR;
-        }
-        str_cadd(&prog->instructions, c);
+    prog->program.instructions = malloc(sizeof(char) * swap_endian(prog->program.header.prog_size));
+    if (read(prog->fd, prog->program.instructions, swap_endian(prog->program.header.prog_size)) < 0) {
+        dprintf(2, "Error: read failed instructions\n");
+        return ERROR;
     }
     close(prog->fd);
-    write(1, &prog->header, sizeof(header_t));
-    write(1, prog->instructions->data, prog->instructions->length);
+    write(1, &prog->program.header, sizeof(header_t));
+    write(1, prog->program.instructions, swap_endian(prog->program.header.prog_size));
     return (0);
 }

@@ -13,14 +13,18 @@
     #include "my_vec.h"
     #include "my_str.h"
 
+typedef struct program_s {
+    header_t header;
+    char *instructions;
+    int *registers;
+} program_t;
+
 typedef struct prog_s {
     size_t adress;
     size_t number;
     char *path;
     int fd;
-    header_t header;
-    str_t *instructions;
-    int *instructions_adress;
+    program_t program;
 } prog_t;
 
 VEC_DEF(prog_t, prog);
