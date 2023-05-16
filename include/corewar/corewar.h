@@ -16,13 +16,23 @@
     #define ERROR 84
     #define SUCCESS 0
 
+    #define MIN_AC (2)
+    #define START_AV (3)
+
+    #define MAX_PROG_AV (5)
+
     #include "corewar/arguments.h"
 
 
-typedef unsigned char u_char;
-
+// PARSING
 int read_program(prog_t *prog);
 bool parse_cycles(char **av, arguments_t *args);
 bool parse_prog(char **av, int ac, arguments_t *args, int *i);
+
+
+// UTILS
+int swap_endian(int val);
+u_char get_bits(u_char byte, int start, int count);
+
 
 #endif /* !COREWAR_H_ */

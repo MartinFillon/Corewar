@@ -7,44 +7,41 @@
 
 #include <fcntl.h>
 #include <stddef.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <stdio.h>
 
 #include "my_btree.h"
 #include "my_stdio.h"
 
-#include "asm/asm.h"
 #include "my_stdlib.h"
 #include "my_str.h"
 #include "my_vec.h"
 
+#include "asm/asm.h"
 #include "corewar/corewar.h"
 #include "corewar/instructions.h"
 #include "corewar/op.h"
 
-int swap_endian(int val)
-{
-    return (
-        (val & 0x000000ff) << 24 |
-        (val & 0x0000ff00) << 8 |
-        (val & 0x00ff0000) >> 8 |
-        (val & 0xff000000) >> 24
-    );
-}
-
-u_char get_bits(u_char byte, int start, int count)
-{
-    return ((1 << count) - 1) & (byte >> start);
-}
-
 int get_arg(cmd_t *cmd, size_t arg_type, int fd)
 {
     if (read(fd, &cmd->param[cmd->nb_param], arg_type) < 0)
-        return (1);
+        return 1;
+
     cmd->nb_param++;
-    return (0);
+    return 0;
+}
+
+bool arg_match(int arg_type, cmd_t *cmd, int fd)
+{
+    switch (arg_type) {
+        case 0b01: return get_arg(cmd, sizeof(char), fd);
+        case 0b10: return get_arg(cmd, DIR_SIZE, fd);
+        case 0b11: return get_arg(cmd, IND_SIZE, fd);
+    }
+
+    return false;
 }
 
 int parse_arguments(cmd_t *cmd, u_char coding_byte, int fd)
@@ -55,29 +52,21 @@ int parse_arguments(cmd_t *cmd, u_char coding_byte, int fd)
         arg_type = get_bits(coding_byte, i * 2, 2);
         if (arg_type == 0b0)
             continue;
-        if (arg_type == 0b01)
-            if (get_arg(cmd, sizeof(char), fd))
-                return (1);
-        if (arg_type == 0b10)
-            if (get_arg(cmd, DIR_SIZE, fd))
-                return (1);
-        if (arg_type == 0b11)
-            if (get_arg(cmd, IND_SIZE, fd))
-                return (1);
+        if (arg_match(arg_type, cmd, fd))
+            return 1;
     }
     return 0;
 }
 
 int handle_special(cmd_t *cmd, int fd)
 {
-    if (cmd->command == 0x01)
-        return get_arg(cmd, DIR_SIZE, fd);
-    if (cmd->command == 0x09)
-        return get_arg(cmd, IND_SIZE, fd);
-    if (cmd->command == 0x0c)
-        return get_arg(cmd, IND_SIZE, fd);
-    if (cmd->command == 0x0f)
-        return get_arg(cmd, IND_SIZE, fd);
+    switch (cmd->command) {
+        case 0x01: return get_arg(cmd, DIR_SIZE, fd);
+        case 0x09: return get_arg(cmd, IND_SIZE, fd);
+        case 0x0c: return get_arg(cmd, IND_SIZE, fd);
+        case 0x0f: return get_arg(cmd, IND_SIZE, fd);
+    }
+
     return 0;
 }
 
@@ -110,8 +99,8 @@ int read_program(prog_t *prog)
 {
     int fd = open(prog->path, O_RDONLY);
     header_t header;
-    char c;
     vec_cmd_t *commands = vec_create(100, sizeof(cmd_t));
+    char c;
 
     if (read(fd, &header, sizeof(header_t)) < 0)
         return (ERROR);
