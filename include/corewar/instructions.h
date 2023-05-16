@@ -9,7 +9,9 @@
     #define INSTRUCTIONS_H_
 
     #include <sys/types.h>
+
     #include "my_vec.h"
+
     #include "asm/asm.h"
 
 typedef struct cmd_s {

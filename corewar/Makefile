@@ -26,8 +26,6 @@ ifeq ($(DEBUG),1)
 	LDFLAGS += -fsanitize=address
 endif
 
-OBJ = $(SRC:.c=.o)
-
 all: $(NAME)
 
 $(NAME): $(OBJ)

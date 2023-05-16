@@ -5,8 +5,6 @@
 ** main
 */
 
-#include <unistd.h>
-
 #include "asm/asm.h"
 
 int main(int argc, char **argv)
