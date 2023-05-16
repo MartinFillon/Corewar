@@ -21,7 +21,6 @@
 
 #include "asm/asm.h"
 #include "corewar/corewar.h"
-#include "corewar/instructions.h"
 #include "corewar/op.h"
 
 int swap_endian(int val)
@@ -44,13 +43,19 @@ int read_program(prog_t *prog)
     char c;
     prog->instructions = str_create("");
 
-    if (read(prog->fd, &prog->header, sizeof(header_t)) < 0)
-        return (ERROR);
+    if (read(prog->fd, &prog->header, sizeof(header_t)) < 0) {
+        dprintf(2, "Error: read failed header\n");
+        return ERROR;
+    }
     for (int i = 0; i < swap_endian(prog->header.prog_size); i++) {
-        if (read(prog->fd, &c, sizeof(char)) < 0)
+        if (read(prog->fd, &c, sizeof(char)) < 0) {
+            dprintf(2, "Error: read failed\n");
             return ERROR;
+        }
         str_cadd(&prog->instructions, c);
     }
     close(prog->fd);
+    write(1, &prog->header, sizeof(header_t));
+    write(1, prog->instructions->data, prog->instructions->length);
     return (0);
 }
