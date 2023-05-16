@@ -74,7 +74,7 @@ static bool check_file(arguments_t *args, prog_t *prog)
 
 bool parse_prog(char **av, int ac, arguments_t *args, int *i)
 {
-    prog_t tmp = {0, 0, NULL, -1};
+    prog_t tmp = {0};
     int max_i = *i + MAX_PROG_AV;
     int ret = 0;
 

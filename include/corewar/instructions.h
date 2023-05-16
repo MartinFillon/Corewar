@@ -17,10 +17,11 @@
 typedef struct cmd_s {
     u_char command;
     u_char nb_param;
-    union {
-        u_int value;
+    int arg_type[4];
+    union params {
         u_char reg;
-        u_short index;
+        short index;
+        int value;
     } param[4];
 } cmd_t;
 
