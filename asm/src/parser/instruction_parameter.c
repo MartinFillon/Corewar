@@ -16,8 +16,9 @@
 #include "my_str.h"
 #include "my_vec.h"
 
-#include "asm/asm.h"
 #include "corewar/op.h"
+#include "asm/asm.h"
+#include "asm/body.h"
 
 static int str_count(str_t *str, char c)
 {
@@ -47,49 +48,64 @@ static void get_coding_byte(str_t *param_type, str_t **buffer, int index)
     str_cadd(buffer, coding_byte);
 }
 
-void get_parameters(vec_str_t *params, str_t *buffer)
+void get_parameters(vec_str_t *params, str_t **buffer)
 {
-    str_t *tmp = NULL;
+    int value = 0;
 
     for (size_t i = 0; i < params->size; i++) {
         if (str_startswith(params->data[i], STR(DIRECT_CHAR))) {
-            tmp = str_create(params->data[i]->data + 1);
-            int value = my_atoi(tmp->data);
-            str_cadd(&buffer, (value >> 8) & 0xFF);
-            str_cadd(&buffer, value & 0xFF);
+            manage_direct(params, buffer, i);
         }
         if (str_startswith(params->data[i], STR("r"))) {
-            int value = my_atoi(params->data[i]->data + 1);
-            str_cadd(&buffer, value);
+            value = my_atoi(params->data[i]->data + 1);
+            str_cadd(buffer, value);
         }
         if (!str_startswith(params->data[i], STR("r")) &&
             !str_startswith(params->data[i], STR(DIRECT_CHAR))) {
-            int value = my_atoi(params->data[i]->data);
-            str_cadd(&buffer, (value >> 8) & 0xFF);
-            str_cadd(&buffer, value & 0xFF);
+            value = my_atoi(params->data[i]->data);
+            str_cadd(buffer, (value >> 8) & 0xFF);
+            str_cadd(buffer, value & 0xFF);
         }
     }
 }
 
-int parse_instruction_parameter(str_t *param, int index, str_t **buffer)
+static str_t *add_parameter(
+    vec_str_t *params, str_t *param_type, labels_t *labels
+)
 {
-    vec_str_t *params = str_split(param, STR(SEPARATOR_CHAR));
-    str_t *param_type = str_create("");
-    if (str_count(param, ',') != OP_NAME[index].nb_param)
-        return ERROR;
-    str_cadd(buffer, ((char) OP_NAME[index].hex));
     for (size_t i = 0; i < params->size; i++) {
         str_ltrim(&params->data[i], ' ');
         str_ltrim(&params->data[i], '\t');
-        if (str_startswith(params->data[i], STR(DIRECT_CHAR)))
+        if (str_startswith(params->data[i], STR(DIRECT_CHAR))){
+            if (params->data[i]->data[1] == LABEL_CHAR){
+                str_slice(&params->data[i], 2, params->data[i]->length);
+                my_printf("+%s\n", params->data[i]->data);
+                vec_pushback(&labels->vector, &params->data[i]);
+            }
             str_sadd(&param_type, STR(DIRECT));
+        }
         if (str_startswith(params->data[i], STR("r")))
             str_sadd(&param_type, STR(REG));
         if (!str_startswith(params->data[i], STR("r")) &&
             !str_startswith(params->data[i], STR(DIRECT_CHAR)))
             str_sadd(&param_type, STR(INDIRECT));
     }
+    return param_type;
+}
+
+int parse_instruction_parameter(
+    str_t *param, int index, str_t **buffer, labels_t *labels
+)
+{
+    vec_str_t *params = str_split(param, STR(SEPARATOR_CHAR));
+    str_t *param_type = str_create("");
+
+    if (str_count(param, ',') != OP_NAME[index].nb_param)
+        return ERROR;
+    param_type = add_parameter(params, param_type, labels);
+    str_cadd(buffer, ((char) OP_NAME[index].hex));
     get_coding_byte(param_type, buffer, index);
+    get_parameters(params, buffer);
     vec_free(params);
     free(param_type);
     return SUCCESS;

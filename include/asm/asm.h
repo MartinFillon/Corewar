@@ -25,6 +25,7 @@
         const uint8_t hex;
         const char *name;
         const int *index;
+        size_t size;
     }op_name_t;
 
     enum {
@@ -60,6 +61,7 @@
             .hex = 0x01,
             .name = "live",
             .index = (int[]) {UNDEFINED},
+            .size = 4,
         },
         {
             .id = LD,
@@ -67,6 +69,7 @@
             .hex = 0x02,
             .name = "ld",
             .index = (int[]) {UNDEFINED, REGISTER},
+            .size = 4,
         },
         {
             .id = ST,
@@ -74,6 +77,7 @@
             .hex = 0x03,
             .name = "st",
             .index = (int[]) {REGISTER,  UNDEFINED},
+            .size = 0,
         },
         {
             .id = ADD,
@@ -81,6 +85,7 @@
             .hex = 0x04,
             .name = "add",
             .index = (int[]) {REGISTER,  REGISTER, REGISTER},
+            .size = 0,
         },
         {
             .id = SUB,
@@ -88,6 +93,7 @@
             .hex = 0x05,
             .name = "sub",
             .index = (int[]) {REGISTER,  REGISTER, REGISTER},
+            .size = 0,
         },
         {
             .id = AND,
@@ -95,6 +101,7 @@
             .hex = 0x06,
             .name = "and",
             .index = (int[]) {UNDEFINED,  UNDEFINED, REGISTER},
+            .size = 4,
         },
         {
             .id = OR,
@@ -102,6 +109,7 @@
             .hex = 0x07,
             .name = "or",
             .index = (int[]) {UNDEFINED,  UNDEFINED, REGISTER},
+            .size = 4,
         },
         {
             .id = XOR,
@@ -109,6 +117,7 @@
             .hex = 0x08,
             .name = "xor",
             .index = (int[]) {UNDEFINED,  UNDEFINED, REGISTER},
+            .size = 4,
         },
         {
             .id = ZJMP,
@@ -116,6 +125,7 @@
             .hex = 0x09,
             .name = "zjmp",
             .index = (int[]) {INDEX},
+            .size = 2,
         },
         {
             .id = LDI,
@@ -123,6 +133,7 @@
             .hex = 0x0a,
             .name = "ldi",
             .index = (int[]) {REGEX,  REGEX, REGISTER},
+            .size = 2,
         },
         {
             .id = STI,
@@ -130,6 +141,7 @@
             .hex = 0x0b,
             .name = "sti",
             .index = (int[]) {REGISTER,  REGEX, REGEX},
+            .size = 2,
         },
         {
             .id = FORK,
@@ -137,6 +149,7 @@
             .hex = 0x0c,
             .name = "fork",
             .index = (int[]) {INDEX},
+            .size = 2,
         },
         {
             .id = LLD,
@@ -144,6 +157,7 @@
             .hex = 0x0d,
             .name = "lld",
             .index = (int[]) {UNDEFINED, REGISTER},
+            .size = 4,
         },
         {
             .id = LLDI,
@@ -151,6 +165,7 @@
             .hex = 0x0e,
             .name = "lldi",
             .index = (int[]) {REGEX,  REGEX, REGISTER},
+            .size = 2,
         },
         {
             .id = LFORK,
@@ -158,6 +173,7 @@
             .hex = 0x0f,
             .name = "lfork",
             .index = (int[]) {INDEX},
+            .size = 2,
         },
         {
             .id = AFF,
@@ -165,25 +181,12 @@
             .hex = 0x10,
             .name = "aff",
             .index = (int[]) {REGISTER},
+            .size = 0,
         }
     };
 
-/* PARSER */
 int launch_parser(header_t *header, char const *filepath);
-int parse_body(vec_str_t *champ, char const *filepath, header_t *header);
-long find_name(str_t *str, str_t *find);
-int parse_instruction_parameter(str_t *param, int index, str_t **buffer);
 
-/* UTILS */
-int nb_char_to_skip(str_t *line, char delimiter, int start);
-
-/* ERROR HANDLING */
-// BASE
-int check_args(int argc);
-
-int convert_big_endian(int little);
-
-/* CONVERSION */
 void write_file(
     header_t const *header,const char *filepath, str_t const *buffer
 );

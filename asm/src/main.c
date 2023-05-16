@@ -8,6 +8,7 @@
 #include <unistd.h>
 
 #include "asm/asm.h"
+#include "asm/error.h"
 
 int main(int argc, char **argv)
 {

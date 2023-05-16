@@ -12,9 +12,10 @@
 #include "my_stdlib.h"
 #include "my_str.h"
 
-#include "asm/header.h"
-#include "asm/asm.h"
 #include "corewar/op.h"
+#include "asm/asm.h"
+#include "asm/header.h"
+#include "asm/body.h"
 
 int launch_parser(header_t *header, char const *filepath)
 {
