@@ -51,6 +51,7 @@ int read_program(prog_t *prog)
     }
     close(prog->fd);
     prog->program.registers = malloc(REG_SIZE * REG_NUMBER);
+    prog->program.registers[0] = prog->number;
     prog->program.pc = 0;
     return (0);
 }
