@@ -21,8 +21,10 @@
 bool parse_cycles(char **av, arguments_t *args)
 {
     if (my_streq(av[1], "-dump")) {
-        if (!my_str_isnum(av[2]))
+        if (!my_str_isnum(av[2])) {
+            dprintf(2, "Error: invalid dump args\n");
             return false;
+        }
         args->nbr_cycles = my_atoi(av[2]);
     }
 

@@ -28,8 +28,10 @@ int main(int ac, char **av)
 {
     arguments_t args;
 
-    if (ac < MIN_AC || (ac > MIN_AC && parse_cycles(av, &args)))
+    if (ac < MIN_AC || (ac > MIN_AC && !parse_cycles(av, &args))) {
+        dprintf(2, "Error: invalid args, %d\n", ac);
         return ERROR;
+    }
 
     args.programs = vec_create(100, sizeof(prog_t));
 
