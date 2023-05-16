@@ -7,11 +7,12 @@
 
 #include "my_stdio.h"
 
+#include "corewar/corewar.h"
 #include "corewar/arguments.h"
 
-int exec_live(program_t *p, char *memory, int *memory_index)
+int exec_live(program_t *p, char UNUSED *memory, int *memory_index)
 {
-    char arg = memory[*memory_index + 1];
+    char arg = p->instructions[*memory_index + 1];
     if (arg < 1)
         return 1;
     int reg = p->registers[arg - 1];

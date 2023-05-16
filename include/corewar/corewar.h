@@ -21,6 +21,8 @@
 
     #define MAX_PROG_AV (5)
 
+    #define UNUSED __attribute__((unused))
+
     #include "corewar/arguments.h"
 
 
