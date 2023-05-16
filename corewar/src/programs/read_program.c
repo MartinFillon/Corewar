@@ -50,7 +50,7 @@ int read_program(prog_t *prog)
         return ERROR;
     }
     close(prog->fd);
-    write(1, &prog->program.header, sizeof(header_t));
-    write(1, prog->program.instructions, swap_endian(prog->program.header.prog_size));
+    prog->program.registers = malloc(REG_SIZE * REG_NUMBER);
+    prog->program.pc = 0;
     return (0);
 }

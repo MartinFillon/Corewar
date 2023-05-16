@@ -8,6 +8,7 @@
 #ifndef ARGUMENTS_H_
     #define ARGUMENTS_H_
 
+    #include <stdbool.h>
     #include <stddef.h>
     #include "corewar/op.h"
     #include "my_vec.h"
@@ -17,6 +18,8 @@ typedef struct program_s {
     header_t header;
     char *instructions;
     int *registers;
+    int pc;
+    bool carry;
 } program_t;
 
 typedef struct prog_s {
