@@ -47,7 +47,7 @@ static int manage_instruction(
     (void)index;
     champ_t body = {0};
     str_t *name = str_create("");
-    str_t *tmp = str_create("");
+    str_t *tmp = NULL;
     int callback = 0;
 
     for (size_t i = 0; i <= AFF; i++) {
@@ -58,7 +58,7 @@ static int manage_instruction(
             tmp = str_create(&line->data[callback + name->length]);
             callback = parse_instruction_parameter(tmp, i, buffer, &body);
             vec_pushback(&assembler->champ, &body);
-            my_vfree(2, tmp, name);
+            my_vfree(1, tmp);
             return callback;
         }
     }

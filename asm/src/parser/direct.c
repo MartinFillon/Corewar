@@ -20,4 +20,5 @@ void manage_direct(vec_str_t *params, str_t **buffer, size_t i)
     str_cadd(buffer, 0x00);
     str_cadd(buffer, (value >> 8) & 0xFF);
     str_cadd(buffer, value & 0xFF);
+    free(tmp);
 }

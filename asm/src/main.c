@@ -6,9 +6,24 @@
 */
 
 #include <unistd.h>
+#include <stdlib.h>
 
 #include "asm/asm.h"
 #include "asm/error.h"
+
+static void free_champ(asm_t *champ)
+{
+    fclose(champ->file);
+    for (size_t i = 0; i < champ->labels->size; i++){
+        free(champ->labels->data[i].label);
+    }
+    vec_free(champ->labels);
+    for (size_t i = 0; i < champ->champ->size; i++){
+        free(champ->champ->data[i].instruction);
+        vec_free(champ->champ->data[i].params);
+    }
+    free(champ->champ);
+}
 
 int main(int argc, char **argv)
 {
@@ -21,7 +36,7 @@ int main(int argc, char **argv)
         return ERROR;
     if (launch_parser(&assembler, argv[1]) == ERROR)
         return ERROR;
-    fclose(assembler.file);
 
+    free_champ(&assembler);
     return SUCCESS;
 }

@@ -35,6 +35,7 @@ int launch_parser(asm_t *assembler, char const *filepath)
         vec_free(content);
         return ERROR;
     }
+    free(buffer);
     vec_free(content);
     return SUCCESS;
 }
