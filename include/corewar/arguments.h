@@ -10,23 +10,24 @@
 
     #include <stdbool.h>
     #include <stddef.h>
-    #include "corewar/op.h"
+
     #include "my_vec.h"
     #include "my_str.h"
 
+    #include "corewar/op.h"
+
+
 typedef struct program_s {
     header_t header;
-    char *instructions;
-    int *registers;
+    char *body;
+    int registers[REG_NUMBER];
     int pc;
     bool carry;
 } program_t;
 
 typedef struct prog_s {
-    size_t adress;
-    size_t number;
-    char *path;
-    int fd;
+    int address;
+    int number;
     program_t program;
 } prog_t;
 
@@ -39,9 +40,15 @@ typedef struct corewar_s {
 
 VEC_DEF(prog_t, prog);
 
-typedef struct arguments_s {
-    size_t nbr_cycles;
+typedef struct vm_s {
+    int cycle;
+    int cycle_to_die;
+    int nbr_cycles;
+    int nbr_live;
+    int last_live;
+
+    char memory[MEM_SIZE];
     vec_prog_t *programs;
-} arguments_t;
+} vm_t;
 
 #endif /* !ARGUMENTS_H_ */

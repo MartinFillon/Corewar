@@ -7,8 +7,11 @@
 
 CC	=	gcc
 
-SRC = 	src/main.c 							\
-		src/arguments/parse_arguments.c 	\
+SRC = 	src/main.c							\
+		src/utils.c							\
+		src/vm/vm.c							\
+		src/arguments/parse_arguments.c		\
+		src/programs/programs.c				\
 		src/programs/read_program.c
 
 NAME = corewar

@@ -23,35 +23,46 @@
 #include "corewar/corewar.h"
 #include "corewar/op.h"
 
-int swap_endian(int val)
+static bool read_program(program_t *program, int fd)
 {
-    return (
-        (val & 0x000000ff) << 24 |
-        (val & 0x0000ff00) << 8 |
-        (val & 0x00ff0000) >> 8 |
-        (val & 0xff000000) >> 24
-    );
+    if (read(fd, &program->header, sizeof(header_t)) != sizeof(header_t)) {
+        my_dprintf(2, "Error: failed to read header\n");
+        return false;
+    }
+    if (swap_endian(program->header.magic) != COREWAR_EXEC_MAGIC) {
+        my_dprintf(2, "Error: wrong magic number\n");
+        return false;
+    }
+    int prog_size = swap_endian(program->header.prog_size);
+    program->body = malloc(sizeof(char) * prog_size);
+    if (program->body == NULL) {
+        my_dprintf(2, "Error: malloc failed\n");
+        return false;
+    }
+    if (read(fd, program->body, prog_size) != prog_size) {
+        my_dprintf(2, "Error: failed to read body\n");
+        return false;
+    }
+    return true;
 }
 
-u_char get_bits(u_char byte, int start, int count)
+bool check_and_read_prog(vm_t *vm, prog_t *prog, char const *path)
 {
-    return ((1 << count) - 1) & (byte >> start);
-}
+    if (my_strendwith(path, ".cor") == false) {
+        my_dprintf(2, "Error: %s is not a .cor file\n", path);
+        return false;
+    }
 
-int read_program(prog_t *prog)
-{
-    if (read(prog->fd, &prog->program.header, sizeof(header_t)) < 0) {
-        dprintf(2, "Error: read failed header\n");
-        return ERROR;
+    int fd = open(path, O_RDONLY);
+    if (fd < 0) {
+        my_dprintf(2, "Error: Can't read .cor file %s\n", path);
+        return false;
     }
-    prog->program.instructions = malloc(sizeof(char) * swap_endian(prog->program.header.prog_size));
-    if (read(prog->fd, prog->program.instructions, swap_endian(prog->program.header.prog_size)) < 0) {
-        dprintf(2, "Error: read failed instructions\n");
-        return ERROR;
+    if (read_program(&prog->program, fd) == false) {
+        close(fd);
+        return false;
     }
-    close(prog->fd);
-    prog->program.registers = malloc(REG_SIZE * REG_NUMBER);
-    prog->program.registers[0] = prog->number;
-    prog->program.pc = 0;
-    return (0);
+    vec_pushback(&vm->programs, prog);
+    close(fd);
+    return true;
 }

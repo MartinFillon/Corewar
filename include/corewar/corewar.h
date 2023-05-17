@@ -17,7 +17,7 @@
     #define SUCCESS 0
 
     #define MIN_AC (2)
-    #define START_AV (3)
+    #define START_AV (1)
 
     #define MAX_PROG_AV (5)
 
@@ -27,14 +27,23 @@
 
 
 // PARSING
-int read_program(prog_t *prog);
-bool parse_cycles(char **av, arguments_t *args);
-bool parse_prog(char **av, int ac, arguments_t *args, int *i);
+bool check_and_read_prog(vm_t *vm, prog_t *prog, char const *path);
+bool parse_cycles(char const *const *av, vm_t *vm);
+bool parse_prog(char const *const *av, int ac, vm_t *vm, int *i);
 
 
 // UTILS
 int swap_endian(int val);
 u_char get_bits(u_char byte, int start, int count);
+
+
+// VM
+void free_vm(vm_t *vm);
+vm_t init_vm(void);
+
+
+// PROGRAM
+prog_t init_prog(void);
 
 
 #endif /* !COREWAR_H_ */
