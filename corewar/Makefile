@@ -12,6 +12,7 @@ SRC = 	src/main.c							\
 		src/vm/vm.c							\
 		src/arguments/parse_arguments.c		\
 		src/programs/programs.c				\
+		src/programs/utils.c				\
 		src/programs/read_program.c
 
 NAME = corewar

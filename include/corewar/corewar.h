@@ -44,6 +44,7 @@ vm_t init_vm(void);
 
 // PROGRAM
 prog_t init_prog(void);
+void print_progs(vec_prog_t *progs);
 
 
 #endif /* !COREWAR_H_ */
