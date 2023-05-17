@@ -56,9 +56,6 @@ static int manage_instruction(
         if (callback != -1) {
             body.instruction = name;
             tmp = str_create(&line->data[callback + name->length]);
-            str_trim(&tmp, '\t');
-            str_trim(&tmp, ' ');
-            body.params = str_split(tmp, STR(SEPARATOR_CHAR));
             callback = parse_instruction_parameter(tmp, i, buffer, &body);
             vec_pushback(&assembler->champ, &body);
             my_vfree(2, tmp, name);
@@ -84,5 +81,6 @@ int parse_body(vec_str_t *body, asm_t *assembler, str_t **buffer)
             return ERROR;
         }
     }
+    fwrite((*buffer)->data, sizeof(char), (*buffer)->length, assembler->file);
     return SUCCESS;
 }

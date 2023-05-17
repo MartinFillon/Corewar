@@ -78,23 +78,14 @@ static str_t *add_parameter(
         str_ltrim(&params->data[i], ' ');
         str_ltrim(&params->data[i], '\t');
         if (str_startswith(params->data[i], STR(DIRECT_CHAR))){
-            if (params->data[i]->data[1] == LABEL_CHAR){
-                my_printf("label\n");
-                continue;
-                // str_slice(&params->data[i], 2, params->data[i]->length);
-                // vec_pushback(&champ->label, &params->data[i]);
-            }
             str_sadd(&param_type, STR(DIRECT));
-            // vec_pushback(&champ->types, dir);
         }
         if (str_startswith(params->data[i], STR("r"))){
             str_sadd(&param_type, STR(REG));
-            // vec_pushback(&champ->types, reg);
         }
         if (!str_startswith(params->data[i], STR("r")) &&
             !str_startswith(params->data[i], STR(DIRECT_CHAR))){
             str_sadd(&param_type, STR(INDIRECT));
-            // vec_pushback(&champ->types, ind);
         }
     }
     return param_type;
@@ -106,14 +97,17 @@ int parse_instruction_parameter(
 {
     str_t *param_type = str_create("");
 
+    str_trim(&param, '\t');
+    str_trim(&param, ' ');
     if (str_count(param, ',') != OP_NAME[index].nb_param){
+        my_dprintf(2, "%s:Invalid number of parameters\n", OP_NAME[index].name);
         return ERROR;
     }
+    champ->params = str_split(param, STR(SEPARATOR_CHAR));
     param_type = add_parameter(champ->params, param_type, champ);
     str_cadd(buffer, ((char) OP_NAME[index].hex));
     get_coding_byte(param_type, buffer, index);
     get_parameters(champ->params, buffer);
-    vec_free(champ->params);
     free(param_type);
     return SUCCESS;
 }

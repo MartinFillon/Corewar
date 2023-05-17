@@ -21,6 +21,7 @@ int main(int argc, char **argv)
         return ERROR;
     if (launch_parser(&assembler, argv[1]) == ERROR)
         return ERROR;
+    fclose(assembler.file);
 
     return SUCCESS;
 }

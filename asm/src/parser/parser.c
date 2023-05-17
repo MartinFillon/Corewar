@@ -30,12 +30,11 @@ int launch_parser(asm_t *assembler, char const *filepath)
         return ERROR;
     }
     assembler->header = &header;
-    /* FIND LABELS --> STOCK THEM IN VECTOR `LABELS`*/
+    write_file(assembler, &buffer);
     if (parse_body(content, assembler, &buffer) == ERROR) {
         vec_free(content);
         return ERROR;
     }
-    write_file(assembler, &buffer);
     vec_free(content);
     return SUCCESS;
 }

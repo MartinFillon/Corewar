@@ -36,7 +36,6 @@ void write_file(
     (void)buffer;
     str_t *new_file = convert_file(assembler->filepath);
     assembler->filepath = new_file->data;
-    int fd = 0;
 
     if (new_file == NULL) {
         return;
@@ -49,7 +48,5 @@ void write_file(
     }
 
     fwrite(assembler->header, sizeof(header_t), 1, assembler->file);
-    fwrite((*buffer)->data, sizeof(char), (*buffer)->length, assembler->file);
     free(new_file);
-    close(fd);
 }
