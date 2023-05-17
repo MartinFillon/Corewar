@@ -8,8 +8,10 @@
 #ifndef ASM_H_
     #define ASM_H_
     #include <stdint.h>
+    #include <stdio.h>
     #include "my_str.h"
     #include "corewar/op.h"
+    #include "asm/body.h"
     #define UNUSED __attribute__((unused))
 
     #define ERROR 84
@@ -27,6 +29,15 @@
         const int *index;
         size_t size;
     }op_name_t;
+
+    typedef struct asm_s {
+        FILE *file;
+        char const *filepath;
+        header_t *header;
+        vec_champ_t *champ;
+        vec_label_t *labels;
+        str_t *buffer;
+    } asm_t;
 
     enum {
         LIVE,
@@ -185,10 +196,8 @@
         }
     };
 
-int launch_parser(header_t *header, char const *filepath);
+int launch_parser(asm_t *assembler, char const *filepath);
 
-void write_file(
-    header_t const *header,const char *filepath, str_t const *buffer
-);
+void write_file(asm_t *assembler, str_t **buffer);
 
 #endif /* !ASM_H_ */

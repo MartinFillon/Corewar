@@ -12,11 +12,14 @@
 
 int main(int argc, char **argv)
 {
-    header_t header = {0};
+    asm_t assembler = {
+        .champ = vec_create(100, sizeof(champ_t)),
+        .labels = vec_create(100, sizeof(label_t)),
+    };
 
     if (check_args(argc) == ERROR)
         return ERROR;
-    if (launch_parser(&header, argv[1]) == ERROR)
+    if (launch_parser(&assembler, argv[1]) == ERROR)
         return ERROR;
 
     return SUCCESS;

@@ -7,6 +7,7 @@
 
 #include <fcntl.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <unistd.h>
 
 #include "my_stdio.h"
@@ -29,24 +30,26 @@ str_t *convert_file(char const *filepath)
 }
 
 void write_file(
-    header_t const *header, char const *filepath, str_t const *buffer
+    asm_t *assembler, str_t **buffer
 )
 {
-    str_t *new_file = convert_file(filepath);
+    (void)buffer;
+    str_t *new_file = convert_file(assembler->filepath);
+    assembler->filepath = new_file->data;
     int fd = 0;
 
     if (new_file == NULL) {
         return;
     }
 
-    fd = open(new_file->data, O_CREAT | O_WRONLY, 0644);
-    if (fd < 0) {
+    assembler->file = fopen(assembler->filepath, "w");
+    if (assembler->file == NULL){
         my_dprintf(2, "Error: Can't open file\n");
         return;
     }
 
-    write(fd, header, sizeof(header_t));
-    write(fd, buffer->data, buffer->length);
+    fwrite(assembler->header, sizeof(header_t), 1, assembler->file);
+    fwrite((*buffer)->data, sizeof(char), (*buffer)->length, assembler->file);
     free(new_file);
     close(fd);
 }

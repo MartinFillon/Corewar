@@ -17,20 +17,25 @@
 #include "asm/header.h"
 #include "asm/body.h"
 
-int launch_parser(header_t *header, char const *filepath)
+int launch_parser(asm_t *assembler, char const *filepath)
 {
-    vec_str_t *champ = NULL;
+    vec_str_t *content = NULL;
+    header_t header = {0};
+    str_t *buffer = str_create("");
+    assembler->filepath = filepath;
 
-    champ = parse_header(filepath, header);
-
-    if (champ == NULL) {
-        vec_free(champ);
+    content = parse_header(filepath, &header);
+    if (content == NULL) {
+        vec_free(content);
         return ERROR;
     }
-    if (parse_body(champ, filepath, header) == ERROR) {
-        vec_free(champ);
+    assembler->header = &header;
+    /* FIND LABELS --> STOCK THEM IN VECTOR `LABELS`*/
+    if (parse_body(content, assembler, &buffer) == ERROR) {
+        vec_free(content);
         return ERROR;
     }
-    vec_free(champ);
+    write_file(assembler, &buffer);
+    vec_free(content);
     return SUCCESS;
 }

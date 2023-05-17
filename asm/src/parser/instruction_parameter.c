@@ -70,43 +70,50 @@ void get_parameters(vec_str_t *params, str_t **buffer)
 }
 
 static str_t *add_parameter(
-    vec_str_t *params, str_t *param_type, labels_t *labels
+    vec_str_t *params, str_t *param_type, champ_t *champ
 )
 {
+    (void)champ;
     for (size_t i = 0; i < params->size; i++) {
         str_ltrim(&params->data[i], ' ');
         str_ltrim(&params->data[i], '\t');
         if (str_startswith(params->data[i], STR(DIRECT_CHAR))){
             if (params->data[i]->data[1] == LABEL_CHAR){
-                str_slice(&params->data[i], 2, params->data[i]->length);
-                my_printf("+%s\n", params->data[i]->data);
-                vec_pushback(&labels->vector, &params->data[i]);
+                my_printf("label\n");
+                continue;
+                // str_slice(&params->data[i], 2, params->data[i]->length);
+                // vec_pushback(&champ->label, &params->data[i]);
             }
             str_sadd(&param_type, STR(DIRECT));
+            // vec_pushback(&champ->types, dir);
         }
-        if (str_startswith(params->data[i], STR("r")))
+        if (str_startswith(params->data[i], STR("r"))){
             str_sadd(&param_type, STR(REG));
+            // vec_pushback(&champ->types, reg);
+        }
         if (!str_startswith(params->data[i], STR("r")) &&
-            !str_startswith(params->data[i], STR(DIRECT_CHAR)))
+            !str_startswith(params->data[i], STR(DIRECT_CHAR))){
             str_sadd(&param_type, STR(INDIRECT));
+            // vec_pushback(&champ->types, ind);
+        }
     }
     return param_type;
 }
 
 int parse_instruction_parameter(
-    str_t *param, int index, str_t **buffer, labels_t *labels
+    str_t *param, size_t index, str_t **buffer, champ_t *champ
 )
 {
-    vec_str_t *params = str_split(param, STR(SEPARATOR_CHAR));
     str_t *param_type = str_create("");
 
-    if (str_count(param, ',') != OP_NAME[index].nb_param)
+    if (str_count(param, ',') != OP_NAME[index].nb_param){
         return ERROR;
-    param_type = add_parameter(params, param_type, labels);
+    }
+    param_type = add_parameter(champ->params, param_type, champ);
     str_cadd(buffer, ((char) OP_NAME[index].hex));
     get_coding_byte(param_type, buffer, index);
-    get_parameters(params, buffer);
-    vec_free(params);
+    get_parameters(champ->params, buffer);
+    vec_free(champ->params);
     free(param_type);
     return SUCCESS;
 }

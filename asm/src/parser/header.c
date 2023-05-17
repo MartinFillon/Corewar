@@ -43,8 +43,8 @@ static int fill_header(vec_str_t *champ, header_t *header)
             my_strcpy(header->comment, champ->data[i]->data + quote_idx + 1);
     }
     if (header->comment[0] == '\0' || header->prog_name[0] == '\0' ||
-    cleanup_header(header) == ERROR)
-        return ERROR;
+        cleanup_header(header) == ERROR)
+            return ERROR;
     return SUCCESS;
 }
 
@@ -62,8 +62,9 @@ vec_str_t *parse_header(char const *champ_path, header_t *header)
         str_ltrim(&champ->data[i], '\t');
         str_ltrim(&champ->data[i], ' ');
     }
-    if (fill_header(champ, header) == ERROR)
+    if (fill_header(champ, header) == ERROR){
         return NULL;
+    }
     free(content);
     return champ;
 }
