@@ -21,7 +21,7 @@ str_t *convert_file(char const *filepath)
     str_t *new_file = str_create(filepath);
 
     if (str_endswith(new_file, STR(".s")) == 0) {
-        my_dprintf(2, "Error: File must be a .s\n");
+        my_dprintf(2, "asm: File must be a .s\n");
         return NULL;
     }
 
@@ -40,10 +40,9 @@ void write_file(
     if (new_file == NULL) {
         return;
     }
-
     assembler->file = fopen(assembler->filepath, "w");
     if (assembler->file == NULL){
-        my_dprintf(2, "Error: Can't open file\n");
+        my_dprintf(2, "asm: Can't open file\n");
         return;
     }
 

@@ -50,11 +50,11 @@ static void get_coding_byte(str_t *param_type, str_t **buffer, int index)
 
 void get_parameters(vec_str_t *params, str_t **buffer)
 {
-    int value = 0;
+    long value = 0;
 
     for (size_t i = 0; i < params->size; i++) {
         if (str_startswith(params->data[i], STR(DIRECT_CHAR))) {
-            manage_direct(params, buffer, i);
+            manage_direct(params->data[i], buffer);
         }
         if (str_startswith(params->data[i], STR("r"))) {
             value = my_atoi(params->data[i]->data + 1);
@@ -62,9 +62,7 @@ void get_parameters(vec_str_t *params, str_t **buffer)
         }
         if (!str_startswith(params->data[i], STR("r")) &&
             !str_startswith(params->data[i], STR(DIRECT_CHAR))) {
-            value = my_atoi(params->data[i]->data);
-            str_cadd(buffer, (value >> 8) & 0xFF);
-            str_cadd(buffer, value & 0xFF);
+            manage_indirect(params->data[i], buffer);
         }
     }
 }

@@ -41,4 +41,6 @@ int parse_labels(
 
 void manage_direct(vec_str_t *params, str_t **buffer, size_t i);
 
+void get_indirect(char type, long nbr, str_t **buffer);
+
 #endif /* !BODY_H */

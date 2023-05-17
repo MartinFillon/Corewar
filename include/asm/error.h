@@ -10,6 +10,6 @@
 
 int check_args(int argc);
 
-int convert_big_endian(int little);
+int swap_endian(int little);
 
 #endif /* !ERROR_H_ */
