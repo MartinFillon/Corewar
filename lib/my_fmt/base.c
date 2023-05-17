@@ -6,27 +6,29 @@
 */
 
 #include <stdarg.h>
+
+#include "my_fmt.h"
 #include "my_stdlib.h"
 #include "my_str.h"
-#include "my_fmt.h"
 
 static void fmt_add_base(fmt_state_t *state, int is_upper)
 {
-    unsigned long int nb = va_arg(*(state->ap), unsigned long int);
-    int base = va_arg(*(state->ap), int);
+    unsigned long int nb = va_arg(*state->ap, unsigned long int);
+    int base = va_arg(*state->ap, int);
     int len = my_nbrlen(nb, base);
     char *res = malloc(sizeof(char) * (len + 1));
     res[len] = '\0';
     int i = len - 1;
+    int digit = 0;
 
     while (nb) {
-        if (nb % base < 9)
-            res[i--] = (nb % base) + '0';
+        digit = nb % base;
+        if (digit < 0xA)
+            res[i--] = digit + '0';
         else
-            res[i--] = (nb % base - 9) + ((is_upper) ? 'A' : 'a');
+            res[i--] = (digit - 0xA) + ((is_upper) ? 'A' : 'a');
         nb /= base;
     }
-
     str_add(state->buffer, res);
     free(res);
 }

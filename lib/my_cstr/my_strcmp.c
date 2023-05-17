@@ -34,7 +34,7 @@ int my_strstartwith(char const *str, char const *start)
     if (my_strlen(str) < start_len)
         return 0;
 
-    return my_strncmp(str, start, start_len);
+    return my_strncmp(str, start, start_len) == 0;
 }
 
 int my_strendwith(char const *str, char const *end)
@@ -45,5 +45,5 @@ int my_strendwith(char const *str, char const *end)
     if (str_len < end_len)
         return 0;
 
-    return my_strncmp(str + str_len - end_len, end, end_len);
+    return my_strncmp(str + str_len - end_len, end, end_len) == 0;
 }
