@@ -31,13 +31,6 @@ typedef struct prog_s {
     program_t program;
 } prog_t;
 
-VEC_DEF(program_t, program);
-
-typedef struct corewar_s {
-    size_t nbr_cycles;
-    vec_program_t *programs;
-} corewar_t;
-
 VEC_DEF(prog_t, prog);
 
 typedef struct vm_s {
