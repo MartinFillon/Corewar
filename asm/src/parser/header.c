@@ -14,6 +14,7 @@
 
 #include "corewar/op.h"
 #include "asm/asm.h"
+#include "asm/header.h"
 #include "asm/error.h"
 
 static int cleanup_header(header_t *header)

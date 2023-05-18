@@ -11,4 +11,6 @@
 
 vec_str_t *parse_header(char const *champ_path, header_t *header);
 
+void get_prog_size(str_t *champ, header_t *header);
+
 #endif /* !HEADER_H_ */

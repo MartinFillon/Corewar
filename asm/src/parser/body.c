@@ -19,6 +19,7 @@
 #include "corewar/op.h"
 #include "asm/asm.h"
 #include "asm/body.h"
+#include "asm/error.h"
 
 static int find_instruction(str_t *line, str_t const *op_name)
 {
@@ -81,7 +82,7 @@ int parse_body(vec_str_t *body, asm_t *assembler, str_t **buffer)
             return ERROR;
         }
     }
-    assembler->header->prog_size = (*buffer)->length;
+    assembler->header->prog_size = swap_endian((*buffer)->length);
     fwrite(assembler->header, sizeof(header_t), 1, assembler->file);
     fwrite((*buffer)->data, sizeof(char), (*buffer)->length, assembler->file);
     return SUCCESS;

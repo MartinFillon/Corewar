@@ -5,15 +5,33 @@
 ** prog_size
 */
 
+#include "my_str.h"
+
 #include "asm/asm.h"
 #include "corewar/op.h"
-#include "my_str.h"
+
+static void find_for_params(vec_str_t *input, size_t i, header_t *header)
+{
+    for (size_t idx = 1; idx < input->size; idx++){
+        if (input->data[idx]->data[0] == 'r'){
+            header->prog_size += 1;
+        }
+        if (input->data[idx]->data[0] != 'r' &&
+            input->data[idx]->data[0] != '%'){
+            header->prog_size += 2;
+        }
+        if (input->data[idx]->data[0] != '%' && OP_NAME[i].size != 0){
+            header->prog_size += OP_NAME[i].size;
+        }
+    }
+}
 
 void get_prog_size(str_t *champ, header_t *header)
 {
     vec_str_t *input = NULL;
+    str_t *tmp = NULL;
 
-    input = str_split(champ, STR(" \t"));
+    input = str_split(champ, STR(", \t"));
     if (str_compare(input->data[0], STR("live")) != 0 &&
         str_compare(input->data[0], STR("lfork")) != 0 &&
         str_compare(input->data[0], STR("fork")) != 0 &&
@@ -22,20 +40,9 @@ void get_prog_size(str_t *champ, header_t *header)
     } else {
         header->prog_size += 1;
     }
-    for (size_t i = 1; i < input->size; i++){
-        if (str_compare(input->data[i], STR("r")) == 0)
-            header->prog_size += 1;
-        if (str_compare(input->data[i], STR("l ")) == 0)
-            header->prog_size += 2;
-        if (str_compare(input->data[i], STR("%")) == 0)
-            header->prog_size += 4;
+    for (size_t i = 0; i < AFF; i++){
+        tmp = str_create(OP_NAME[i].name);
+        if (str_compare(input->data[0], tmp) == 0)
+            find_for_params(input, i, header);
     }
 }
-    // for (size_t i = 1; i < input->size; i++){
-    //     if (&input->data[i][0] == 'r')
-    //         header->prog_size += 1;
-    //     if (&input->data[i][0] == T_IND)
-    //         header->prog_size += 2;
-    //     if (&input->data[i][0] == DIRECT_CHAR)
-    //         header->prog_size += OP_NAME[i].size;
-    // }
