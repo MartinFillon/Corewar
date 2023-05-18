@@ -13,6 +13,9 @@
 
 void free_vm(vm_t *vm)
 {
+    for (size_t i = 0; i < vm->programs->size; ++i)
+        free(vm->programs->data[i].program.body);
+
     free(vm->programs);
 }
 

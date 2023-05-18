@@ -27,6 +27,7 @@
 
 
 // PARSING
+bool check_valid_prog(vm_t *vm, prog_t *prog, char const *path);
 bool check_and_read_prog(vm_t *vm, prog_t *prog, char const *path);
 bool parse_cycles(char const *const *av, vm_t *vm, int *start_av_from);
 bool parse_prog(char const *const *av, int ac, vm_t *vm, int *i);
@@ -41,7 +42,10 @@ u_char get_bits(u_char byte, int start, int count);
 void free_vm(vm_t *vm);
 void print_vm(vm_t *vm);
 vm_t init_vm(void);
+
 bool load_programs(vm_t *vm);
+void order_programs_by_number(vec_prog_t *programs);
+
 
 
 // PROGRAM
