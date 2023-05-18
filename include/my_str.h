@@ -359,7 +359,7 @@ int str_eq(str_t const *s1, str_t const *s2);
 /**
  * @brief converts a string to an int
  *
- * @param str   the ADRESS of string to extract the integer from
+ * @param str   the ADDRESS of string to extract the integer from
  * @return the integer represented by the string
  */
 long int str_toint(str_t *str);
@@ -367,7 +367,7 @@ long int str_toint(str_t *str);
 /**
  * @brief converts a string to a double
  *
- * @param str   the ADRESS of string to extract the double from
+ * @param str   the ADDRESS of string to extract the double from
  * @return the double represented by the string
  */
 double str_tofloat(str_t *str);
