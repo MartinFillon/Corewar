@@ -33,7 +33,7 @@ static int find_instruction(str_t *line, str_t const *op_name)
             }
         if (callback != 1 &&
             line->data[callback + op_name->length] == LABEL_CHAR){
-                str_slice(&line, callback + op_name->length + 2, line->length);
+                str_slice(&line, callback + op_name->length + 2, line->length) ;
                 return callback;
         }
     }
@@ -81,6 +81,8 @@ int parse_body(vec_str_t *body, asm_t *assembler, str_t **buffer)
             return ERROR;
         }
     }
+    assembler->header->prog_size = (*buffer)->length;
+    fwrite(assembler->header, sizeof(header_t), 1, assembler->file);
     fwrite((*buffer)->data, sizeof(char), (*buffer)->length, assembler->file);
     return SUCCESS;
 }

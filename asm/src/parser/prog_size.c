@@ -22,6 +22,14 @@ void get_prog_size(str_t *champ, header_t *header)
     } else {
         header->prog_size += 1;
     }
+    for (size_t i = 1; i < input->size; i++){
+        if (str_compare(input->data[i], STR("r")) == 0)
+            header->prog_size += 1;
+        if (str_compare(input->data[i], STR("l ")) == 0)
+            header->prog_size += 2;
+        if (str_compare(input->data[i], STR("%")) == 0)
+            header->prog_size += 4;
+    }
 }
     // for (size_t i = 1; i < input->size; i++){
     //     if (&input->data[i][0] == 'r')

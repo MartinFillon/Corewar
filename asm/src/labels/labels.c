@@ -18,17 +18,9 @@
 
 int parse_labels(str_t *label, int index, str_t **buffer, vec_str_t *all_labels)
 {
+    (void)label;
     (void)index;
     (void)buffer;
-
-    for (size_t i = 0; i < all_labels->size; i++) {
-        my_printf("---%s\n", all_labels->data[i]->data);
-        if (str_ncompare(
-                label, all_labels->data[i], label->length) == 0
-            ) {
-            my_printf("Label exists\n");
-            return SUCCESS;
-        }
-    }
-    return ERROR;
+    (void)all_labels;
+    return SUCCESS;
 }

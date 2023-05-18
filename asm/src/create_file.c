@@ -29,9 +29,7 @@ str_t *convert_file(char const *filepath)
     return new_file;
 }
 
-void write_file(
-    asm_t *assembler, str_t **buffer
-)
+void write_file(asm_t *assembler, str_t **buffer)
 {
     (void)buffer;
     str_t *new_file = convert_file(assembler->filepath);
@@ -45,7 +43,5 @@ void write_file(
         my_dprintf(2, "asm: Can't open file\n");
         return;
     }
-
-    fwrite(assembler->header, sizeof(header_t), 1, assembler->file);
     free(new_file);
 }
