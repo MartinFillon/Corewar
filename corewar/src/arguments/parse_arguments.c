@@ -39,8 +39,11 @@ static int parse_prog_number(
             my_dprintf(2, "Error: invalid number (-n) value\n");
             return ERROR;
         }
-
         prog->number = my_atoi(av[*i]);
+        if (prog->number < 1 || prog->number > MAX_PLAYERS) {
+            my_dprintf(2, "Error: invalid number for player, (1, 2, 3, 4)\n");
+            return ERROR;
+        }
         return true;
     }
 
