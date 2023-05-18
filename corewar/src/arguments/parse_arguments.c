@@ -5,83 +5,82 @@
 ** parse_arguments
 */
 
-#include <fcntl.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-
 #include "my_cstr.h"
+#include "my_stdio.h"
 #include "my_stdlib.h"
 #include "my_vec.h"
 
 #include "corewar/arguments.h"
 #include "corewar/corewar.h"
 
-int parse_cycles(char **av, arguments_t *args)
+bool parse_cycles(char const *const *av, vm_t *vm)
 {
-    if (my_strcmp(av[1], "-dump") == 0) {
-        if (!my_str_isnum(av[2]))
-            return ERROR;
-        args->nbr_cycles = my_atoi(av[2]);
+    if (my_streq(av[1], "-dump")) {
+        if (!my_str_isnum(av[2])) {
+            my_dprintf(2, "Error: invalid dump args\n");
+            return false;
+        }
+
+        vm->nbr_cycles = my_atoi(av[2]);
     }
-    return SUCCESS;
+
+    return true;
 }
 
-static int parse_prog_number(char **av, int *j, int ac, prog_t *tmp)
+static int parse_prog_number(
+    int ac, char const *const *av, int *j, prog_t *prog
+)
 {
-    if (!my_strcmp(av[*j], "-n")) {
-            *j += 1;
-        if (*j >= ac || !my_str_isnum(av[*j]))
+    if (my_streq(av[*j], "-n")) {
+        ++*j;
+
+        if (*j >= ac || !my_str_isnum(av[*j])) {
             return ERROR;
-        tmp->number = my_atoi(av[*j]);
+        }
+
+        prog->number = my_atoi(av[*j]);
         return true;
     }
+
     return false;
 }
 
-static int parse_prog_adress(char **av, int *j, int ac, prog_t *tmp)
+static int parse_prog_adress(
+    int ac, char const *const *av, int *j, prog_t *prog
+)
 {
-    if (!my_strcmp(av[*j], "-a")) {
-        *j += 1;
-        if (*j >= ac || !my_str_isnum(av[*j]))
+    if (my_streq(av[*j], "-a")) {
+        ++*j;
+
+        if (*j >= ac || !my_str_isnum(av[*j])) {
             return ERROR;
-        tmp->adress = my_atoi(av[*j]);
+        }
+
+        prog->address = my_atoi(av[*j]);
         return true;
     }
+
     return false;
 }
 
-static int check_file(arguments_t *args, prog_t *prog)
+bool parse_prog(char const *const *av, int ac, vm_t *vm, int *i)
 {
-    int fd = open(prog->path, O_RDONLY);
-    if (fd == -1)
-        return ERROR;
-    close(fd);
-    vec_pushback(&args->programs, prog);
-    return SUCCESS;
-}
-
-int parse_prog(char **av, int ac, arguments_t *args, int *i)
-{
-    prog_t tmp = {0, 0, NULL};
-    int j = *i;
+    prog_t tmp = init_prog();
+    int max_prog_av = *i + MAX_PROG_AV;
     int ret = 0;
 
-    for (; j < *i + 5 && j < ac; j++) {
-        ret = parse_prog_number(av, &j, ac, &tmp);
+    for (; *i < max_prog_av && *i < ac; ++*i) {
+        ret = parse_prog_number(ac, av, i, &tmp);
         if (ret == ERROR)
-            return ERROR;
+            return false;
         if (ret)
             continue;
-        ret = parse_prog_adress(av, &j, ac, &tmp);
+        ret = parse_prog_adress(ac, av, i, &tmp);
         if (ret == ERROR)
-            return ERROR;
+            return false;
         if (ret)
             continue;
-        tmp.path = my_strdup(av[j]);
-        break;
+        return check_and_read_prog(vm, &tmp, av[*i]);
     }
-    *i = j;
-    return check_file(args, &tmp);
+    return false;
 }
