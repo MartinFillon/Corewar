@@ -25,6 +25,18 @@ static int get_total_programs_size(vec_prog_t *programs)
     return total_size;
 }
 
+static bool check_overlap(vm_t *vm, int mem_idx, int prog_size)
+{
+    for (int i = 0; i < prog_size; ++i) {
+        if (vm->arena[(mem_idx + i) % MEM_SIZE] != 0) {
+            my_dprintf(2, "Error: overlap detected\n");
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool load_programs(vm_t *vm)
 {
     vec_prog_t *programs = vm->programs;
@@ -36,10 +48,13 @@ bool load_programs(vm_t *vm)
         if (programs->data[i].address != -1)
             mem_idx = programs->data[i].address;
 
-        my_memcpy(
-            vm->memory + mem_idx, programs->data[i].program.body,
-            programs->data[i].program.header.prog_size
-        );
+        program_t *p = &programs->data[i].program;
+
+        if (check_overlap(vm, mem_idx, p->header.prog_size))
+            return false;
+
+        programs->data[i].address = mem_idx;
+        my_memcpy(vm->arena + mem_idx, p->body, p->header.prog_size);
         mem_idx += programs->data[i].program.header.prog_size + mem_gap;
         mem_idx %= MEM_SIZE;
     }

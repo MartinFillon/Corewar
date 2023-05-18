@@ -27,7 +27,7 @@ vm_t init_vm(void)
         .nbr_cycles_to_dump = 0,
         .nbr_live = 0,
         .last_live = -1,
-        .memory = {0},
+        .arena = {0},
         .programs = vec_create(100, sizeof(prog_t)),
     };
 
@@ -43,4 +43,16 @@ void print_vm(vm_t *vm)
     my_printf("\tnbr_live = %d\n", vm->nbr_live);
     my_printf("\tlast_live = %d\n", vm->last_live);
     my_printf("}\n");
+}
+
+bool start_vm(vm_t *vm)
+{
+    order_programs_by_number(vm->programs);
+
+    if (load_programs(vm) == false)
+        return false;
+
+    vec_reverse(vm->programs);
+
+    return true;
 }

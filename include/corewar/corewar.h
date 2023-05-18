@@ -39,12 +39,15 @@ u_char get_bits(u_char byte, int start, int count);
 
 
 // VM
+vm_t init_vm(void);
 void free_vm(vm_t *vm);
 void print_vm(vm_t *vm);
-vm_t init_vm(void);
+bool start_vm(vm_t *vm);
 
 bool load_programs(vm_t *vm);
 void order_programs_by_number(vec_prog_t *programs);
+
+void dump_memory(vm_t *vm);
 
 
 

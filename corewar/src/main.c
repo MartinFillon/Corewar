@@ -39,14 +39,6 @@ static bool parse_argv(int ac, char const *const *av, vm_t *vm)
     return true;
 }
 
-void start_vm(vm_t *vm)
-{
-    print_vm(vm);
-
-    order_programs_by_number(vm->programs);
-    load_programs(vm);
-}
-
 int main(int ac, char const *const *av)
 {
     vm_t vm = init_vm();
@@ -56,7 +48,10 @@ int main(int ac, char const *const *av)
         return ERROR;
     }
 
-    start_vm(&vm);
+    if (start_vm(&vm) == false)
+        return ERROR;
+
+    dump_memory(&vm);
 
     free_vm(&vm);
     return SUCCESS;

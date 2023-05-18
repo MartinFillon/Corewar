@@ -8,6 +8,7 @@
 #ifndef ARGUMENTS_H_
     #define ARGUMENTS_H_
 
+    #include <sys/types.h>
     #include <stdbool.h>
     #include <stddef.h>
 
@@ -40,7 +41,7 @@ typedef struct vm_s {
     int nbr_live;
     int last_live;
 
-    char memory[MEM_SIZE];
+    u_char arena[MEM_SIZE];
     vec_prog_t *programs;
 } vm_t;
 

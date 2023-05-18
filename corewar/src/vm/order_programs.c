@@ -13,34 +13,23 @@
 #include "corewar/arguments.h"
 #include "corewar/corewar.h"
 
-static vec_int_t *find_used_numbers(vec_prog_t *programs)
+static void fill_used_numbers(vec_prog_t *programs, bool *used_numbers)
 {
-    vec_int_t *used_numbers = vec_create(programs->size, sizeof(int));
-
     for (size_t i = 0; i < programs->size; ++i)
         if (programs->data[i].number != -1)
-            vec_pushback(&used_numbers, &programs->data[i].number);
-
-    return used_numbers;
+            used_numbers[programs->data[i].number - 1] = true;
 }
 
-static bool is_number_used(vec_int_t *used_numbers, int number)
+static int get_next_available_number(bool *used_numbers)
 {
-    for (size_t i = 0; i < used_numbers->size; ++i)
-        if (used_numbers->data[i] == number)
-            return true;
+    int i = 0;
 
-    return false;
-}
+    while (i < MAX_PLAYERS && used_numbers[i])
+        i++;
 
-static int get_next_available_number(vec_int_t *used_numbers, int from)
-{
-    int number = from;
+    used_numbers[i] = true;
 
-    while (is_number_used(used_numbers, number))
-        number++;
-
-    return number;
+    return i;
 }
 
 static int order_by_number(const void *a, const void *b)
@@ -53,17 +42,15 @@ static int order_by_number(const void *a, const void *b)
 
 void order_programs_by_number(vec_prog_t *programs)
 {
-    vec_int_t *used_numbers = find_used_numbers(programs);
-    int number = get_next_available_number(used_numbers, 0);
+    bool *used_numbers = (bool[4]){0, 0, 0, 0};
+    fill_used_numbers(programs, used_numbers);
 
     for (size_t i = 0; i < programs->size; ++i) {
         if (programs->data[i].number != -1)
             continue;
 
-        programs->data[i].number = number;
-        number = get_next_available_number(used_numbers, number + 1);
+        programs->data[i].number = get_next_available_number(used_numbers) + 1;
     }
 
     vec_sort(programs, &order_by_number);
-    vec_reverse(programs);
 }
