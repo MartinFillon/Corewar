@@ -168,6 +168,13 @@ vec_t *vec_filter(void *vec, int (*keep)(void *));
  *                  if find(elem) == 1 then the element will be returned
  * @return the item if it exists or NULL
  */
-void *vec_find(void *vec, int (*find)(void *));
+void *vec_find(void *v, int (*find)(void *, void *), void *data);
+
+/**
+ * @brief reverses a vector
+ *
+ */
+void vec_reverse(void *vec);
+
 
 #endif /* INCLUDE_MY_VEC_ */
