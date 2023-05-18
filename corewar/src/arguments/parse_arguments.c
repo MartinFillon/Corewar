@@ -29,18 +29,18 @@ bool parse_cycles(char const *const *av, vm_t *vm, int *start_av_from)
 }
 
 static int parse_prog_number(
-    int ac, char const *const *av, int *j, prog_t *prog
+    int ac, char const *const *av, int *i, prog_t *prog
 )
 {
-    if (my_streq(av[*j], "-n")) {
-        ++*j;
+    if (my_streq(av[*i], "-n")) {
+        ++*i;
 
-        if (*j >= ac || !my_str_isnum(av[*j])) {
+        if (*i >= ac || !my_str_isnum(av[*i])) {
             my_dprintf(2, "Error: invalid number (-n) value\n");
             return ERROR;
         }
 
-        prog->number = my_atoi(av[*j]);
+        prog->number = my_atoi(av[*i]);
         return true;
     }
 
@@ -48,18 +48,18 @@ static int parse_prog_number(
 }
 
 static int parse_prog_address(
-    int ac, char const *const *av, int *j, prog_t *prog
+    int ac, char const *const *av, int *i, prog_t *prog
 )
 {
-    if (my_streq(av[*j], "-a")) {
-        ++*j;
+    if (my_streq(av[*i], "-a")) {
+        ++*i;
 
-        if (*j >= ac || !my_str_isnum(av[*j])) {
+        if (*i >= ac || !my_str_isnum(av[*i])) {
             my_dprintf(2, "Error: invalid address (-a) value\n");
             return ERROR;
         }
 
-        prog->address = my_atoi(av[*j]) % MEM_SIZE;
+        prog->address = my_atoi(av[*i]) % MEM_SIZE;
         return true;
     }
 
