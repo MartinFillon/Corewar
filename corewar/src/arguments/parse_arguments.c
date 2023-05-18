@@ -13,15 +13,16 @@
 #include "corewar/arguments.h"
 #include "corewar/corewar.h"
 
-bool parse_cycles(char const *const *av, vm_t *vm)
+bool parse_cycles(char const *const *av, vm_t *vm, int *start_av_from)
 {
     if (my_streq(av[1], "-dump")) {
         if (!my_str_isnum(av[2])) {
-            my_dprintf(2, "Error: invalid dump args\n");
+            my_dprintf(2, "Error: invalid dump (-dump) value\n");
             return false;
         }
 
-        vm->nbr_cycles = my_atoi(av[2]);
+        vm->nbr_cycles_to_dump = my_atoi(av[2]);
+        *start_av_from += 2;
     }
 
     return true;
@@ -35,6 +36,7 @@ static int parse_prog_number(
         ++*j;
 
         if (*j >= ac || !my_str_isnum(av[*j])) {
+            my_dprintf(2, "Error: invalid number (-n) value\n");
             return ERROR;
         }
 
@@ -45,7 +47,7 @@ static int parse_prog_number(
     return false;
 }
 
-static int parse_prog_adress(
+static int parse_prog_address(
     int ac, char const *const *av, int *j, prog_t *prog
 )
 {
@@ -53,10 +55,11 @@ static int parse_prog_adress(
         ++*j;
 
         if (*j >= ac || !my_str_isnum(av[*j])) {
+            my_dprintf(2, "Error: invalid address (-a) value\n");
             return ERROR;
         }
 
-        prog->address = my_atoi(av[*j]);
+        prog->address = my_atoi(av[*j]) % MEM_SIZE;
         return true;
     }
 
@@ -75,7 +78,7 @@ bool parse_prog(char const *const *av, int ac, vm_t *vm, int *i)
             return false;
         if (ret)
             continue;
-        ret = parse_prog_adress(ac, av, i, &tmp);
+        ret = parse_prog_address(ac, av, i, &tmp);
         if (ret == ERROR)
             return false;
         if (ret)

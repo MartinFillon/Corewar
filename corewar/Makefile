@@ -10,6 +10,7 @@ CC	=	gcc
 SRC = 	src/main.c							\
 		src/utils.c							\
 		src/vm/vm.c							\
+		src/vm/load_programs.c				\
 		src/arguments/parse_arguments.c		\
 		src/programs/programs.c				\
 		src/programs/utils.c				\
