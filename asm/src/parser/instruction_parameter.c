@@ -20,17 +20,6 @@
 #include "asm/asm.h"
 #include "asm/body.h"
 
-static int str_count(str_t *str, char c)
-{
-    int count = 0;
-
-    for (size_t i = 0; i < str->length; i++) {
-        if (str->data[i] == c)
-            count++;
-    }
-    return count;
-}
-
 static void get_coding_byte(str_t *param_type, str_t **buffer, int index)
 {
     unsigned char coding_byte = 0;
@@ -48,13 +37,14 @@ static void get_coding_byte(str_t *param_type, str_t **buffer, int index)
     str_cadd(buffer, coding_byte);
 }
 
-void get_parameters(vec_str_t *params, str_t **buffer)
+void get_parameters(vec_str_t *params, str_t **buffer, size_t index)
 {
     long value = 0;
+    size_t size = OP_NAME[index].size;
 
     for (size_t i = 0; i < params->size; i++) {
         if (str_startswith(params->data[i], STR(DIRECT_CHAR))) {
-            manage_direct(params->data[i], buffer);
+            manage_direct(params->data[i], buffer, size);
         }
         if (str_startswith(params->data[i], STR("r"))) {
             value = my_atoi(params->data[i]->data + 1);
@@ -62,16 +52,13 @@ void get_parameters(vec_str_t *params, str_t **buffer)
         }
         if (!str_startswith(params->data[i], STR("r")) &&
             !str_startswith(params->data[i], STR(DIRECT_CHAR))) {
-            manage_indirect(params->data[i], buffer);
+            manage_indirect(params->data[i], buffer, size);
         }
     }
 }
 
-static str_t *add_parameter(
-    vec_str_t *params, str_t *param_type, champ_t *champ
-)
+static str_t *add_parameter(vec_str_t *params, str_t *param_type)
 {
-    (void)champ;
     for (size_t i = 0; i < params->size; i++) {
         str_ltrim(&params->data[i], ' ');
         str_ltrim(&params->data[i], '\t');
@@ -102,10 +89,10 @@ int parse_instruction_parameter(
         return ERROR;
     }
     champ->params = str_split(param, STR(SEPARATOR_CHAR));
-    param_type = add_parameter(champ->params, param_type, champ);
+    param_type = add_parameter(champ->params, param_type);
     str_cadd(buffer, ((char) OP_NAME[index].hex));
     get_coding_byte(param_type, buffer, index);
-    get_parameters(champ->params, buffer);
+    get_parameters(champ->params, buffer, index);
     free(param_type);
     return SUCCESS;
 }

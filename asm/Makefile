@@ -10,6 +10,7 @@ CC	?=	gcc
 SRC	=	$(addprefix src/, main.c			\
 			create_file.c					\
 			parser/parser.c					\
+			parser/utils.c					\
 			parser/header.c 				\
 			parser/prog_size.c 				\
 			parser/body.c					\

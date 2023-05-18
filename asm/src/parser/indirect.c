@@ -5,13 +5,16 @@
 ** indirect
 */
 
+#include <stdlib.h>
+
+#include "my_stdio.h"
+#include "my_stdlib.h"
+
 #include "asm/asm.h"
 
-char IND = '3';
-
-static void get_indirect(char type, long nbr, str_t **buffer)
+static void get_indirect(size_t type, long nbr, str_t **buffer)
 {
-    if (type == IND) {
+    if (type == IND_SIZE) {
         if (nbr < 0) {
             nbr = 65536 + nbr;
             str_cadd(buffer, (nbr / 256));
@@ -23,10 +26,9 @@ static void get_indirect(char type, long nbr, str_t **buffer)
     }
 }
 
-void manage_indirect(str_t *param, str_t **buffer)
+void manage_indirect(str_t *param, str_t **buffer, size_t type)
 {
     int value = 0;
-    char type = 0;
     str_t *tmp = str_create(param->data + 1);
 
     value = my_atoi(tmp->data);

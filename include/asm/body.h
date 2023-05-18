@@ -20,7 +20,6 @@ VEC_DEF(label_t, label)
 typedef struct champ_s {
     str_t *instruction;
     vec_str_t *params;
-    vec_int_t *types;
 } champ_t;
 
 VEC_DEF(champ_t, champ)
@@ -39,8 +38,8 @@ int parse_labels(
     str_t *label, int index, str_t **buffer, vec_str_t *all_labels
 );
 
-void manage_direct(vec_str_t *params, str_t **buffer, size_t i);
+void manage_direct(str_t *param, str_t **buffer, size_t type);
 
-void get_indirect(char type, long nbr, str_t **buffer);
+void manage_indirect(str_t *param, str_t **buffer, size_t type);
 
 #endif /* !BODY_H */

@@ -12,12 +12,9 @@
 
 #include "asm/asm.h"
 
-char DIR4 = '0';
-char DIR2 = '2';
-
-static void get_direct_index(char type, long nbr, str_t **buffer)
+static void get_direct_index(size_t type, long nbr, str_t **buffer)
 {
-    if (type == DIR2) {
+    if (type == IND_SIZE) {
         if (nbr < 0) {
             nbr = 65536 + nbr;
             str_cadd(buffer, (nbr / (long)256));
@@ -29,9 +26,9 @@ static void get_direct_index(char type, long nbr, str_t **buffer)
     }
 }
 
-static void get_direct_int(char type, long nbr, str_t **buffer)
+static void get_direct_int(size_t type, long nbr, str_t **buffer)
 {
-    if (type == DIR4) {
+    if (type == DIR_SIZE) {
         if (nbr < 0) {
             nbr = 4294967296 + nbr;
             str_cadd(buffer, (nbr / 16777216));
@@ -48,14 +45,15 @@ static void get_direct_int(char type, long nbr, str_t **buffer)
     get_direct_index(type, nbr, buffer);
 }
 
-void manage_direct(str_t *param, str_t **buffer)
+void manage_direct(str_t *param, str_t **buffer, size_t type)
 {
     int value = 0;
-    char type = 0;
     str_t *tmp = str_create(param->data + 1);
 
     if (tmp->data[0] == LABEL_CHAR){
         str_cadd(buffer, 0x00);
+        str_cadd(buffer, 0x00);
+        free(tmp);
         return;
     }
     value = my_atoi(tmp->data);
