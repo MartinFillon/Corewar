@@ -7,27 +7,31 @@ on:
       - "ga-ignore-**"
 
 env:
-  EXECUTABLE: "my_rpg"
+  EXECUTABLES: "corewar/corewar,asm/asm"
 
 jobs:
-  check_compilation:
+  check_program_compilation:
     runs-on: ubuntu-latest
+
     container:
       image: epitechcontent/epitest-docker
 
     steps:
-      - name: checkout the repo
+      - name: Checkout the repo
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: compile project
+
+      - name: Build project
+        timeout-minutes: 2
         run: |
-          timeout 120 make && make clean
-      - name: check presence of executables
+          make && make clean
+
+      - name: Check executables
         run: |
           for EXECUTABLE in $(echo $EXECUTABLES | tr "," "\n"); do
             if [[ ! -f $EXECUTABLE ]]; then
-              echo "::error file=Makefile,title=Makefile error::Missing executable $EXECUTABLE"
-              exit 1
+                echo "::error title=Executable not found $EXECUTABLE::"
+                exit 1
             fi
           done

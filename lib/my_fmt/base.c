@@ -21,12 +21,11 @@ static void fmt_add_base(fmt_state_t *state, int is_upper)
     int i = len - 1;
     int digit = 0;
 
+    if (nb == 0) res[0] = '0';
     while (nb) {
         digit = nb % base;
-        if (digit < 0xA)
-            res[i--] = digit + '0';
-        else
-            res[i--] = (digit - 0xA) + ((is_upper) ? 'A' : 'a');
+        res[i--] = (digit < 0xA) ?
+            (digit + '0') : ((digit - 0xA) + ((is_upper) ? 'A' : 'a'));
         nb /= base;
     }
     str_add(state->buffer, res);

@@ -12,22 +12,13 @@
 
 #include "my_cstr.h"
 #include "my_stdio.h"
+#include "my_stdlib.h"
 #include "my_str.h"
 #include "my_vec.h"
 
-#include "asm/asm.h"
 #include "corewar/op.h"
-
-static int str_count(str_t *str, char c)
-{
-    int count = 0;
-
-    for (size_t i = 0; i < str->length; i++) {
-        if (str->data[i] == c)
-            count++;
-    }
-    return count;
-}
+#include "asm/asm.h"
+#include "asm/body.h"
 
 static void get_coding_byte(str_t *param_type, str_t **buffer, int index)
 {
@@ -46,26 +37,64 @@ static void get_coding_byte(str_t *param_type, str_t **buffer, int index)
     str_cadd(buffer, coding_byte);
 }
 
-int parse_instruction_parameter(str_t *param, int index, str_t **buffer)
+void get_parameters(vec_str_t *params, str_t **buffer, size_t index)
 {
-    vec_str_t *params = str_split(param, STR(SEPARATOR_CHAR));
-    str_t *param_type = str_create("");
-    if (str_count(param, ',') != OP_NAME[index].nb_param)
-        return ERROR;
-    str_cadd(buffer, ((char) OP_NAME[index].hex));
+    long value = 0;
+    size_t size = OP_NAME[index].size;
+
+    for (size_t i = 0; i < params->size; i++) {
+        if (str_startswith(params->data[i], STR(DIRECT_CHAR))) {
+            manage_direct(params->data[i], buffer, size);
+        }
+        if (str_startswith(params->data[i], STR("r"))) {
+            value = my_atoi(params->data[i]->data + 1);
+            str_cadd(buffer, value);
+        }
+        if (!str_startswith(params->data[i], STR("r")) &&
+            !str_startswith(params->data[i], STR(DIRECT_CHAR))) {
+            manage_indirect(params->data[i], buffer, size);
+        }
+    }
+}
+
+static str_t *add_parameter(vec_str_t *params, str_t *param_type)
+{
     for (size_t i = 0; i < params->size; i++) {
         str_ltrim(&params->data[i], ' ');
         str_ltrim(&params->data[i], '\t');
-        if (str_startswith(params->data[i], STR(DIRECT_CHAR)))
+        if (str_startswith(params->data[i], STR(DIRECT_CHAR))){
             str_sadd(&param_type, STR(DIRECT));
-        if (str_startswith(params->data[i], STR("r")))
+        }
+        if (str_startswith(params->data[i], STR("r"))){
             str_sadd(&param_type, STR(REG));
+        }
         if (!str_startswith(params->data[i], STR("r")) &&
-            !str_startswith(params->data[i], STR(DIRECT_CHAR)))
+            !str_startswith(params->data[i], STR(DIRECT_CHAR))){
             str_sadd(&param_type, STR(INDIRECT));
+        }
     }
+    return param_type;
+}
+
+int parse_instruction_parameter(
+    str_t *param, size_t index, str_t **buffer, champ_t *champ
+)
+{
+    str_t *param_type = str_create("");
+
+    str_trim(&param, '\t');
+    str_trim(&param, ' ');
+    if (str_count(param, ',') != OP_NAME[index].nb_param){
+        my_dprintf(2, "%s: Invalid nbr of parameters\n", OP_NAME[index].name);
+        my_dprintf(2, "Expected %d, got %d\n", OP_NAME[index].nb_param,
+            str_count(param, ','));
+        return ERROR;
+    }
+    champ->params = str_split(param, STR(SEPARATOR_CHAR));
+    param_type = add_parameter(champ->params, param_type);
+    str_cadd(buffer, ((char) OP_NAME[index].hex));
     get_coding_byte(param_type, buffer, index);
-    vec_free(params);
+    get_parameters(champ->params, buffer, index);
     free(param_type);
     return SUCCESS;
 }

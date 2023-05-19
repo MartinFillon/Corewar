@@ -16,35 +16,50 @@
 #include "my_str.h"
 #include "my_vec.h"
 
-#include "asm/asm.h"
 #include "corewar/op.h"
+#include "asm/asm.h"
+#include "asm/body.h"
+#include "asm/error.h"
 
 static int find_instruction(str_t *line, str_t const *op_name)
 {
     int callback = 0;
 
     for (size_t i = 0; i < line->length; i++) {
-        if ((callback = str_find(line, op_name, i)) != -1 &&
+        callback = str_find(line, op_name, i);
+        if ((callback != -1) &&
             (line->data[callback + op_name->length] == ' ' ||
-            line->data[callback + op_name->length] == '\t')) {
-            return callback;
+            line->data[callback + op_name->length] == '\t')){
+                return callback;
+            }
+        if (callback != 1 &&
+            line->data[callback + op_name->length] == LABEL_CHAR){
+                str_slice(&line, callback + op_name->length + 2, line->length) ;
+                return callback;
         }
     }
     return -1;
 }
 
-static int manage_instruction(str_t *line, str_t **buffer)
+static int manage_instruction(
+    str_t *line, size_t index, str_t **buffer, asm_t *assembler
+)
 {
+    (void)index;
+    champ_t body = {0};
     str_t *name = str_create("");
-    str_t *temp;
+    str_t *tmp = NULL;
     int callback = 0;
 
     for (size_t i = 0; i <= AFF; i++) {
         str_add(str_clear(&name), OP_NAME[i].name);
-        if ((callback = find_instruction(line, name)) != -1) {
-            temp = str_create(&line->data[callback + name->length]);
-            callback = parse_instruction_parameter(temp, i, buffer);
-            my_vfree(2, temp, name);
+        callback = find_instruction(line, name);
+        if (callback != -1) {
+            body.instruction = name;
+            tmp = str_create(&line->data[callback + name->length]);
+            callback = parse_instruction_parameter(tmp, i, buffer, &body);
+            vec_pushback(&assembler->champ, &body);
+            my_vfree(1, tmp);
             return callback;
         }
     }
@@ -52,24 +67,23 @@ static int manage_instruction(str_t *line, str_t **buffer)
     return ERROR;
 }
 
-int parse_body(vec_str_t *champ, char const *filepath, header_t *header)
+int parse_body(vec_str_t *body, asm_t *assembler, str_t **buffer)
 {
-    str_t *buffer = str_create("");
-
-    for (size_t i = 0; i < champ->size; i++) {
-        if (champ->data[i]->data[0] == COMMENT_CHAR ||
-            champ->data[i]->length == 0 || champ->data[i]->data[0] == '.') {
-            free(champ->data[i]);
-            vec_remove(champ, i);
+    for (size_t i = 0; i < body->size; i++) {
+        if (body->data[i]->data[0] == COMMENT_CHAR ||
+            body->data[i]->length == 0 || body->data[i]->data[0] == '.') {
+            free(body->data[i]);
+            vec_remove(body, i);
             i--;
         }
     }
-    for (size_t i = 0; i < champ->size; i++) {
-        if (manage_instruction(champ->data[i], &buffer) == ERROR)
+    for (size_t i = 0; i < body->size; i++) {
+        if (manage_instruction(body->data[i], i, buffer, assembler) == ERROR){
             return ERROR;
+        }
     }
-    header->prog_size = buffer->length;
-    write_file(header, filepath, buffer);
-    free(buffer);
+    assembler->header->prog_size = swap_endian((*buffer)->length);
+    fwrite(assembler->header, sizeof(header_t), 1, assembler->file);
+    fwrite((*buffer)->data, sizeof(char), (*buffer)->length, assembler->file);
     return SUCCESS;
 }

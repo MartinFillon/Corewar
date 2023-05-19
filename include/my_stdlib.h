@@ -11,7 +11,7 @@
     #include <stdint.h>
     #include <stdbool.h>
 
-    #define MAX_SWAP_SIZE   (1024)
+    #define MAX_SWAP_SIZE   (8192)
 
 
 size_t my_nbrlen(long int nb, int base);
