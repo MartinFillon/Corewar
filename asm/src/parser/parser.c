@@ -26,11 +26,11 @@ int launch_parser(asm_t *assembler, char const *filepath)
 
     content = parse_header(filepath, &header);
     if (content == NULL) {
-        vec_free(content);
+        free(buffer);
         return ERROR;
     }
     assembler->header = &header;
-    write_file(assembler, &buffer);
+    write_file(assembler);
     if (parse_body(content, assembler, &buffer) == ERROR) {
         vec_free(content);
         return ERROR;

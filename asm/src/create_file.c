@@ -29,9 +29,8 @@ str_t *convert_file(char const *filepath)
     return new_file;
 }
 
-void write_file(asm_t *assembler, str_t **buffer)
+void write_file(asm_t *assembler)
 {
-    (void)buffer;
     str_t *new_file = convert_file(assembler->filepath);
     assembler->filepath = new_file->data;
 

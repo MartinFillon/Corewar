@@ -52,7 +52,7 @@ hi:	live %234
 	zjmp %:hi
 
     ld %0, r3
-    aff r-1000
+    aff r94
     lfork %:hi
     ld %0, r3
     or r1, %0, r3
@@ -110,19 +110,18 @@ po:	ld	%65, r8
 	zjmp %:po
 
     ld %0, r3
-    aff r-1000
+    aff r200
     lfork %:po
     ld %0, r3
-    or r1, %0, r3
+    or r1, %4, r3
 
     and r2, %200, r800
     ld %0, r3
-    live %-233
     st r2, r99
     zjmp %:pompes
 
-pompes: ldi r12, r-4, r5
-    xor r-3, r2, r100
+pompes: ldi r12, r4, r5
+    xor r3, r2, r100
 
     ld %0, r3
     sti r9, %:pompes, r-1
@@ -132,7 +131,7 @@ pompes: ldi r12, r-4, r5
     ld %0, r3
     zjmp %:attack
     ld %0, r3
-    aff r-1000
+    aff r94
     lfork %:hi
     ld %0, r3
     or r1, %0, r3
@@ -144,7 +143,7 @@ pompes: ldi r12, r-4, r5
     zjmp %:pompes
 
     ld %0, r3
-    aff r-1000
+    aff r94
     lfork %:bro
     ld %0, r3
     zjmp	%:begin
@@ -155,7 +154,7 @@ pompes: ldi r12, r-4, r5
 	zjmp %:po
 
     ld %0, r3
-    aff r-1000
+    aff r94
     lfork %:lol
     ld %0, r3
     or r1, %0, r3
@@ -169,7 +168,7 @@ pompes: ldi r12, r-4, r5
 lol: ldi r12, r-4, r5
 
     ld %0, r3
-    aff r-1000
+    aff r94
     lfork %:bro
     ld %0, r3
     zjmp	%:begin
@@ -193,7 +192,7 @@ lol: ldi r12, r-4, r5
     zjmp %:pompes
 
     ld %0, r3
-    aff r-1000
+    aff r94
     lfork %:bro
     ld %0, r3
     zjmp	%:begin
