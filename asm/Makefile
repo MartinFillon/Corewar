@@ -5,15 +5,21 @@
 ## Makefile for asm
 ##
 
-CC	=	gcc
+CC	?=	gcc
 
-SRC	=	src/main.c							\
-		src/create_file.c					\
-		src/parser/parser.c					\
-		src/parser/body.c					\
-		src/parser/instruction_parameter.c	\
-		src/error_handling/handle_errors.c	\
-		src/error_handling/big_endian.c
+SRC	=	$(addprefix src/, main.c			\
+			create_file.c					\
+			parser/parser.c					\
+			parser/utils.c					\
+			parser/header.c 				\
+			parser/prog_size.c 				\
+			parser/body.c					\
+			parser/direct.c 				\
+			parser/indirect.c 				\
+			parser/instruction_parameter.c	\
+			labels/labels.c					\
+			error_handling/handle_errors.c	\
+			error_handling/big_endian.c)
 
 NAME = asm
 

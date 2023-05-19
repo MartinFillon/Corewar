@@ -14,7 +14,7 @@
     #define MAX_PLAYERS 4
 
     #define COMMENT_CHAR '#'
-    #define LABEL_CHAR ":"
+    #define LABEL_CHAR ':'
     #define DIRECT_CHAR "%"
     #define SEPARATOR_CHAR ","
 
@@ -43,12 +43,12 @@ typedef char    args_type_t;
     #define T_LAB 8       /* LABEL */
 
 typedef struct op_s {
-    char         *mnemonique;
-    char         nbr_args;
-    args_type_t  type[MAX_ARGS_NUMBER];
-    char         code;
-    int          nbr_cycles;
-    char         *comment;
+    char *mnemonique;
+    char nbr_args;
+    args_type_t type[MAX_ARGS_NUMBER];
+    char code;
+    int nbr_cycles;
+    char *comment;
 } op_t;
 
 /*

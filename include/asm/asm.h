@@ -8,8 +8,10 @@
 #ifndef ASM_H_
     #define ASM_H_
     #include <stdint.h>
+    #include <stdio.h>
     #include "my_str.h"
     #include "corewar/op.h"
+    #include "asm/body.h"
     #define UNUSED __attribute__((unused))
 
     #define ERROR 84
@@ -25,7 +27,17 @@ typedef struct op_name_s {
     const uint8_t hex;
     const char *name;
     const int *index;
-} op_name_t;
+    size_t size;
+}op_name_t;
+
+typedef struct asm_s {
+    FILE *file;
+    char const *filepath;
+    header_t *header;
+    vec_champ_t *champ;
+    vec_label_t *labels;
+    str_t *buffer;
+} asm_t;
 
 enum {
     LIVE,
@@ -60,6 +72,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x01,
         .name = "live",
         .index = (int[]) {UNDEFINED},
+        .size = 4,
     },
     {
         .id = LD,
@@ -67,6 +80,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x02,
         .name = "ld",
         .index = (int[]) {UNDEFINED, REGISTER},
+        .size = 4,
     },
     {
         .id = ST,
@@ -74,6 +88,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x03,
         .name = "st",
         .index = (int[]) {REGISTER,  UNDEFINED},
+        .size = 0,
     },
     {
         .id = ADD,
@@ -81,6 +96,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x04,
         .name = "add",
         .index = (int[]) {REGISTER,  REGISTER, REGISTER},
+        .size = 0,
     },
     {
         .id = SUB,
@@ -88,6 +104,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x05,
         .name = "sub",
         .index = (int[]) {REGISTER,  REGISTER, REGISTER},
+        .size = 0,
     },
     {
         .id = AND,
@@ -95,6 +112,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x06,
         .name = "and",
         .index = (int[]) {UNDEFINED,  UNDEFINED, REGISTER},
+        .size = 4,
     },
     {
         .id = OR,
@@ -102,6 +120,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x07,
         .name = "or",
         .index = (int[]) {UNDEFINED,  UNDEFINED, REGISTER},
+        .size = 4,
     },
     {
         .id = XOR,
@@ -109,6 +128,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x08,
         .name = "xor",
         .index = (int[]) {UNDEFINED,  UNDEFINED, REGISTER},
+        .size = 4,
     },
     {
         .id = ZJMP,
@@ -116,6 +136,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x09,
         .name = "zjmp",
         .index = (int[]) {INDEX},
+        .size = 2,
     },
     {
         .id = LDI,
@@ -123,6 +144,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x0a,
         .name = "ldi",
         .index = (int[]) {REGEX,  REGEX, REGISTER},
+        .size = 2,
     },
     {
         .id = STI,
@@ -130,6 +152,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x0b,
         .name = "sti",
         .index = (int[]) {REGISTER,  REGEX, REGEX},
+        .size = 2,
     },
     {
         .id = FORK,
@@ -137,6 +160,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x0c,
         .name = "fork",
         .index = (int[]) {INDEX},
+        .size = 2,
     },
     {
         .id = LLD,
@@ -144,6 +168,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x0d,
         .name = "lld",
         .index = (int[]) {UNDEFINED, REGISTER},
+        .size = 4,
     },
     {
         .id = LLDI,
@@ -151,6 +176,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x0e,
         .name = "lldi",
         .index = (int[]) {REGEX,  REGEX, REGISTER},
+        .size = 2,
     },
     {
         .id = LFORK,
@@ -158,6 +184,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x0f,
         .name = "lfork",
         .index = (int[]) {INDEX},
+        .size = 2,
     },
     {
         .id = AFF,
@@ -165,27 +192,14 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x10,
         .name = "aff",
         .index = (int[]) {REGISTER},
+        .size = 0,
     }
 };
 
-/* PARSER */
-int launch_parser(header_t *header, char const *filepath);
-int parse_body(vec_str_t *champ, char const *filepath, header_t *header);
-long find_name(str_t *str, str_t *find);
-int parse_instruction_parameter(str_t *param, int index, str_t **buffer);
+int launch_parser(asm_t *assembler, char const *filepath);
 
-/* UTILS */
-int nb_char_to_skip(str_t *line, char delimiter, int start);
+void write_file(asm_t *assembler, str_t **buffer);
 
-/* ERROR HANDLING */
-// BASE
-int check_args(int argc);
-
-int convert_big_endian(int little);
-
-/* CONVERSION */
-void write_file(
-    header_t const *header,const char *filepath, str_t const *buffer
-);
+int str_count(str_t *str, char c);
 
 #endif /* !ASM_H_ */
