@@ -6,40 +6,49 @@
 */
 
 #include <fcntl.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
 #include <unistd.h>
 
-#include "my_btree.h"
 #include "my_stdio.h"
-
 #include "my_stdlib.h"
-#include "my_str.h"
 #include "my_vec.h"
 
-#include "asm/asm.h"
 #include "corewar/corewar.h"
 #include "corewar/op.h"
 
-static bool read_program(program_t *program, int fd)
+static bool read_header(program_t *p, int fd)
 {
-    if (read(fd, &program->header, sizeof(header_t)) != sizeof(header_t)) {
+    if (read(fd, &p->header, sizeof(header_t)) != sizeof(header_t)) {
         my_dprintf(2, "Error: failed to read header\n");
         return false;
     }
-    if (swap_endian(program->header.magic) != COREWAR_EXEC_MAGIC) {
+
+    p->header.magic = swap_endian(p->header.magic);
+    p->header.prog_size = swap_endian(p->header.prog_size);
+
+    if (p->header.magic != COREWAR_EXEC_MAGIC) {
         my_dprintf(2, "Error: wrong magic number\n");
         return false;
     }
-    int prog_size = swap_endian(program->header.prog_size);
-    program->body = malloc(sizeof(char) * prog_size);
-    if (program->body == NULL) {
+    if (p->header.prog_size > MEM_SIZE) {
+        my_dprintf(2, "Error: program size is bigger than the arena\n");
+        return false;
+    }
+    return true;
+}
+
+static bool read_program(program_t *p, int fd)
+{
+    if (read_header(p, fd) == false)
+        return false;
+
+    p->body = malloc(sizeof(char) * p->header.prog_size);
+
+    if (p->body == NULL) {
         my_dprintf(2, "Error: malloc failed\n");
         return false;
     }
-    if (read(fd, program->body, prog_size) != prog_size) {
+    if (read(fd, p->body, p->header.prog_size) != p->header.prog_size) {
+        free(p->body);
         my_dprintf(2, "Error: failed to read body\n");
         return false;
     }
@@ -48,10 +57,8 @@ static bool read_program(program_t *program, int fd)
 
 bool check_and_read_prog(vm_t *vm, prog_t *prog, char const *path)
 {
-    if (my_strendwith(path, ".cor") == false) {
-        my_dprintf(2, "Error: %s is not a .cor file\n", path);
+    if (check_valid_prog(vm, prog, path) == false)
         return false;
-    }
 
     int fd = open(path, O_RDONLY);
     if (fd < 0) {

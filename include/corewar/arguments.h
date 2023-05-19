@@ -8,6 +8,7 @@
 #ifndef ARGUMENTS_H_
     #define ARGUMENTS_H_
 
+    #include <sys/types.h>
     #include <stdbool.h>
     #include <stddef.h>
 
@@ -31,23 +32,16 @@ typedef struct prog_s {
     program_t program;
 } prog_t;
 
-VEC_DEF(program_t, program);
-
-typedef struct corewar_s {
-    size_t nbr_cycles;
-    vec_program_t *programs;
-} corewar_t;
-
 VEC_DEF(prog_t, prog);
 
 typedef struct vm_s {
     int cycle;
     int cycle_to_die;
-    int nbr_cycles;
+    int nbr_cycles_to_dump;
     int nbr_live;
     int last_live;
 
-    char memory[MEM_SIZE];
+    u_char arena[MEM_SIZE];
     vec_prog_t *programs;
 } vm_t;
 

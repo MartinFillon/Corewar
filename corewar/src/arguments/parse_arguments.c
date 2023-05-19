@@ -13,50 +13,56 @@
 #include "corewar/arguments.h"
 #include "corewar/corewar.h"
 
-bool parse_cycles(char const *const *av, vm_t *vm)
+bool parse_cycles(char const *const *av, vm_t *vm, int *start_av_from)
 {
     if (my_streq(av[1], "-dump")) {
         if (!my_str_isnum(av[2])) {
-            my_dprintf(2, "Error: invalid dump args\n");
+            my_dprintf(2, "Error: invalid dump (-dump) value\n");
             return false;
         }
 
-        vm->nbr_cycles = my_atoi(av[2]);
+        vm->nbr_cycles_to_dump = my_atoi(av[2]);
+        *start_av_from += 2;
     }
 
     return true;
 }
 
 static int parse_prog_number(
-    int ac, char const *const *av, int *j, prog_t *prog
+    int ac, char const *const *av, int *i, prog_t *prog
 )
 {
-    if (my_streq(av[*j], "-n")) {
-        ++*j;
+    if (my_streq(av[*i], "-n")) {
+        ++*i;
 
-        if (*j >= ac || !my_str_isnum(av[*j])) {
+        if (*i >= ac || !my_str_isnum(av[*i])) {
+            my_dprintf(2, "Error: invalid number (-n) value\n");
             return ERROR;
         }
-
-        prog->number = my_atoi(av[*j]);
+        prog->number = my_atoi(av[*i]);
+        if (prog->number < 1 || prog->number > MAX_PLAYERS) {
+            my_dprintf(2, "Error: invalid number for player, (1, 2, 3, 4)\n");
+            return ERROR;
+        }
         return true;
     }
 
     return false;
 }
 
-static int parse_prog_adress(
-    int ac, char const *const *av, int *j, prog_t *prog
+static int parse_prog_address(
+    int ac, char const *const *av, int *i, prog_t *prog
 )
 {
-    if (my_streq(av[*j], "-a")) {
-        ++*j;
+    if (my_streq(av[*i], "-a")) {
+        ++*i;
 
-        if (*j >= ac || !my_str_isnum(av[*j])) {
+        if (*i >= ac || !my_str_isnum(av[*i])) {
+            my_dprintf(2, "Error: invalid address (-a) value\n");
             return ERROR;
         }
 
-        prog->address = my_atoi(av[*j]);
+        prog->address = my_atoi(av[*i]) % MEM_SIZE;
         return true;
     }
 
@@ -75,7 +81,7 @@ bool parse_prog(char const *const *av, int ac, vm_t *vm, int *i)
             return false;
         if (ret)
             continue;
-        ret = parse_prog_adress(ac, av, i, &tmp);
+        ret = parse_prog_address(ac, av, i, &tmp);
         if (ret == ERROR)
             return false;
         if (ret)

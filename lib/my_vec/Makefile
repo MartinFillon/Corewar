@@ -18,6 +18,7 @@ SRC	=	./add.c			\
 		./free.c		\
 		./iterate.c		\
 		./remove.c		\
+		./reverse.c		\
 		./sort.c		\
 		./utils.c
 

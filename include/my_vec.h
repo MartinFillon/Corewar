@@ -83,7 +83,7 @@ void vec_remove(void *vec, size_t idx);
 /**
  * @brief inserts an element into a vector at a given index
  *
- * @param vec   the ADRESS of the vector to insert the element in
+ * @param vec   the ADDRESS of the vector to insert the element in
  * @param elem  the element to insert
  * @param idx   the index at which the element will be inserted
  */
@@ -101,8 +101,8 @@ vec_t **vec_resize(vec_t **vec, size_t new_size);
 /**
  * @brief adds an element at the back of a vector
  *
- * @param vec   the ADRESS of the vector to append the element to
- * @param elem  the ADRESS of element to add
+ * @param vec   the ADDRESS of the vector to append the element to
+ * @param elem  the ADDRESS of element to add
  */
 void vec_pushback(void *vec, void *elem);
 
@@ -168,6 +168,13 @@ vec_t *vec_filter(void *vec, int (*keep)(void *));
  *                  if find(elem) == 1 then the element will be returned
  * @return the item if it exists or NULL
  */
-void *vec_find(void *vec, int (*find)(void *));
+void *vec_find(void *v, int (*find)(void *, void *), void *data);
+
+/**
+ * @brief reverses a vector
+ *
+ */
+void vec_reverse(void *vec);
+
 
 #endif /* INCLUDE_MY_VEC_ */

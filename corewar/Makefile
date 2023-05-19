@@ -10,7 +10,11 @@ CC	=	gcc
 SRC = 	src/main.c							\
 		src/utils.c							\
 		src/vm/vm.c							\
+		src/vm/load_programs.c				\
+		src/vm/order_programs.c				\
+		src/vm/dump_memory.c				\
 		src/arguments/parse_arguments.c		\
+		src/programs/check_program.c		\
 		src/programs/programs.c				\
 		src/programs/utils.c				\
 		src/programs/read_program.c

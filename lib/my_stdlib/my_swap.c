@@ -5,16 +5,19 @@
 ** generic swap
 */
 
+#include <assert.h>
+
 #include "my_stdlib.h"
 
 void my_swap(void *a, void *b, size_t elem_size)
 {
-    static char temp[MAX_SWAP_SIZE] = {0};
+    char *char_a = a;
+    char *char_b = b;
+    char tmp = 0;
 
-    if (elem_size > MAX_SWAP_SIZE)
-        return;
-
-    my_memcpy(temp, b, elem_size);
-    my_memcpy(b, a, elem_size);
-    my_memcpy(a, temp, elem_size);
+    do {
+        tmp = *char_a;
+        *char_a++ = *char_b;
+        *char_b++ = tmp;
+    } while (--elem_size > 0);
 }

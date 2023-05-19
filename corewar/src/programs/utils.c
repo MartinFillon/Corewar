@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2022
-** test123
+** corewar
 ** File description:
 ** program utils
 */
