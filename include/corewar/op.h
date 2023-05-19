@@ -5,6 +5,7 @@
 ** op
 */
 
+
 #ifndef _OP_H_
     #define _OP_H_
 
@@ -32,6 +33,8 @@
 **
 */
 
+typedef struct program_s program_t;
+
 typedef char    args_type_t;
 
     #define T_REG 1       /* register */
@@ -48,6 +51,7 @@ typedef struct op_s {
     char         code;
     int          nbr_cycles;
     char         *comment;
+    int (*func)(program_t *, char *, int *);
 } op_t;
 
 /*

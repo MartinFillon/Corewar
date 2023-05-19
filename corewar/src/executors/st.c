@@ -20,7 +20,7 @@ int exec_st(program_t *p, char *memory, int *pc)
     get_arg_types(memory, *pc + 1, arg_types);
     reg = memory[*pc + 2];
     if (arg_types[1] == T_IND) {
-        arg1 = get_indirect(memory, *pc + 3);
+        arg1 = get_indirect(memory, *pc + 3, *pc);
         write_int(
             memory, (*pc + arg1 % IDX_MOD) % MEM_SIZE, p->registers[reg - 1]
         );
