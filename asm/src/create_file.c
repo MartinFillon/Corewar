@@ -18,6 +18,7 @@
 
 str_t *convert_file(char const *filepath)
 {
+    printf("%s\n", filepath);
     str_t *new_file = str_create(filepath);
 
     if (str_endswith(new_file, STR(".s")) == 0) {
