@@ -8,7 +8,8 @@
 
 live:	live %1
 
-ok:	sti r5, r4, r1
+ok:
+	sti r5, r4, r1
 	add r4, r5, r4
 	ld %0, r8
 	zjmp %:live
