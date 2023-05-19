@@ -18,7 +18,6 @@
 
 str_t *convert_file(char const *filepath)
 {
-    printf("%s\n", filepath);
     str_t *new_file = str_create(filepath);
 
     if (str_endswith(new_file, STR(".s")) == 0) {
@@ -28,7 +27,6 @@ str_t *convert_file(char const *filepath)
 
     str_slice(&new_file, 0, new_file->length - 2);
     str_add(&new_file, ".cor");
-    printf("%s\n", new_file->data);
     return new_file;
 }
 

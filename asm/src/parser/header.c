@@ -60,7 +60,7 @@ vec_str_t *parse_header(char const *champ_path, header_t *header)
     str_t *content = read_file(champ_path);
     vec_str_t *champ = NULL;
 
-    if (content == NULL || my_strendwith(champ_path, ".cor") == 1){
+    if (content == NULL){
         my_dprintf(2, "asm: Can't read source file %s\n", champ_path);
         free(content);
         return NULL;

@@ -31,7 +31,7 @@ int main(int argc, char **argv)
         .labels = vec_create(100, sizeof(label_t)),
     };
 
-    if (check_args(argc) == ERROR){
+    if (check_args(argc, argv) == ERROR){
         free_champ(&assembler);
         return ERROR;
     }
