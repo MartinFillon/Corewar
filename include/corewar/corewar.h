@@ -49,6 +49,9 @@ void print_progs(vec_prog_t *progs);
 // GETTERS
 int get_direct(char *mememory, int memory_index);
 void get_arg_types(char *memory, int memory_index, u_char *arg_types);
-int get_indirect(char *memory, int memory_index);
+int get_indirect(char *memory, int memory_index, int index);
+
+//Writers
+void write_int(char *memory, int index, int content);
 
 #endif /* !COREWAR_H_ */
