@@ -13,7 +13,6 @@
 
 static void free_champ(asm_t *champ)
 {
-    fclose(champ->file);
     for (size_t i = 0; i < champ->labels->size; i++){
         free(champ->labels->data[i].label);
     }
@@ -32,11 +31,15 @@ int main(int argc, char **argv)
         .labels = vec_create(100, sizeof(label_t)),
     };
 
-    if (check_args(argc) == ERROR)
+    if (check_args(argc, argv) == ERROR){
+        free_champ(&assembler);
         return ERROR;
-    if (launch_parser(&assembler, argv[1]) == ERROR)
+    }
+    if (launch_parser(&assembler, argv[1]) == ERROR){
+        free_champ(&assembler);
         return ERROR;
-
+    }
+    fclose(assembler.file);
     free_champ(&assembler);
     return SUCCESS;
 }

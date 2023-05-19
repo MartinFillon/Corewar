@@ -15,7 +15,6 @@
 #include "corewar/op.h"
 #include "asm/asm.h"
 #include "asm/header.h"
-#include "asm/error.h"
 
 static int cleanup_header(header_t *header)
 {
@@ -59,11 +58,11 @@ static int fill_header(vec_str_t *champ, header_t *header)
 vec_str_t *parse_header(char const *champ_path, header_t *header)
 {
     str_t *content = read_file(champ_path);
-    header->magic = swap_endian(COREWAR_EXEC_MAGIC);
     vec_str_t *champ = NULL;
 
     if (content == NULL){
         my_dprintf(2, "asm: Can't read source file %s\n", champ_path);
+        free(content);
         return NULL;
     }
     champ = str_split(content, STR("\n"));
@@ -71,8 +70,11 @@ vec_str_t *parse_header(char const *champ_path, header_t *header)
         str_ltrim(&champ->data[i], '\t');
         str_ltrim(&champ->data[i], ' ');
     }
-    if (fill_header(champ, header) == ERROR)
+    if (fill_header(champ, header) == ERROR){
+        free(content);
+        vec_free(champ);
         return NULL;
+    }
     free(content);
     return champ;
 }

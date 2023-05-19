@@ -85,7 +85,9 @@ int parse_instruction_parameter(
     str_trim(&param, '\t');
     str_trim(&param, ' ');
     if (str_count(param, ',') != OP_NAME[index].nb_param){
-        my_dprintf(2, "%s:Invalid number of parameters\n", OP_NAME[index].name);
+        my_dprintf(2, "%s: Invalid nbr of parameters\n", OP_NAME[index].name);
+        my_dprintf(2, "Expected %d, got %d\n", OP_NAME[index].nb_param,
+            str_count(param, ','));
         return ERROR;
     }
     champ->params = str_split(param, STR(SEPARATOR_CHAR));

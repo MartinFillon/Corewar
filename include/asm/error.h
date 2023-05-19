@@ -8,7 +8,7 @@
 #ifndef ERROR_H_
     #define ERROR_H_
 
-int check_args(int argc);
+int check_args(int argc, char **argv);
 
 int swap_endian(int little);
 

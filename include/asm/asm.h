@@ -198,7 +198,7 @@ static const op_name_t OP_NAME[] = {
 
 int launch_parser(asm_t *assembler, char const *filepath);
 
-void write_file(asm_t *assembler, str_t **buffer);
+void write_file(asm_t *assembler);
 
 int str_count(str_t *str, char c);
 

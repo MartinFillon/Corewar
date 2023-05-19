@@ -25,13 +25,13 @@ str_t *convert_file(char const *filepath)
         return NULL;
     }
 
-    str_replace(&new_file, STR(".s"), STR(".cor"));
+    str_slice(&new_file, 0, new_file->length - 2);
+    str_add(&new_file, ".cor");
     return new_file;
 }
 
-void write_file(asm_t *assembler, str_t **buffer)
+void write_file(asm_t *assembler)
 {
-    (void)buffer;
     str_t *new_file = convert_file(assembler->filepath);
     assembler->filepath = new_file->data;
 

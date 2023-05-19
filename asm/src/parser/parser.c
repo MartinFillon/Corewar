@@ -16,6 +16,7 @@
 #include "asm/asm.h"
 #include "asm/header.h"
 #include "asm/body.h"
+#include "asm/error.h"
 
 int launch_parser(asm_t *assembler, char const *filepath)
 {
@@ -24,13 +25,14 @@ int launch_parser(asm_t *assembler, char const *filepath)
     str_t *buffer = str_create("");
     assembler->filepath = filepath;
 
+    header.magic = swap_endian(COREWAR_EXEC_MAGIC);
     content = parse_header(filepath, &header);
     if (content == NULL) {
-        vec_free(content);
+        free(buffer);
         return ERROR;
     }
     assembler->header = &header;
-    write_file(assembler, &buffer);
+    write_file(assembler);
     if (parse_body(content, assembler, &buffer) == ERROR) {
         vec_free(content);
         return ERROR;
