@@ -25,7 +25,9 @@ str_t *convert_file(char const *filepath)
         return NULL;
     }
 
-    str_replace(&new_file, STR(".s"), STR(".cor"));
+    str_slice(&new_file, 0, new_file->length - 2);
+    str_add(&new_file, ".cor");
+    printf("%s\n", new_file->data);
     return new_file;
 }
 
