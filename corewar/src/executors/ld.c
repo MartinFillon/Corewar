@@ -12,7 +12,7 @@
 
 int exec_ld(program_t *p, char *memory, int *pc)
 {
-    u_char *arg_types =(u_char[4]){0};
+    u_char *arg_types = (u_char[4]){0};
     int reg = -1;
     int arg1 = 0;
 
