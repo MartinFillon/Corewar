@@ -8,8 +8,8 @@
 #ifndef COREWAR_H_
     #define COREWAR_H_
 
-    #include <sys/types.h>
     #include <stdbool.h>
+    #include <sys/types.h>
 
     #include "my_vec.h"
 
@@ -23,14 +23,23 @@
 
     #define UNUSED __attribute__((unused))
 
+    #define HELP_MESSAGE                                                       \
+        "USAGE\n"                                                              \
+        "\t%s [-dump nbr_cycle] [[-n prog_number] [-a load_address] "          \
+        "prog_name] "                                                          \
+        "...\n"
+
     #include "corewar/arguments.h"
 
 
 // PARSING
 bool check_valid_prog(vm_t *vm, prog_t *prog, char const *path);
 bool check_and_read_prog(vm_t *vm, prog_t *prog, char const *path);
-bool parse_cycles(char const *const *av, vm_t *vm, int *start_av_from);
+bool parse_cycles(char const *const *av, vm_t *vm);
 bool parse_prog(char const *const *av, int ac, vm_t *vm, int *i);
+bool parse_argv(int ac, char const *const *av, vm_t *vm);
+bool show_help(int ac, char const *const *av);
+bool check_progs_sizes(vm_t *vm);
 
 
 // UTILS
@@ -48,7 +57,6 @@ bool load_programs(vm_t *vm);
 void order_programs_by_number(vec_prog_t *programs);
 
 void dump_memory(vm_t *vm);
-
 
 
 // PROGRAM

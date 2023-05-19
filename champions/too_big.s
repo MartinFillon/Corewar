@@ -222,3 +222,394 @@ mm:    ld %0, r8
     ld %13, r4
     ld %2, r5
     lfork %:mm
+
+m1:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+m2:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+m3:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+m4:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m5:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m6:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m7:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m8:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m9:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m10:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m11:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m12:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m13:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m14:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m15:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m16:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m17:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m18:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m19:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m20:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m010:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m011:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m012:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m013:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m014:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m015:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m016:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m017:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m018:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m019:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+
+m020:    ld %0, r8
+    zjmp %:live
+    sub r9, r13, r3
+    zjmp %:dude
+    sti r1, %:live, %1
+    fork %:ok
+    ld %13, r4
+    ld %2, r5
+    lfork %:mm
+
+p1:	ld	%65, r8
+	st	r8, 100
+	aff r16
+	add	r6, r7, r7
+	sti	r7, r7, r1
+	ld	%:crow, r4
+	ld	%15, r5
+	sub	r4, r5, r3
+	zjmp	%:attack
+    ld	%0, r4
+    zjmp	%:begin
+    ld	%0, r4
+
+    live %234
+	ld %0, r3
+	zjmp %:po
+
+    ld %0, r3
+    lfork %:po
+    ld %0, r3
+    or r1, %4, r3
+
+    and r2, %0, r7
+    ld %0, r3
+    st r2, r6
+    zjmp %:pompes
+
+p2:	ld	%65, r8
+	st	r8, 100
+	aff r16
+	add	r6, r7, r7
+	sti	r7, r7, r1
+	ld	%:crow, r4
+	ld	%15, r5
+	sub	r4, r5, r3
+	zjmp	%:attack
+    ld	%0, r4
+    zjmp	%:begin
+    ld	%0, r4
+
+    live %234
+	ld %0, r3
+	zjmp %:po
+
+    ld %0, r3
+    lfork %:po
+    ld %0, r3
+    or r1, %4, r3
+
+    and r2, %0, r7
+    ld %0, r3
+    st r2, r6
+    zjmp %:pompes
