@@ -29,6 +29,7 @@ typedef struct program_s {
 typedef struct prog_s {
     int address;
     int number;
+    char const *path;
     program_t program;
 } prog_t;
 
