@@ -24,6 +24,7 @@ typedef struct program_s {
     int registers[REG_NUMBER];
     int pc;
     bool carry;
+    int cycle_to_wait;
 } program_t;
 
 typedef struct prog_s {

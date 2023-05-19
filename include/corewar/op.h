@@ -5,6 +5,7 @@
 ** op
 */
 
+
 #ifndef _OP_H_
     #define _OP_H_
 
@@ -33,6 +34,8 @@
 **
 */
 
+typedef struct program_s program_t;
+
 typedef char    args_type_t;
 
     #define T_REG 1       /* register */
@@ -43,12 +46,13 @@ typedef char    args_type_t;
     #define T_LAB 8       /* LABEL */
 
 typedef struct op_s {
-    char *mnemonique;
-    char nbr_args;
-    args_type_t type[MAX_ARGS_NUMBER];
-    char code;
-    int nbr_cycles;
-    char *comment;
+    char         *mnemonique;
+    char         nbr_args;
+    args_type_t  type[MAX_ARGS_NUMBER];
+    char         code;
+    int          nbr_cycles;
+    char         *comment;
+    int (*func)(program_t *, char *, int *);
 } op_t;
 
 /*
