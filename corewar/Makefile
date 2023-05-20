@@ -9,6 +9,7 @@ CC	=	gcc
 
 SRC = 	src/main.c							\
 		src/utils.c							\
+		src/executors/getters/get_direct.c  \
 		src/vm/vm.c							\
 		src/vm/load_programs.c				\
 		src/vm/order_programs.c				\
