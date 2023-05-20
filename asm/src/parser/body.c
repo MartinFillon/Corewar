@@ -18,6 +18,7 @@
 
 #include "corewar/op.h"
 #include "asm/asm.h"
+#include "asm/header.h"
 #include "asm/body.h"
 #include "asm/error.h"
 
