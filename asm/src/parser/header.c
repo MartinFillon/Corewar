@@ -67,8 +67,8 @@ vec_str_t *parse_header(char const *champ_path, header_t *header)
     }
     champ = str_split(content, STR("\n"));
     for (size_t i = 0; i < champ->size; i++) {
-        str_ltrim(&champ->data[i], '\t');
-        str_ltrim(&champ->data[i], ' ');
+        str_trim(&champ->data[i], '\t');
+        str_trim(&champ->data[i], ' ');
     }
     if (fill_header(champ, header) == ERROR){
         free(content);
