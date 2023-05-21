@@ -41,7 +41,7 @@ static int find_instruction(str_t *line, str_t const *op_name)
     return -1;
 }
 
-static int manage_instruction(str_t *line, str_t **buffer, asm_t *assembler)
+static int manage_instruction(str_t *line, asm_t *assembler)
 {
     champ_t body = {0};
     str_t *name = str_create("");
@@ -54,7 +54,7 @@ static int manage_instruction(str_t *line, str_t **buffer, asm_t *assembler)
         if (callback != -1) {
             body.instruction = name;
             tmp = str_create(&line->data[callback + name->length]);
-            callback = parse_instruction_parameter(tmp, i, buffer, &body);
+            callback = parse_instruction_parameter(tmp, i, assembler, &body);
             vec_pushback(&assembler->champ, &body);
             my_vfree(1, tmp);
             return callback;
@@ -77,7 +77,7 @@ static int check_special_case(str_t *line)
     return SUCCESS;
 }
 
-int parse_body(vec_str_t *body, asm_t *assembler, str_t **buffer)
+int parse_body(vec_str_t *body, asm_t *assembler)
 {
     for (size_t i = 0; i < body->size; i++) {
         if (body->data[i]->data[0] == COMMENT_CHAR ||
@@ -89,12 +89,13 @@ int parse_body(vec_str_t *body, asm_t *assembler, str_t **buffer)
         }
     }
     for (size_t i = 0; i < body->size; i++) {
-        if (manage_instruction(body->data[i], buffer, assembler) == ERROR){
+        if (manage_instruction(body->data[i], assembler) == ERROR){
             return ERROR;
         }
     }
-    assembler->header->prog_size = swap_endian((*buffer)->length);
+    assembler->header->prog_size = swap_endian((assembler->buffer)->length);
     fwrite(assembler->header, sizeof(header_t), 1, assembler->file);
-    fwrite((*buffer)->data, sizeof(char), (*buffer)->length, assembler->file);
+    fwrite((assembler->buffer)->data, sizeof(char), (assembler->buffer)->length,
+    assembler->file);
     return SUCCESS;
 }

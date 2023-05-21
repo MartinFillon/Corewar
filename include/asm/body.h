@@ -26,15 +26,15 @@ VEC_DEF(champ_t, champ)
 
 typedef struct asm_s asm_t;
 
-int parse_body(vec_str_t *body, asm_t *assembler, str_t **buffer);
+int parse_body(vec_str_t *body, asm_t *assembler);
 
 long find_name(str_t *str, str_t *find);
 
 int parse_instruction_parameter(
-    str_t *param, size_t index, str_t **buffer, champ_t *champ
+    str_t *param, size_t index, asm_t *assembler, champ_t *champ
 );
 
-void manage_direct(str_t *param, str_t **buffer, size_t type);
+void manage_direct(str_t *param, str_t **buffer, size_t type, asm_t *assembler);
 
 void manage_indirect(str_t *param, str_t **buffer, size_t type);
 
