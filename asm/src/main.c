@@ -35,6 +35,7 @@ int main(int argc, char **argv)
         free_champ(&assembler);
         return ERROR;
     }
+    assembler.filepath = argv[1];
     if (launch_parser(&assembler, argv[1]) == ERROR){
         free_champ(&assembler);
         return ERROR;
