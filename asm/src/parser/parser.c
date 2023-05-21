@@ -32,8 +32,7 @@ int launch_parser(asm_t *assembler, char const *filepath)
     }
     assembler->header = &header;
     write_file(assembler);
-    if (parse_labels(content, assembler) == ERROR ||
-        parse_body(content, assembler, &buffer) == ERROR) {
+    if (parse_body(content, assembler, &buffer) == ERROR) {
         vec_free(content);
         return ERROR;
     }
