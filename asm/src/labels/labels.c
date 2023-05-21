@@ -6,7 +6,6 @@
 */
 
 #include <stdlib.h>
-#include <stdio.h>
 
 #include "my_stdlib.h"
 #include "my_str.h"
@@ -15,14 +14,7 @@
 
 #include "asm/asm.h"
 #include "asm/body.h"
-
-static int get_label_addr(str_t *label, asm_t *assembler, vec_str_t *body)
-{
-    (void)label;
-    (void)assembler;
-    (void)body;
-    return ERROR;
-}
+#include "asm/labels.h"
 
 static int exclude_instructions(str_t *lines, asm_t *assembler)
 {
@@ -46,7 +38,6 @@ static int exclude_instructions(str_t *lines, asm_t *assembler)
 
 int parse_labels(vec_str_t *lines, asm_t *assembler)
 {
-    (void)assembler;
     for (size_t i = 0; i < lines->size; i++) {
         if (lines->data[i]->data[0] == COMMENT_CHAR ||
             lines->data[i]->length == 0 || lines->data[i]->data[0] == '.') {

@@ -34,8 +34,6 @@ int parse_instruction_parameter(
     str_t *param, size_t index, str_t **buffer, champ_t *champ
 );
 
-int parse_labels(vec_str_t *lines, asm_t *assembler);
-
 void manage_direct(str_t *param, str_t **buffer, size_t type);
 
 void manage_indirect(str_t *param, str_t **buffer, size_t type);

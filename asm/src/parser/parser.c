@@ -16,6 +16,7 @@
 #include "asm/asm.h"
 #include "asm/header.h"
 #include "asm/body.h"
+#include "asm/labels.h"
 #include "asm/error.h"
 
 int launch_parser(asm_t *assembler, char const *filepath)
@@ -32,7 +33,8 @@ int launch_parser(asm_t *assembler, char const *filepath)
     }
     assembler->header = &header;
     write_file(assembler);
-    if (parse_body(content, assembler, &buffer) == ERROR) {
+    if (parse_labels(content, assembler) == ERROR ||
+        parse_body(content, assembler, &buffer) == ERROR) {
         vec_free(content);
         return ERROR;
     }

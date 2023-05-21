@@ -6,7 +6,6 @@
 */
 
 #include <stddef.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -42,11 +41,8 @@ static int find_instruction(str_t *line, str_t const *op_name)
     return -1;
 }
 
-static int manage_instruction(
-    str_t *line, size_t index, str_t **buffer, asm_t *assembler
-)
+static int manage_instruction(str_t *line, str_t **buffer, asm_t *assembler)
 {
-    (void)index;
     champ_t body = {0};
     str_t *name = str_create("");
     str_t *tmp = NULL;
@@ -93,7 +89,7 @@ int parse_body(vec_str_t *body, asm_t *assembler, str_t **buffer)
         }
     }
     for (size_t i = 0; i < body->size; i++) {
-        if (manage_instruction(body->data[i], i, buffer, assembler) == ERROR){
+        if (manage_instruction(body->data[i], buffer, assembler) == ERROR){
             return ERROR;
         }
     }
