@@ -35,7 +35,7 @@ static int find_instruction(str_t *line, str_t const *op_name)
             }
         if (callback != 1 &&
             line->data[callback + op_name->length] == LABEL_CHAR){
-                str_slice(&line, callback + op_name->length + 2, line->length) ;
+                str_slice(&line, callback + op_name->length + 2, line->length);
                 return callback;
         }
     }
@@ -68,11 +68,25 @@ static int manage_instruction(
     return ERROR;
 }
 
+static int check_special_case(str_t *line)
+{
+    for (size_t i = 0; i < AFF; i++) {
+        if (my_strcmp(line->data, OP_NAME[i].name) == 0){
+            return SUCCESS;
+        }
+        if (str_endswith(line, STR(":")) == 1){
+            return ERROR;
+        }
+    }
+    return SUCCESS;
+}
+
 int parse_body(vec_str_t *body, asm_t *assembler, str_t **buffer)
 {
     for (size_t i = 0; i < body->size; i++) {
         if (body->data[i]->data[0] == COMMENT_CHAR ||
-            body->data[i]->length == 0 || body->data[i]->data[0] == '.') {
+            body->data[i]->length == 0 || body->data[i]->data[0] == '.' ||
+            check_special_case(body->data[i]) == ERROR) {
             free(body->data[i]);
             vec_remove(body, i);
             i--;
