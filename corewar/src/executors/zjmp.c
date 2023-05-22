@@ -13,7 +13,7 @@ int exec_zjmp(vm_t *vm, program_t *p)
     int arg = 0;
     int address = p->pc;
 
-    get_arg(&arg, vm->arena, &p->pc, T_DIR);
+    get_arg(&arg, vm->arena, &p->pc, T_IND);
     if (p->carry == 1)
         p->pc = (address + (arg % IDX_MOD)) % MEM_SIZE;
     return 0;
