@@ -7,10 +7,10 @@
 
 #include "corewar/corewar.h"
 
-int exec_fork(program_t *p, char *memory, int *pc)
+int exec_fork(vm_t *vm, program_t *p)
 {
     (void)p;
-    (void)memory;
-    (void)pc;
+    (void)vm;
+
     return 0;
 }
