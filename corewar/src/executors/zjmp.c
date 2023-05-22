@@ -8,13 +8,13 @@
 #include "corewar/corewar.h"
 #include "corewar/op.h"
 
-int exec_zjmp(program_t *p, char *memory, int *pc)
+int exec_zjmp(vm_t *vm, program_t *p)
 {
     int arg = 0;
-    int address = *pc;
+    int address = p->pc;
 
-    get_arg(&arg, memory, pc, T_DIR);
+    get_arg(&arg, vm->arena, &p->pc, T_DIR);
     if (p->carry == 1)
-        *pc = (address + (arg % IDX_MOD)) % MEM_SIZE;
+        p->pc = (address + (arg % IDX_MOD)) % MEM_SIZE;
     return 0;
 }

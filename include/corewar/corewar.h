@@ -8,10 +8,13 @@
 #ifndef COREWAR_H_
     #define COREWAR_H_
 
+    #include <limits.h>
     #include <stdbool.h>
     #include <sys/types.h>
 
     #include "my_vec.h"
+
+    #include "corewar/arguments.h"
 
     #define ERROR 84
     #define SUCCESS 0
@@ -29,7 +32,8 @@
         "prog_name] "                                                          \
         "...\n"
 
-    #include "corewar/arguments.h"
+    #define INVALID_INSTRUCTION (UCHAR_MAX)
+
 
 
 // PARSING
@@ -52,6 +56,7 @@ vm_t init_vm(void);
 void free_vm(vm_t *vm);
 void print_vm(vm_t *vm);
 bool start_vm(vm_t *vm);
+void run_vm(vm_t *vm);
 
 bool load_programs(vm_t *vm);
 void order_programs_by_number(vec_prog_t *programs);
@@ -63,13 +68,15 @@ void dump_memory(vm_t *vm);
 prog_t init_prog(void);
 void print_progs(vec_prog_t *progs);
 
+
 // GETTERS
-int get_arg(int *arg, char *memory, int *pc, u_char arg_type);
-int get_direct(char *mememory, int memory_index);
-void get_arg_types(char *memory, int memory_index, u_char *arg_types);
-int get_indirect(char *memory, int memory_index, int index);
+int get_arg(int *arg, u_char *memory, int *pc, u_char arg_type);
+int get_direct(u_char *mememory, int memory_index);
+void get_arg_types(u_char *memory, int memory_index, u_char *arg_types);
+int get_indirect(u_char *memory, int memory_index, int index);
+
 
 //Writers
-void write_int(char *memory, int index, int content);
+void write_int(u_char *memory, int index, int content);
 
 #endif /* !COREWAR_H_ */

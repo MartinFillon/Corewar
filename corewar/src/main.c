@@ -15,18 +15,12 @@ int main(int ac, char const *const *av)
         free_vm(&vm);
         return SUCCESS;
     }
-    if (parse_argv(ac, av, &vm) == false) {
+    if (parse_argv(ac, av, &vm) == false || start_vm(&vm) == false) {
         free_vm(&vm);
         return ERROR;
     }
-    if (start_vm(&vm) == false) {
-        return ERROR;
-    }
 
-    // run_vm(&vm);
-
-    // if (vm.nbr_cycles_to_dump != -1)
-    dump_memory(&vm);
+    run_vm(&vm);
 
     free_vm(&vm);
     return SUCCESS;
