@@ -11,6 +11,7 @@
 #include "my_cstr.h"
 
 #include "asm/asm.h"
+#include "asm/labels.h"
 
 static void get_direct_index(size_t type, long nbr, str_t **buffer)
 {
@@ -45,14 +46,13 @@ static void get_direct_int(size_t type, long nbr, str_t **buffer)
     get_direct_index(type, nbr, buffer);
 }
 
-void manage_direct(str_t *param, str_t **buffer, size_t type)
+void manage_direct(str_t *param, str_t **buffer, size_t type, asm_t *assembler)
 {
     int value = 0;
     str_t *tmp = str_create(param->data + 1);
 
     if (tmp->data[0] == LABEL_CHAR){
-        str_cadd(buffer, 0x00);
-        str_cadd(buffer, 0x00);
+        get_label_value(tmp, assembler, buffer);
         free(tmp);
         return;
     }

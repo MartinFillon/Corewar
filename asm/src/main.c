@@ -16,7 +16,6 @@ static void free_champ(asm_t *champ)
     for (size_t i = 0; i < champ->labels->size; i++){
         free(champ->labels->data[i].label);
     }
-    vec_free(champ->labels);
     for (size_t i = 0; i < champ->champ->size; i++){
         free(champ->champ->data[i].instruction);
         vec_free(champ->champ->data[i].params);
@@ -35,6 +34,7 @@ int main(int argc, char **argv)
         free_champ(&assembler);
         return ERROR;
     }
+    assembler.filepath = argv[1];
     if (launch_parser(&assembler, argv[1]) == ERROR){
         free_champ(&assembler);
         return ERROR;
