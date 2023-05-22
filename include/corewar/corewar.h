@@ -57,6 +57,7 @@ void free_vm(vm_t *vm);
 void print_vm(vm_t *vm);
 bool start_vm(vm_t *vm);
 void run_vm(vm_t *vm);
+void run_cycle(vm_t *vm);
 
 bool load_programs(vm_t *vm);
 void order_programs_by_number(vec_prog_t *programs);

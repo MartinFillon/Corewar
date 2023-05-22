@@ -32,6 +32,7 @@ typedef struct prog_s {
     int address;
     int number;
     char const *path;
+    bool is_running;
     program_t program;
 } prog_t;
 

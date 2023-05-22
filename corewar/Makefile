@@ -15,6 +15,7 @@ SRC = 	src/main.c								\
 		src/vm/order_programs.c					\
 		src/vm/dump_memory.c					\
 		src/vm/run_cycles.c						\
+		src/vm/run_cycle.c						\
 		src/executors/getters/get_direct.c		\
 		src/executors/getters/get_arg.c			\
 		src/executors/getters/get_arg_types.c	\
