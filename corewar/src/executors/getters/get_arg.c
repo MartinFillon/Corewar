@@ -16,7 +16,7 @@ int get_arg(int *arg, u_char *memory, int *pc, u_char arg_type)
         return 1;
     }
     if (arg_type == 0b11) {
-        *arg = get_indirect(memory, *pc, *pc);
+        *arg = get_indirect(memory, *pc);
         *pc = (*pc + IND_SIZE) % MEM_SIZE;
         return 1;
     }
