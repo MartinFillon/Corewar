@@ -73,7 +73,7 @@ void print_progs(vec_prog_t *progs);
 int get_arg(int *arg, u_char *memory, int *pc, u_char arg_type);
 int get_direct(u_char *mememory, int memory_index);
 void get_arg_types(u_char *memory, int memory_index, u_char *arg_types);
-int get_indirect(u_char *memory, int memory_index, int index);
+int get_indirect(u_char *memory, int memory_index);
 
 
 //Writers
