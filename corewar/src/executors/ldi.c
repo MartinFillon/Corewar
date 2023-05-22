@@ -25,7 +25,7 @@ int exec_ldi(vm_t *vm, program_t *p)
     get_arg(&reg, vm->arena, &p->pc, arg_types[2]);
     if (reg == 0)
         return 0;
-    address = (arg1 + arg2 % IDX_MOD) % MEM_SIZE;
+    address = (arg1 + arg2 % IDX_MOD);
     p->registers[reg - 1] = vm->arena[(st + address) % MEM_SIZE];
     p->carry = p->registers[reg - 1] == 0;
     return 0;
