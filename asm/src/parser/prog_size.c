@@ -5,6 +5,8 @@
 ** prog_size
 */
 
+#include <stdlib.h>
+
 #include "my_str.h"
 
 #include "asm/asm.h"
@@ -28,15 +30,27 @@ static void find_for_params(vec_str_t *input, size_t i, int *size)
     }
 }
 
+static void further_in_parameters(vec_str_t *input, int *size)
+{
+    for (size_t i = 0; i < AFF; i++){
+        if (my_strcmp(input->data[0]->data, OP_NAME[i].name) == 0){
+            find_for_params(input, i, size);
+        }
+    }
+}
+
 void get_prog_size(str_t *champ, int *size)
 {
     vec_str_t *input = NULL;
 
     input = str_split(champ, STR(", \t"));
     if (str_endswith(input->data[0], STR(":"))){
+        free(input->data[0]);
         vec_remove(input, 0);
-        if (input->size == 0)
+        if (input->size == 0){
+            vec_free(input);
             return;
+        }
     }
     if (str_compare(input->data[0], STR("live")) != 0 &&
         str_compare(input->data[0], STR("lfork")) != 0 &&
@@ -45,9 +59,6 @@ void get_prog_size(str_t *champ, int *size)
             *size += 2;
     } else
         *size += 1;
-    for (size_t i = 0; i < AFF; i++){
-        if (my_strcmp(input->data[0]->data, OP_NAME[i].name) == 0){
-            find_for_params(input, i, size);
-        }
-    }
+    further_in_parameters(input, size);
+    vec_free(input);
 }

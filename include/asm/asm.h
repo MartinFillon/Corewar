@@ -12,6 +12,7 @@
     #include "my_str.h"
     #include "corewar/op.h"
     #include "asm/body.h"
+    #include "asm/labels.h"
     #define UNUSED __attribute__((unused))
 
     #define ERROR 84

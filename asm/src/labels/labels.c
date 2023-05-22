@@ -18,7 +18,6 @@
 
 static int exclude_instructions(str_t *line, asm_t *assembler, vec_str_t *lines)
 {
-    (void)assembler;
     vec_str_t *words = NULL;
     label_t label = {0};
 
@@ -31,10 +30,11 @@ static int exclude_instructions(str_t *line, asm_t *assembler, vec_str_t *lines)
     }
     words = str_split(line, STR(" \t"));
     if (words->data[0]->data[words->data[0]->length - 1] == LABEL_CHAR){
-        label.label = words->data[0];
-        label.location = get_label_addr(label.label, lines);
+        label.label = str_create(words->data[0]->data);
+        get_label_addr(label.label, lines, &label);
         vec_pushback(&assembler->labels, &label);
     }
+    vec_free(words);
     return SUCCESS;
 }
 
@@ -52,19 +52,26 @@ int parse_labels(vec_str_t *lines, asm_t *assembler)
         if (exclude_instructions(lines->data[i], assembler, lines) == ERROR)
             return ERROR;
     }
-    my_printf("%s = %d\n", assembler->labels[0].data->label->data,
-    assembler->labels[0].data->location);
-    my_printf("%s = %d\n", assembler->labels[1].data->label->data,
-    assembler->labels[1].data->location);
     return SUCCESS;
 }
 
 void get_label_value(str_t *label, asm_t *assembler, str_t **buffer)
 {
-    (void)buffer;
-    (void)label;
+    long value = 0;
+
+    str_slice(&label, 1, label->length);
     for (size_t i = 0; i < assembler->labels->size; i++){
-        my_printf("%s\n", assembler->labels[i].data->label->data);
-        my_printf("%d\n", assembler->labels[i].data->location);
+        if (str_ncompare(label, assembler->labels->data[i].label,
+            label->length) == 0){
+            value = assembler->labels->data[i].location - (*buffer)->length;
+        }
+    }
+    if (value < 0) {
+        value = 65536 + value;
+        str_cadd(buffer, (value / 256));
+        str_cadd(buffer, (value % 256));
+    } else {
+        str_cadd(buffer, (value / 256));
+        str_cadd(buffer, (value % 256));
     }
 }

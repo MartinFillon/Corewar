@@ -53,8 +53,6 @@ void manage_direct(str_t *param, str_t **buffer, size_t type, asm_t *assembler)
 
     if (tmp->data[0] == LABEL_CHAR){
         get_label_value(tmp, assembler, buffer);
-        str_cadd(buffer, 0x00);
-        str_cadd(buffer, 0x00);
         free(tmp);
         return;
     }
