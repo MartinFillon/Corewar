@@ -16,7 +16,7 @@ int exec_ld(vm_t *vm, program_t *p)
     int reg = -1;
     int arg1 = 0;
     int st = p->pc;
-  
+
     p->pc = (p->pc + 1) % MEM_SIZE;
     get_arg_types(vm->arena, p->pc, arg_types);
     p->pc = (p->pc + 1) % MEM_SIZE;
