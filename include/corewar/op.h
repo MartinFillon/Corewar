@@ -34,7 +34,10 @@
 **
 */
 
+
 typedef struct program_s program_t;
+typedef struct vm_s vm_t;
+
 
 typedef char    args_type_t;
 
@@ -52,7 +55,7 @@ typedef struct op_s {
     char         code;
     int          nbr_cycles;
     char         *comment;
-    int (*func)(program_t *, char *, int *);
+    int (*func)(vm_t *, program_t *);
 } op_t;
 
 /*

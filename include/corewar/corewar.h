@@ -8,10 +8,13 @@
 #ifndef COREWAR_H_
     #define COREWAR_H_
 
-    #include <sys/types.h>
+    #include <limits.h>
     #include <stdbool.h>
+    #include <sys/types.h>
 
     #include "my_vec.h"
+
+    #include "corewar/arguments.h"
 
     #define ERROR 84
     #define SUCCESS 0
@@ -23,14 +26,24 @@
 
     #define UNUSED __attribute__((unused))
 
-    #include "corewar/arguments.h"
+    #define HELP_MESSAGE                                                       \
+        "USAGE\n"                                                              \
+        "\t%s [-dump nbr_cycle] [[-n prog_number] [-a load_address] "          \
+        "prog_name] "                                                          \
+        "...\n"
+
+    #define INVALID_INSTRUCTION (UCHAR_MAX)
+
 
 
 // PARSING
 bool check_valid_prog(vm_t *vm, prog_t *prog, char const *path);
 bool check_and_read_prog(vm_t *vm, prog_t *prog, char const *path);
-bool parse_cycles(char const *const *av, vm_t *vm, int *start_av_from);
+bool parse_cycles(char const *const *av, vm_t *vm);
 bool parse_prog(char const *const *av, int ac, vm_t *vm, int *i);
+bool parse_argv(int ac, char const *const *av, vm_t *vm);
+bool show_help(int ac, char const *const *av);
+bool check_progs_sizes(vm_t *vm);
 
 
 // UTILS
@@ -43,6 +56,7 @@ vm_t init_vm(void);
 void free_vm(vm_t *vm);
 void print_vm(vm_t *vm);
 bool start_vm(vm_t *vm);
+void run_vm(vm_t *vm);
 
 bool load_programs(vm_t *vm);
 void order_programs_by_number(vec_prog_t *programs);
@@ -50,18 +64,19 @@ void order_programs_by_number(vec_prog_t *programs);
 void dump_memory(vm_t *vm);
 
 
-
 // PROGRAM
 prog_t init_prog(void);
 void print_progs(vec_prog_t *progs);
 
+
 // GETTERS
-int get_arg(int *arg, char *memory, int *pc, u_char arg_type);
-int get_direct(char *mememory, int memory_index);
-void get_arg_types(char *memory, int memory_index, u_char *arg_types);
-int get_indirect(char *memory, int memory_index, int index);
+int get_arg(int *arg, u_char *memory, int *pc, u_char arg_type);
+int get_direct(u_char *mememory, int memory_index);
+void get_arg_types(u_char *memory, int memory_index, u_char *arg_types);
+int get_indirect(u_char *memory, int memory_index, int index);
+
 
 //Writers
-void write_int(char *memory, int index, int content);
+void write_int(u_char *memory, int index, int content);
 
 #endif /* !COREWAR_H_ */

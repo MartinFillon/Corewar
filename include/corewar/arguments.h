@@ -24,12 +24,14 @@ typedef struct program_s {
     int registers[REG_NUMBER];
     int pc;
     bool carry;
+    bool is_alive;
     int cycle_to_wait;
 } program_t;
 
 typedef struct prog_s {
     int address;
     int number;
+    char const *path;
     program_t program;
 } prog_t;
 
@@ -40,10 +42,11 @@ typedef struct vm_s {
     int cycle_to_die;
     int nbr_cycles_to_dump;
     int nbr_live;
-    int last_live;
+    program_t const *last_live;
 
     u_char arena[MEM_SIZE];
     vec_prog_t *programs;
 } vm_t;
+
 
 #endif /* !ARGUMENTS_H_ */

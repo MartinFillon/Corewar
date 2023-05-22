@@ -8,7 +8,7 @@
 #include "corewar/corewar.h"
 #include "corewar/op.h"
 
-int get_arg(int *arg, char *memory, int *pc, u_char arg_type)
+int get_arg(int *arg, u_char *memory, int *pc, u_char arg_type)
 {
     if (arg_type == 0b10) {
         *arg = get_direct(memory, *pc);
