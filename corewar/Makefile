@@ -7,17 +7,41 @@
 
 CC	=	gcc
 
-SRC = 	src/main.c							\
-		src/utils.c							\
-		src/executors/getters/get_direct.c  \
-		src/vm/vm.c							\
-		src/vm/load_programs.c				\
-		src/vm/order_programs.c				\
-		src/vm/dump_memory.c				\
-		src/arguments/parse_arguments.c		\
-		src/programs/check_program.c		\
-		src/programs/programs.c				\
-		src/programs/utils.c				\
+SRC = 	src/main.c								\
+		src/utils.c								\
+		src/op.c								\
+		src/vm/vm.c								\
+		src/vm/load_programs.c					\
+		src/vm/order_programs.c					\
+		src/vm/dump_memory.c					\
+		src/vm/run_cycles.c						\
+		src/vm/run_cycle.c						\
+		src/executors/getters/get_direct.c		\
+		src/executors/getters/get_arg.c			\
+		src/executors/getters/get_arg_types.c	\
+		src/executors/getters/get_indirect.c	\
+		src/executors/writers/write_int.c		\
+		src/executors/add.c						\
+		src/executors/aff.c						\
+		src/executors/and.c						\
+		src/executors/fork.c					\
+		src/executors/ld.c						\
+		src/executors/ldi.c						\
+		src/executors/lfork.c					\
+		src/executors/live.c					\
+		src/executors/lld.c						\
+		src/executors/lldi.c					\
+		src/executors/or.c						\
+		src/executors/st.c						\
+		src/executors/sti.c						\
+		src/executors/sub.c						\
+		src/executors/xor.c						\
+		src/executors/zjmp.c					\
+		src/arguments/parse_arguments.c			\
+		src/arguments/parse_argv.c				\
+		src/programs/check_program.c			\
+		src/programs/programs.c					\
+		src/programs/utils.c					\
 		src/programs/read_program.c
 
 NAME = corewar

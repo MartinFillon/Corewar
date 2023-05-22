@@ -9,7 +9,7 @@
 
 #include "corewar/corewar.h"
 
-int get_direct(char *memory, int memory_index)
+int get_direct(u_char *memory, int memory_index)
 {
     int direct = 0;
 

@@ -12,6 +12,7 @@
     #include "my_str.h"
     #include "corewar/op.h"
     #include "asm/body.h"
+    #include "asm/labels.h"
     #define UNUSED __attribute__((unused))
 
     #define ERROR 84
@@ -28,7 +29,7 @@ typedef struct op_name_s {
     const char *name;
     const int *index;
     size_t size;
-}op_name_t;
+} op_name_t;
 
 typedef struct asm_s {
     FILE *file;

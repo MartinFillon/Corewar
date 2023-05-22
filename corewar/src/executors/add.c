@@ -7,13 +7,14 @@
 
 #include "corewar/arguments.h"
 
-int exec_add(program_t *p, char *memory, int *pc)
+int exec_add(vm_t *vm, program_t *p)
 {
-    int reg1 = memory[*pc + 2];
-    int reg2 = memory[*pc + 3];
-    int reg3 = memory[*pc + 4];
+    int reg1 = vm->arena[(p->pc + 2) % MEM_SIZE];
+    int reg2 = vm->arena[(p->pc + 3) % MEM_SIZE];
+    int reg3 = vm->arena[(p->pc + 4) % MEM_SIZE];
 
     p->registers[reg3 - 1] = p->registers[reg1 - 1] + p->registers[reg2 - 1];
-    *pc += 5;
+    p->pc = (p->pc + 5) % MEM_SIZE;
+    p->carry = p->registers[reg3 - 1] == 0;
     return 0;
 }

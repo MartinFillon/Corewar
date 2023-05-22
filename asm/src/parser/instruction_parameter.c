@@ -6,7 +6,6 @@
 */
 
 #include <stddef.h>
-#include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
 
@@ -37,14 +36,16 @@ static void get_coding_byte(str_t *param_type, str_t **buffer, int index)
     str_cadd(buffer, coding_byte);
 }
 
-void get_parameters(vec_str_t *params, str_t **buffer, size_t index)
+static void get_parameters(
+    vec_str_t *params, str_t **buffer, size_t index, asm_t *assembler
+)
 {
     long value = 0;
     size_t size = OP_NAME[index].size;
 
     for (size_t i = 0; i < params->size; i++) {
         if (str_startswith(params->data[i], STR(DIRECT_CHAR))) {
-            manage_direct(params->data[i], buffer, size);
+            manage_direct(params->data[i], buffer, size, assembler);
         }
         if (str_startswith(params->data[i], STR("r"))) {
             value = my_atoi(params->data[i]->data + 1);
@@ -77,9 +78,10 @@ static str_t *add_parameter(vec_str_t *params, str_t *param_type)
 }
 
 int parse_instruction_parameter(
-    str_t *param, size_t index, str_t **buffer, champ_t *champ
+    str_t *param, size_t index, asm_t *assembler, str_t **buffer
 )
 {
+    champ_t champ = {0};
     str_t *param_type = str_create("");
 
     str_trim(&param, '\t');
@@ -90,11 +92,13 @@ int parse_instruction_parameter(
             str_count(param, ',') + 1);
         return ERROR;
     }
-    champ->params = str_split(param, STR(SEPARATOR_CHAR));
-    param_type = add_parameter(champ->params, param_type);
+    champ.params = str_split(param, STR(SEPARATOR_CHAR));
+    param_type = add_parameter(champ.params, param_type);
     str_cadd(buffer, ((char) OP_NAME[index].hex));
     get_coding_byte(param_type, buffer, index);
-    get_parameters(champ->params, buffer, index);
+    get_parameters(champ.params, buffer, index, assembler);
+    champ.line_size = (int)(*buffer)->length;
+    vec_pushback(&assembler->champ, &champ);
     free(param_type);
     return SUCCESS;
 }

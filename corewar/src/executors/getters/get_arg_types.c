@@ -7,7 +7,7 @@
 
 #include "corewar/corewar.h"
 
-void get_arg_types(char *memory, int memory_index, u_char *arg_types)
+void get_arg_types(u_char *memory, int memory_index, u_char *arg_types)
 {
     u_char coding_byte = memory[memory_index];
 

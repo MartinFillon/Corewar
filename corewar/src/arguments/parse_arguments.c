@@ -5,15 +5,12 @@
 ** parse_arguments
 */
 
-#include "my_cstr.h"
 #include "my_stdio.h"
 #include "my_stdlib.h"
-#include "my_vec.h"
 
-#include "corewar/arguments.h"
 #include "corewar/corewar.h"
 
-bool parse_cycles(char const *const *av, vm_t *vm, int *start_av_from)
+bool parse_cycles(char const *const *av, vm_t *vm)
 {
     if (my_streq(av[1], "-dump")) {
         if (!my_str_isnum(av[2])) {
@@ -22,7 +19,6 @@ bool parse_cycles(char const *const *av, vm_t *vm, int *start_av_from)
         }
 
         vm->nbr_cycles_to_dump = my_atoi(av[2]);
-        *start_av_from += 2;
     }
 
     return true;
@@ -73,19 +69,16 @@ bool parse_prog(char const *const *av, int ac, vm_t *vm, int *i)
 {
     prog_t tmp = init_prog();
     int max_prog_av = *i + MAX_PROG_AV;
-    int ret = 0;
 
     for (; *i < max_prog_av && *i < ac; ++*i) {
-        ret = parse_prog_number(ac, av, i, &tmp);
-        if (ret == ERROR)
-            return false;
-        if (ret)
-            continue;
-        ret = parse_prog_address(ac, av, i, &tmp);
-        if (ret == ERROR)
-            return false;
-        if (ret)
-            continue;
+        switch (parse_prog_number(ac, av, i, &tmp)) {
+            case ERROR: return false;
+            case true: continue;
+        }
+        switch (parse_prog_address(ac, av, i, &tmp)) {
+            case ERROR: return false;
+            case true: continue;
+        }
         return check_and_read_prog(vm, &tmp, av[*i]);
     }
     return false;
