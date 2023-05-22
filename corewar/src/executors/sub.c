@@ -15,5 +15,6 @@ int exec_sub(vm_t *vm, program_t *p)
 
     p->registers[reg3 - 1] = p->registers[reg1 - 1] - p->registers[reg2 - 1];
     p->pc = (p->pc + 5) % MEM_SIZE;
+    p->carry = p->registers[reg3 - 1] == 0;
     return 0;
 }

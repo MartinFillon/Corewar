@@ -26,6 +26,6 @@ int exec_or(vm_t *vm, program_t *p)
     if (reg == 0)
         return 0;
     p->registers[reg - 1] = arg1 | arg2;
-    p->carry = 1;
+    p->carry = p->registers[reg - 1] == 0;
     return 0;
 }
