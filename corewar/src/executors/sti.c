@@ -27,6 +27,7 @@ int exec_sti(vm_t *vm, program_t *p)
         arg1 = p->registers[arg1 - 1];
     if (arg_types[2] == T_REG)
         arg2 = p->registers[arg2 - 1];
-    vm->arena[(st + (arg1 + arg2) % IDX_MOD) % MEM_SIZE] = p->registers[reg - 1];
+    vm->arena[(st + (arg1 + arg2) % IDX_MOD) % MEM_SIZE] =
+        p->registers[reg - 1];
     return 0;
 }
