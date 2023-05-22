@@ -20,7 +20,7 @@ static void find_for_params(vec_str_t *input, size_t i, header_t *header)
             input->data[idx]->data[0] != '%'){
             header->prog_size += 2;
         }
-        if (input->data[idx]->data[0] != '%' && OP_NAME[i].size != 0){
+        if (input->data[idx]->data[0] == '%' && OP_NAME[i].size != 0){
             header->prog_size += OP_NAME[i].size;
         }
     }
@@ -32,6 +32,9 @@ void get_prog_size(str_t *champ, header_t *header)
     str_t *tmp = NULL;
 
     input = str_split(champ, STR(", \t"));
+    if (str_endswith(input->data[0], STR(":"))){
+        vec_remove(input, 0);
+    }
     if (str_compare(input->data[0], STR("live")) != 0 &&
         str_compare(input->data[0], STR("lfork")) != 0 &&
         str_compare(input->data[0], STR("fork")) != 0 &&

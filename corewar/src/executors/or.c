@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2023
 ** Corewar
 ** File description:
-** and
+** or
 */
 
 #include <sys/types.h>
@@ -10,7 +10,7 @@
 #include "corewar/arguments.h"
 #include "corewar/corewar.h"
 
-int exec_and(program_t *p, char *memory, int *pc)
+int exec_or(program_t *p, char *memory, int *pc)
 {
     u_char *arg_types = (u_char[4]){0};
     int reg = -1;
@@ -24,7 +24,7 @@ int exec_and(program_t *p, char *memory, int *pc)
     get_arg(&reg, memory, pc, arg_types[2]);
     if (reg == 0)
         return 0;
-    p->registers[reg - 1] = arg1 & arg2;
+    p->registers[reg - 1] = arg1 | arg2;
     p->carry = 1;
     return 0;
 }

@@ -2,20 +2,18 @@
 ** EPITECH PROJECT, 2023
 ** Corewar
 ** File description:
-** and
+** exec_lldi
 */
 
-#include <sys/types.h>
+#include "corewar/instructions.h"
 
-#include "corewar/arguments.h"
-#include "corewar/corewar.h"
-
-int exec_and(program_t *p, char *memory, int *pc)
+int exec_lldi(program_t *p, char *memory, int *pc)
 {
-    u_char *arg_types = (u_char[4]){0};
-    int reg = -1;
     int arg1 = 0;
     int arg2 = 0;
+    int reg = 0;
+    int st = *pc;
+    u_char *arg_types = (u_char[4]){0};
 
     get_arg_types(memory, ++*pc, arg_types);
     *pc += 1;
@@ -24,7 +22,6 @@ int exec_and(program_t *p, char *memory, int *pc)
     get_arg(&reg, memory, pc, arg_types[2]);
     if (reg == 0)
         return 0;
-    p->registers[reg - 1] = arg1 & arg2;
-    p->carry = 1;
+    p->registers[reg - 1] = get_direct(memory, st + (arg1 + arg2));
     return 0;
 }
