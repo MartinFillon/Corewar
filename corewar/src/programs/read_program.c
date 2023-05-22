@@ -29,10 +29,7 @@ static bool read_header(program_t *p, int fd)
         my_dprintf(2, "Error: wrong magic number\n");
         return false;
     }
-    if (p->header.prog_size > MEM_SIZE) {
-        my_dprintf(2, "Error: program size is bigger than the arena\n");
-        return false;
-    }
+
     return true;
 }
 
@@ -69,6 +66,7 @@ bool check_and_read_prog(vm_t *vm, prog_t *prog, char const *path)
         close(fd);
         return false;
     }
+    prog->path = path;
     vec_pushback(&vm->programs, prog);
     close(fd);
     return true;

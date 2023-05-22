@@ -10,5 +10,5 @@
 
 void write_int(char *memory, int index, int content)
 {
-    my_memcpy(memory + index, &content, 4);
+    my_memcpy(memory + index, &content, sizeof(int));
 }

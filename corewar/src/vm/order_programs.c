@@ -6,6 +6,7 @@
 */
 
 #include <stdbool.h>
+#include <stddef.h>
 
 #include "my_stdio.h"
 #include "my_vec.h"
@@ -53,4 +54,7 @@ void order_programs_by_number(vec_prog_t *programs)
     }
 
     vec_sort(programs, &order_by_number);
+
+    for (size_t i = 0; i < programs->size; ++i)
+        programs->data[i].program.registers[0] = programs->data[i].number;
 }

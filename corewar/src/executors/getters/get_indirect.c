@@ -9,7 +9,7 @@
 
 #include "corewar/corewar.h"
 
-int get_indirect(char *memory, int memory_index, int pc)
+int get_indirect(u_char *memory, int memory_index)
 {
     int direct = 0;
 
@@ -17,6 +17,5 @@ int get_indirect(char *memory, int memory_index, int pc)
         direct <<= 8;
         direct += memory[memory_index + i];
     }
-    direct = swap_endian(direct);
-    return memory[pc + direct];
+    return direct;
 }

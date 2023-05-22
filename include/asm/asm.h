@@ -29,7 +29,7 @@ typedef struct op_name_s {
     const char *name;
     const int *index;
     size_t size;
-}op_name_t;
+} op_name_t;
 
 typedef struct asm_s {
     FILE *file;

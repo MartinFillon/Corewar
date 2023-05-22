@@ -29,10 +29,10 @@ int get_label_addr(str_t *label, vec_str_t *body, label_t *stock)
 
     for (size_t i = 0; i < body->size; i++){
         if (my_strncmp(body->data[i]->data, label->data, label->length) == 0){
-            stock->location = size;
             break;
         }
         get_prog_size(body->data[i], &size);
     }
+    stock->location = size;
     return SUCCESS;
 }
