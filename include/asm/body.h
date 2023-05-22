@@ -11,8 +11,8 @@
     #include "corewar/op.h"
 
 typedef struct champ_s {
-    str_t *instruction;
     vec_str_t *params;
+    int line_size;
 } champ_t;
 
 VEC_DEF(champ_t, champ)

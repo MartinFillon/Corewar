@@ -97,6 +97,7 @@ int parse_instruction_parameter(
     str_cadd(buffer, ((char) OP_NAME[index].hex));
     get_coding_byte(param_type, buffer, index);
     get_parameters(champ.params, buffer, index, assembler);
+    champ.line_size = (int)(*buffer)->length;
     vec_pushback(&assembler->champ, &champ);
     free(param_type);
     return SUCCESS;

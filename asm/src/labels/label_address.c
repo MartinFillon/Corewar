@@ -11,6 +11,18 @@
 #include "asm/asm.h"
 #include "asm/header.h"
 
+int find_pos(size_t length, asm_t *assembler)
+{
+    int len = 0;
+
+    for (size_t i = 0; i < assembler->champ->size; i++){
+        if ((int)length > assembler->champ->data[i].line_size){
+            len = assembler->champ->data[i].line_size;
+        }
+    }
+    return len;
+}
+
 int get_label_addr(str_t *label, vec_str_t *body, label_t *stock)
 {
     int size = 0;
