@@ -22,7 +22,6 @@ int get_arg(int *arg, char *memory, int *pc, u_char arg_type)
         *arg = memory[*pc] % (REG_NUMBER + 1);
         *pc = (*pc + 1) % MEM_SIZE;
         return 1;
-    } else {
-        return 0;
     }
+    return 0;
 }
