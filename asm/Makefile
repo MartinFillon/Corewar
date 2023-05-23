@@ -20,6 +20,7 @@ SRC	=	$(addprefix src/, main.c			\
 			labels/labels.c					\
 			labels/label_address.c 			\
 			error_handling/handle_errors.c	\
+			error_handling/cleanup.c		\
 			error_handling/big_endian.c)
 
 NAME = asm

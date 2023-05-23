@@ -41,6 +41,16 @@ static int find_instruction(str_t *line, str_t const *op_name)
     return -1;
 }
 
+static void clean_parameters(str_t **line)
+{
+    for (size_t i = 0; i < (*line)->length; i++) {
+        if ((*line)->data[i] == COMMENT_CHAR){
+            str_slice(line, 0, i);
+            return;
+        }
+    }
+}
+
 static int manage_instruction(str_t *line, asm_t *assembler, str_t **buffer)
 {
     str_t *name = str_create("");
@@ -52,6 +62,7 @@ static int manage_instruction(str_t *line, asm_t *assembler, str_t **buffer)
         callback = find_instruction(line, name);
         if (callback != -1) {
             tmp = str_create(&line->data[callback + name->length]);
+            clean_parameters(&tmp);
             callback = parse_instruction_parameter(tmp, i, assembler, buffer);
             my_vfree(2, tmp, name);
             return callback;
@@ -85,13 +96,12 @@ int parse_body(vec_str_t *body, asm_t *assembler, str_t **buffer)
             i--;
         }
     }
+    write_header(body, assembler);
     for (size_t i = 0; i < body->size; i++) {
         if (manage_instruction(body->data[i], assembler, buffer) == ERROR){
             return ERROR;
         }
     }
-    assembler->header->prog_size = swap_endian((*buffer)->length);
-    fwrite(assembler->header, sizeof(header_t), 1, assembler->file);
     fwrite((*buffer)->data, sizeof(char), (*buffer)->length,
     assembler->file);
     return SUCCESS;

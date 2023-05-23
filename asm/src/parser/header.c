@@ -15,6 +15,16 @@
 #include "corewar/op.h"
 #include "asm/asm.h"
 #include "asm/header.h"
+#include "asm/error.h"
+
+void write_header(vec_str_t *body, asm_t *assembler)
+{
+    for (size_t i = 0; i < body->size; i++){
+        get_prog_size(body->data[i], &assembler->header->prog_size);
+    }
+    assembler->header->prog_size = swap_endian(assembler->header->prog_size);
+    fwrite(assembler->header, sizeof(header_t), 1, assembler->file);
+}
 
 static int check_header_size(header_t *header)
 {

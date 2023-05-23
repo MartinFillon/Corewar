@@ -40,12 +40,15 @@ static int get_parameters(
     vec_str_t *params, str_t **buffer, size_t index, asm_t *assembler
 )
 {
+    int status = 0;
     long value = 0;
     size_t size = OP_NAME[index].size;
 
     for (size_t i = 0; i < params->size; i++) {
+        str_ltrim(&params->data[i], ' ');
+        str_ltrim(&params->data[i], '\t');
         if (str_startswith(params->data[i], STR(DIRECT_CHAR))) {
-            return manage_direct(params->data[i], buffer, size, assembler);
+            status = manage_direct(params->data[i], buffer, size, assembler);
         }
         if (str_startswith(params->data[i], STR("r"))) {
             value = my_atoi(params->data[i]->data + 1);
@@ -53,10 +56,10 @@ static int get_parameters(
         }
         if (!str_startswith(params->data[i], STR("r")) &&
             !str_startswith(params->data[i], STR(DIRECT_CHAR))) {
-            return manage_indirect(params->data[i], buffer, size);
+            status = manage_indirect(params->data[i], buffer, size);
         }
     }
-    return SUCCESS;
+    return status;
 }
 
 static str_t *add_parameter(vec_str_t *params, str_t *param_type)

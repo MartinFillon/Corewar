@@ -15,6 +15,7 @@
 #include "asm/asm.h"
 #include "asm/body.h"
 #include "asm/labels.h"
+#include "asm/error.h"
 
 static void exclude_instructions(
     str_t *line, asm_t *assembler, vec_str_t *lines
@@ -31,6 +32,7 @@ static void exclude_instructions(
         }
     }
     words = str_split(line, STR(" \t"));
+    clean_comments(&words);
     if (words->data[0]->data[words->data[0]->length - 1] == LABEL_CHAR){
         label.label = str_create(words->data[0]->data);
         get_label_addr(label.label, lines, &label);
