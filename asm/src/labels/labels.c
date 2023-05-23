@@ -73,7 +73,9 @@ int parse_labels(vec_str_t *lines, asm_t *assembler)
     return SUCCESS;
 }
 
-void get_label_value(str_t *label, asm_t *assembler, str_t **buffer)
+void get_label_value(
+    str_t *label, asm_t *assembler, str_t **buffer, size_t type
+)
 {
     long value = 0;
 
@@ -85,12 +87,5 @@ void get_label_value(str_t *label, asm_t *assembler, str_t **buffer)
             find_pos((*buffer)->length, assembler);
         }
     }
-    if (value < 0) {
-        value = 65536 + value;
-        str_cadd(buffer, (value / 256));
-        str_cadd(buffer, (value % 256));
-    } else {
-        str_cadd(buffer, (value / 256));
-        str_cadd(buffer, (value % 256));
-    }
+    get_direct_int(type, value, buffer);
 }

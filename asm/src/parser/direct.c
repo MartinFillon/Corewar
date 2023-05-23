@@ -27,7 +27,7 @@ static void get_direct_index(size_t type, long nbr, str_t **buffer)
     }
 }
 
-static void get_direct_int(size_t type, long nbr, str_t **buffer)
+void get_direct_int(size_t type, long nbr, str_t **buffer)
 {
     if (type == DIR_SIZE) {
         if (nbr < 0) {
@@ -48,11 +48,11 @@ static void get_direct_int(size_t type, long nbr, str_t **buffer)
 
 int manage_direct(str_t *param, str_t **buffer, size_t type, asm_t *assembler)
 {
-    int value = 0;
+    long value = 0;
     str_t *tmp = str_create(param->data + 1);
 
     if (tmp->data[0] == LABEL_CHAR){
-        get_label_value(tmp, assembler, buffer);
+        get_label_value(tmp, assembler, buffer, type);
         free(tmp);
         return SUCCESS;
     }
