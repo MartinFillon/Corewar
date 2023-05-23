@@ -67,7 +67,6 @@ static str_t *add_parameter(vec_str_t *params, str_t *param_type)
     for (size_t i = 0; i < params->size; i++) {
         str_ltrim(&params->data[i], ' ');
         str_ltrim(&params->data[i], '\t');
-        printf("{%s}, ", params->data[i]->data);
         if (str_startswith(params->data[i], STR(DIRECT_CHAR))){
             str_sadd(&param_type, STR(DIRECT));
         }
@@ -79,7 +78,6 @@ static str_t *add_parameter(vec_str_t *params, str_t *param_type)
             str_sadd(&param_type, STR(INDIRECT));
         }
     }
-    printf("\n");
     return param_type;
 }
 
