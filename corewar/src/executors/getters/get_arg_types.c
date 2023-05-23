@@ -12,6 +12,6 @@ void get_arg_types(u_char *memory, int memory_index, u_char *arg_types)
     u_char coding_byte = memory[memory_index];
 
     for (int i = 3; i >= 0; --i) {
-        arg_types[i] = get_bits(coding_byte, i * 2, 2);
+        arg_types[3 - i] = get_bits(coding_byte, i * 2, 2);
     }
 }

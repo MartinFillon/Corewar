@@ -60,7 +60,7 @@ void run_vm(vm_t *vm);
 
 bool load_programs(vm_t *vm);
 void order_programs_by_number(vec_prog_t *programs);
-
+u_char get_next_instruction(vm_t *vm, program_t *program);
 void dump_memory(vm_t *vm);
 
 
