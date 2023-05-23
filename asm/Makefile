@@ -18,7 +18,9 @@ SRC	=	$(addprefix src/, main.c			\
 			parser/indirect.c 				\
 			parser/instruction_parameter.c	\
 			labels/labels.c					\
+			labels/label_address.c 			\
 			error_handling/handle_errors.c	\
+			error_handling/cleanup.c		\
 			error_handling/big_endian.c)
 
 NAME = asm

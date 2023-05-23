@@ -17,7 +17,11 @@ prog_t init_prog(void)
                 .header = {0},
                 .registers = {0},
                 .pc = 0,
+                .is_alive = false,
+                .cycle_to_wait = 0,
             },
+        .path = NULL,
+        .is_running = true,
         .address = -1,
         .number = -1,
     };

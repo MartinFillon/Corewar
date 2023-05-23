@@ -11,6 +11,8 @@
 
 vec_str_t *parse_header(char const *champ_path, header_t *header);
 
-void get_prog_size(str_t *champ, header_t *header);
+void get_prog_size(str_t *champ, int *size);
+
+void write_header(vec_str_t *body, asm_t *assembler);
 
 #endif /* !HEADER_H_ */

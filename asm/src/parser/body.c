@@ -6,7 +6,6 @@
 */
 
 #include <stddef.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -42,12 +41,18 @@ static int find_instruction(str_t *line, str_t const *op_name)
     return -1;
 }
 
-static int manage_instruction(
-    str_t *line, size_t index, str_t **buffer, asm_t *assembler
-)
+static void clean_parameters(str_t **line)
 {
-    (void)index;
-    champ_t body = {0};
+    for (size_t i = 0; i < (*line)->length; i++) {
+        if ((*line)->data[i] == COMMENT_CHAR){
+            str_slice(line, 0, i);
+            return;
+        }
+    }
+}
+
+static int manage_instruction(str_t *line, asm_t *assembler, str_t **buffer)
+{
     str_t *name = str_create("");
     str_t *tmp = NULL;
     int callback = 0;
@@ -56,11 +61,10 @@ static int manage_instruction(
         str_add(str_clear(&name), OP_NAME[i].name);
         callback = find_instruction(line, name);
         if (callback != -1) {
-            body.instruction = name;
             tmp = str_create(&line->data[callback + name->length]);
-            callback = parse_instruction_parameter(tmp, i, buffer, &body);
-            vec_pushback(&assembler->champ, &body);
-            my_vfree(1, tmp);
+            clean_parameters(&tmp);
+            callback = parse_instruction_parameter(tmp, i, assembler, buffer);
+            my_vfree(2, tmp, name);
             return callback;
         }
     }
@@ -92,13 +96,13 @@ int parse_body(vec_str_t *body, asm_t *assembler, str_t **buffer)
             i--;
         }
     }
+    write_header(body, assembler);
     for (size_t i = 0; i < body->size; i++) {
-        if (manage_instruction(body->data[i], i, buffer, assembler) == ERROR){
+        if (manage_instruction(body->data[i], assembler, buffer) == ERROR){
             return ERROR;
         }
     }
-    assembler->header->prog_size = swap_endian((*buffer)->length);
-    fwrite(assembler->header, sizeof(header_t), 1, assembler->file);
-    fwrite((*buffer)->data, sizeof(char), (*buffer)->length, assembler->file);
+    fwrite((*buffer)->data, sizeof(char), (*buffer)->length,
+    assembler->file);
     return SUCCESS;
 }

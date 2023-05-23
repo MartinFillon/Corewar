@@ -15,6 +15,29 @@
 #include "corewar/op.h"
 #include "asm/asm.h"
 #include "asm/header.h"
+#include "asm/error.h"
+
+void write_header(vec_str_t *body, asm_t *assembler)
+{
+    for (size_t i = 0; i < body->size; i++){
+        get_prog_size(body->data[i], &assembler->header->prog_size);
+    }
+    assembler->header->prog_size = swap_endian(assembler->header->prog_size);
+    fwrite(assembler->header, sizeof(header_t), 1, assembler->file);
+}
+
+static int check_header_size(header_t *header)
+{
+    if (my_strlen(header->prog_name) > PROG_NAME_LENGTH) {
+        my_dprintf(2, "header: Champion name too long\n");
+        return ERROR;
+    }
+    if (my_strlen(header->comment) > COMMENT_LENGTH) {
+        my_dprintf(2, "header: Champion comment too long\n");
+        return ERROR;
+    }
+    return SUCCESS;
+}
 
 static int cleanup_header(header_t *header)
 {
@@ -22,11 +45,11 @@ static int cleanup_header(header_t *header)
     char *name_temp = my_strchr(header->prog_name, '"');
 
     if (name_temp == NULL){
-        my_dprintf(2, "Invalid .name\n");
+        my_dprintf(2, "header: Invalid .name\n");
         return ERROR;
     }
     if (comment_temp == NULL){
-        my_dprintf(2, "Invalid .comment\n");
+        my_dprintf(2, "header: .comment\n");
         return ERROR;
     }
     *comment_temp = '\0';
@@ -48,8 +71,7 @@ static int fill_header(vec_str_t *champ, header_t *header)
             my_strcpy(header->comment, champ->data[i]->data + quote_idx + 1);
     }
     if (header->comment[0] == '\0' || header->prog_name[0] == '\0' ||
-        cleanup_header(header) == ERROR){
-            my_dprintf(2, "header: ");
+        cleanup_header(header) == ERROR || check_header_size(header) == ERROR){
             return ERROR;
         }
     return SUCCESS;

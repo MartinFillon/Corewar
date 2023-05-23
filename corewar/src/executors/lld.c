@@ -5,7 +5,6 @@
 ** lld
 */
 
-#include <sys/types.h>
 #include "corewar/corewar.h"
 #include "corewar/op.h"
 
