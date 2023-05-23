@@ -16,6 +16,7 @@ SRC = 	$(SRC_DIR)src/utils.c								\
 		$(SRC_DIR)src/vm/order_programs.c					\
 		$(SRC_DIR)src/vm/dump_memory.c					\
 		$(SRC_DIR)src/vm/run_cycles.c						\
+		$(SRC_DIR)src/vm/run_cycle.c						\
 		$(SRC_DIR)src/executors/getters/get_direct.c		\
 		$(SRC_DIR)src/executors/getters/get_arg.c			\
 		$(SRC_DIR)src/executors/getters/get_arg_types.c	\
