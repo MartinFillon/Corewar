@@ -212,3 +212,166 @@ Test(instruction_tester, st_ind, .fini=end)
     cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
     free_vm(&vm);
 }
+
+Test(instruction_tester, and_reg_dir, .fini=end)
+{
+    vm_t vm = init_vm();
+    char *av[] = {"./corewar", "tests/test9.cor", "tests/test1.cor", NULL};
+    if (!parse_argv(3, (const char *const *)av, &vm) || !start_vm(&vm))
+        cr_assert_fail();
+    program_t *p = &vm.programs->data[0].program;
+    p->registers[3] = 78;
+    exec_and(&vm, p);
+    cr_assert_eq(p->registers[1], p->registers[3] & 10);
+    p->registers[0] = 1;
+    u_char next = get_next_instruction(&vm, p);
+    cr_assert_eq(next, 3);
+    op_tab[next].func(&vm, p);
+    cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
+    free_vm(&vm);
+}
+
+Test(instruction_tester, and_dir_dir, .fini=end)
+{
+    vm_t vm = init_vm();
+    char *av[] = {"./corewar", "tests/test10.cor", "tests/test1.cor", NULL};
+    if (!parse_argv(3, (const char *const *)av, &vm) || !start_vm(&vm))
+        cr_assert_fail();
+    program_t *p = &vm.programs->data[0].program;
+    exec_and(&vm, p);
+    cr_assert_eq(p->registers[1], 22 & 10);
+    p->registers[0] = 1;
+    u_char next = get_next_instruction(&vm, p);
+    cr_assert_eq(next, 3);
+    op_tab[next].func(&vm, p);
+    cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
+    free_vm(&vm);
+}
+
+Test(instruction_tester, and_reg_ind, .fini=end)
+{
+    vm_t vm = init_vm();
+    char *av[] = {"./corewar", "tests/test11.cor", "tests/test1.cor", NULL};
+    if (!parse_argv(3, (const char *const *)av, &vm) || !start_vm(&vm))
+        cr_assert_fail();
+    program_t *p = &vm.programs->data[0].program;
+    int addr = p->pc + 50 % IDX_MOD;
+    vm.arena[addr % MEM_SIZE] = 5;
+    p->registers[3] = 78;
+    exec_and(&vm, p);
+    cr_assert_eq(p->registers[1], p->registers[3] & vm.arena[addr % MEM_SIZE]);
+    p->registers[0] = 1;
+    u_char next = get_next_instruction(&vm, p);
+    cr_assert_eq(next, 3);
+    op_tab[next].func(&vm, p);
+    cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
+    free_vm(&vm);
+}
+
+Test(instruction_tester, or_reg_dir, .fini=end)
+{
+    vm_t vm = init_vm();
+    char *av[] = {"./corewar", "tests/test12.cor", "tests/test1.cor", NULL};
+    if (!parse_argv(3, (const char *const *)av, &vm) || !start_vm(&vm))
+        cr_assert_fail();
+    program_t *p = &vm.programs->data[0].program;
+    p->registers[3] = 78;
+    exec_or(&vm, p);
+    cr_assert_eq(p->registers[1], p->registers[3] | 10);
+    p->registers[0] = 1;
+    u_char next = get_next_instruction(&vm, p);
+    cr_assert_eq(next, 3);
+    op_tab[next].func(&vm, p);
+    cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
+    free_vm(&vm);
+}
+
+Test(instruction_tester, or_dir_dir, .fini=end)
+{
+    vm_t vm = init_vm();
+    char *av[] = {"./corewar", "tests/test13.cor", "tests/test1.cor", NULL};
+    if (!parse_argv(3, (const char *const *)av, &vm) || !start_vm(&vm))
+        cr_assert_fail();
+    program_t *p = &vm.programs->data[0].program;
+    exec_or(&vm, p);
+    cr_assert_eq(p->registers[1], 22 | 10);
+    p->registers[0] = 1;
+    u_char next = get_next_instruction(&vm, p);
+    cr_assert_eq(next, 3);
+    op_tab[next].func(&vm, p);
+    cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
+    free_vm(&vm);
+}
+
+Test(instruction_tester, or_reg_ind, .fini=end)
+{
+    vm_t vm = init_vm();
+    char *av[] = {"./corewar", "tests/test14.cor", "tests/test1.cor", NULL};
+    if (!parse_argv(3, (const char *const *)av, &vm) || !start_vm(&vm))
+        cr_assert_fail();
+    program_t *p = &vm.programs->data[0].program;
+    int addr = p->pc + 50 % IDX_MOD;
+    p->registers[3] = 78;
+    exec_or(&vm, p);
+    cr_assert_eq(p->registers[1], p->registers[3] | vm.arena[addr % MEM_SIZE]);
+    p->registers[0] = 1;
+    u_char next = get_next_instruction(&vm, p);
+    cr_assert_eq(next, 3);
+    op_tab[next].func(&vm, p);
+    cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
+    free_vm(&vm);
+}
+
+Test(instruction_tester, xor_reg_dir, .fini=end)
+{
+    vm_t vm = init_vm();
+    char *av[] = {"./corewar", "tests/test15.cor", "tests/test1.cor", NULL};
+    if (!parse_argv(3, (const char *const *)av, &vm) || !start_vm(&vm))
+        cr_assert_fail();
+    program_t *p = &vm.programs->data[0].program;
+    p->registers[3] = 78;
+    exec_xor(&vm, p);
+    cr_assert_eq(p->registers[1], p->registers[3] ^ 10);
+    p->registers[0] = 1;
+    u_char next = get_next_instruction(&vm, p);
+    cr_assert_eq(next, 3);
+    op_tab[next].func(&vm, p);
+    cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
+    free_vm(&vm);
+}
+
+Test(instruction_tester, xor_dir_dir, .fini=end)
+{
+    vm_t vm = init_vm();
+    char *av[] = {"./corewar", "tests/test17.cor", "tests/test1.cor", NULL};
+    if (!parse_argv(3, (const char *const *)av, &vm) || !start_vm(&vm))
+        cr_assert_fail();
+    program_t *p = &vm.programs->data[0].program;
+    exec_xor(&vm, p);
+    cr_assert_eq(p->registers[1], 22 ^ 10);
+    p->registers[0] = 1;
+    u_char next = get_next_instruction(&vm, p);
+    cr_assert_eq(next, 3);
+    op_tab[next].func(&vm, p);
+    cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
+    free_vm(&vm);
+}
+
+Test(instruction_tester, xor_reg_ind, .fini=end)
+{
+    vm_t vm = init_vm();
+    char *av[] = {"./corewar", "tests/test16.cor", "tests/test1.cor", NULL};
+    if (!parse_argv(3, (const char *const *)av, &vm) || !start_vm(&vm))
+        cr_assert_fail();
+    program_t *p = &vm.programs->data[0].program;
+    int addr = p->pc + 50 % IDX_MOD;
+    p->registers[3] = 78;
+    exec_xor(&vm, p);
+    cr_assert_eq(p->registers[1], p->registers[3] ^ vm.arena[addr % MEM_SIZE]);
+    p->registers[0] = 1;
+    u_char next = get_next_instruction(&vm, p);
+    cr_assert_eq(next, 3);
+    op_tab[next].func(&vm, p);
+    cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
+    free_vm(&vm);
+}
