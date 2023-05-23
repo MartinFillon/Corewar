@@ -31,3 +31,6 @@ asm/asm
 corewar/corewar
 corewar_binaries
 coding-style-reports.log
+
+# tests
+!tests/*.cor

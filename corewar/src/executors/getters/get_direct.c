@@ -17,5 +17,5 @@ int get_direct(u_char *memory, int memory_index)
         direct <<= 8;
         direct += memory[memory_index + i];
     }
-    return swap_endian(direct);
+    return direct;
 }
