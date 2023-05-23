@@ -16,7 +16,7 @@ int exec_fork(vm_t *vm, program_t *p)
     program_t tmp;
 
     p->pc = (p->pc + 1) % MEM_SIZE;
-    get_arg(&arg, vm->arena, &p->pc, T_IND);
+    get_arg(&arg, vm->arena, &p->pc, 0b11);
     tmp = (program_t){
         .body = NULL,
         .carry = p->carry,

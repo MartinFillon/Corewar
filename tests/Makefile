@@ -46,8 +46,8 @@ SRC = 	$(SRC_DIR)src/utils.c								\
 
 TESTS 	=	instructions_tester.c
 
-LDLIBS 		+= -lcriterion -lgcov --coverage
-CFLAGS		+=	-Wall -Wextra -Werror --coverage
+LDLIBS 		+= 	-lcriterion --coverage
+CFLAGS		+=	-Wall -Wextra -Werror
 CPPFLAGS	+=	-I../include
 LDFLAGS		+=	-L../lib
 LDLIBS		+=	-lmy

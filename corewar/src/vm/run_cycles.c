@@ -11,7 +11,7 @@
 #include "corewar/corewar.h"
 #include "corewar/op.h"
 
-static void check_alive(vm_t *vm)
+static void UNUSED check_alive(vm_t *vm)
 {
     for (size_t i = 0; i < vm->programs->size; ++i) {
         if (vm->programs->data[i].program.is_alive == false) {
@@ -51,9 +51,9 @@ void run_vm(vm_t *vm)
             dump_memory(vm);
             return;
         }
-        if (nb_cycle > 0 && nb_cycle % CYCLE_TO_DIE == 0) {
-            check_alive(vm);
-        }
+        // if (nb_cycle > 0 && nb_cycle % CYCLE_TO_DIE == 0) {
+        //     check_alive(vm);
+        // }
 
         run_cycle(vm);
 

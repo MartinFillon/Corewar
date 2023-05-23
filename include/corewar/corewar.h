@@ -61,7 +61,7 @@ void run_cycle(vm_t *vm);
 
 bool load_programs(vm_t *vm);
 void order_programs_by_number(vec_prog_t *programs);
-u_char get_next_instruction(vm_t *vm, program_t *program);
+u_char get_instruction(vm_t *vm, program_t *program);
 void dump_memory(vm_t *vm);
 
 void interpret_binary(int *a, u_char t, vm_t *vm, int st);

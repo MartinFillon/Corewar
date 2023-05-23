@@ -30,6 +30,7 @@ int exec_or(vm_t *vm, program_t *p)
         arg1 = p->registers[arg1 - 1];
     if (arg_types[1] == T_REG)
         arg2 = p->registers[arg2 - 1];
-    p->carry = (p->registers[reg - 1] = arg1 | arg2) == 0;
+    if (reg > 0 && reg < REG_NUMBER)
+        p->carry = (p->registers[reg - 1] = arg1 | arg2) == 0;
     return 0;
 }

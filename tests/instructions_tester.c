@@ -47,7 +47,7 @@ Test(instruction_tester, add_and_other_command_after, .fini=end)
     p->registers[1] = 2;
     exec_add(&vm, p);
     cr_assert_eq(p->registers[2], 3);
-    u_char next = get_next_instruction(&vm, p);
+    u_char next = get_instruction(&vm, p);
     cr_assert_eq(next, 4);
     op_tab[next].func(&vm, p);
     cr_assert_eq(p->registers[2], p->registers[1] - p->registers[0]);
@@ -79,7 +79,7 @@ Test(instruction_tester, sub_and_other_command_after, .fini=end)
     p->registers[1] = 2;
     exec_sub(&vm, p);
     cr_assert_eq(p->registers[2], p->registers[1] - p->registers[0]);
-    u_char next = get_next_instruction(&vm, p);
+    u_char next = get_instruction(&vm, p);
     cr_assert_neq(next, INVALID_INSTRUCTION);
     op_tab[next].func(&vm, p);
     cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
@@ -123,7 +123,7 @@ Test(instruction_tester, ld_indirect_after, .fini=end)
     cr_assert_eq(p->registers[5], 'a');
     p->registers[0] = 1;
     p->registers[1] = 2;
-    u_char next = get_next_instruction(&vm, p);
+    u_char next = get_instruction(&vm, p);
     cr_assert_eq(next, 4);
     op_tab[next].func(&vm, p);
     cr_assert_eq(p->registers[2], p->registers[1] - p->registers[0]);
@@ -142,7 +142,7 @@ Test(instruction_tester, ld_direct_after, .fini=end)
     cr_assert_eq(p->registers[5], 'a');
     p->registers[0] = 1;
     p->registers[1] = 2;
-    u_char next = get_next_instruction(&vm, p);
+    u_char next = get_instruction(&vm, p);
     cr_assert_eq(next, 4);
     op_tab[next].func(&vm, p);
     cr_assert_eq(p->registers[2], p->registers[1] - p->registers[0]);
@@ -171,7 +171,7 @@ Test(instruction_tester, live_after, .fini=end)
     cr_assert_not_null(vm.last_live);
     p->registers[0] = 1;
     p->registers[1] = 2;
-    u_char next = get_next_instruction(&vm, p);
+    u_char next = get_instruction(&vm, p);
     cr_assert_eq(next, 3);
     op_tab[next].func(&vm, p);
     cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
@@ -189,7 +189,7 @@ Test(instruction_tester, st_reg, .fini=end)
     exec_st(&vm, p);
     cr_assert_eq(p->registers[1], p->registers[5]);
     p->registers[0] = 1;
-    u_char next = get_next_instruction(&vm, p);
+    u_char next = get_instruction(&vm, p);
     cr_assert_eq(next, 3);
     op_tab[next].func(&vm, p);
     cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
@@ -209,7 +209,7 @@ Test(instruction_tester, st_ind, .fini=end)
     cr_assert_eq(vm.arena[address % MEM_SIZE], p->registers[5]);
     p->registers[0] = 1;
     p->registers[1] = 2;
-    u_char next = get_next_instruction(&vm, p);
+    u_char next = get_instruction(&vm, p);
     cr_assert_eq(next, 3);
     op_tab[next].func(&vm, p);
     cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
@@ -227,7 +227,7 @@ Test(instruction_tester, and_reg_dir, .fini=end)
     exec_and(&vm, p);
     cr_assert_eq(p->registers[1], p->registers[3] & 10);
     p->registers[0] = 1;
-    u_char next = get_next_instruction(&vm, p);
+    u_char next = get_instruction(&vm, p);
     cr_assert_eq(next, 3);
     op_tab[next].func(&vm, p);
     cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
@@ -244,7 +244,7 @@ Test(instruction_tester, and_dir_dir, .fini=end)
     exec_and(&vm, p);
     cr_assert_eq(p->registers[1], 22 & 10);
     p->registers[0] = 1;
-    u_char next = get_next_instruction(&vm, p);
+    u_char next = get_instruction(&vm, p);
     cr_assert_eq(next, 3);
     op_tab[next].func(&vm, p);
     cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
@@ -264,7 +264,7 @@ Test(instruction_tester, and_reg_ind, .fini=end)
     exec_and(&vm, p);
     cr_assert_eq(p->registers[1], p->registers[3] & vm.arena[addr % MEM_SIZE]);
     p->registers[0] = 1;
-    u_char next = get_next_instruction(&vm, p);
+    u_char next = get_instruction(&vm, p);
     cr_assert_eq(next, 3);
     op_tab[next].func(&vm, p);
     cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
@@ -282,7 +282,7 @@ Test(instruction_tester, or_reg_dir, .fini=end)
     exec_or(&vm, p);
     cr_assert_eq(p->registers[1], p->registers[3] | 10);
     p->registers[0] = 1;
-    u_char next = get_next_instruction(&vm, p);
+    u_char next = get_instruction(&vm, p);
     cr_assert_eq(next, 3);
     op_tab[next].func(&vm, p);
     cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
@@ -299,7 +299,7 @@ Test(instruction_tester, or_dir_dir, .fini=end)
     exec_or(&vm, p);
     cr_assert_eq(p->registers[1], 22 | 10);
     p->registers[0] = 1;
-    u_char next = get_next_instruction(&vm, p);
+    u_char next = get_instruction(&vm, p);
     cr_assert_eq(next, 3);
     op_tab[next].func(&vm, p);
     cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
@@ -318,7 +318,7 @@ Test(instruction_tester, or_reg_ind, .fini=end)
     exec_or(&vm, p);
     cr_assert_eq(p->registers[1], p->registers[3] | vm.arena[addr % MEM_SIZE]);
     p->registers[0] = 1;
-    u_char next = get_next_instruction(&vm, p);
+    u_char next = get_instruction(&vm, p);
     cr_assert_eq(next, 3);
     op_tab[next].func(&vm, p);
     cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
@@ -336,7 +336,7 @@ Test(instruction_tester, xor_reg_dir, .fini=end)
     exec_xor(&vm, p);
     cr_assert_eq(p->registers[1], p->registers[3] ^ 10);
     p->registers[0] = 1;
-    u_char next = get_next_instruction(&vm, p);
+    u_char next = get_instruction(&vm, p);
     cr_assert_eq(next, 3);
     op_tab[next].func(&vm, p);
     cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
@@ -353,7 +353,7 @@ Test(instruction_tester, xor_dir_dir, .fini=end)
     exec_xor(&vm, p);
     cr_assert_eq(p->registers[1], 22 ^ 10);
     p->registers[0] = 1;
-    u_char next = get_next_instruction(&vm, p);
+    u_char next = get_instruction(&vm, p);
     cr_assert_eq(next, 3);
     op_tab[next].func(&vm, p);
     cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
@@ -372,7 +372,7 @@ Test(instruction_tester, xor_reg_ind, .fini=end)
     exec_xor(&vm, p);
     cr_assert_eq(p->registers[1], p->registers[3] ^ vm.arena[addr % MEM_SIZE]);
     p->registers[0] = 1;
-    u_char next = get_next_instruction(&vm, p);
+    u_char next = get_instruction(&vm, p);
     cr_assert_eq(next, 3);
     op_tab[next].func(&vm, p);
     cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
@@ -390,7 +390,7 @@ Test(instruction_tester, zjmp_carry_0, .fini=end)
     exec_zjmp(&vm, p);
     p->registers[0] = 1;
     p->registers[1] = 5;
-    u_char next = get_next_instruction(&vm, p);
+    u_char next = get_instruction(&vm, p);
     cr_assert_eq(next, 3);
     op_tab[next].func(&vm, p);
     cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
@@ -424,7 +424,7 @@ Test(instruction_tester, ldi_complex, .fini=end)
     vm.arena[(address + 156 % IDX_MOD) % MEM_SIZE] = 78;
     exec_ldi(&vm, p);
     cr_assert_eq(p->registers[1], 78);
-    u_char next = get_next_instruction(&vm, p);
+    u_char next = get_instruction(&vm, p);
     cr_assert_eq(next, 3);
     op_tab[next].func(&vm, p);
     cr_assert_eq(p->registers[2], p->registers[1] + p->registers[0]);
@@ -439,7 +439,7 @@ Test(instruction_tester, sti, .fini=end)
         cr_assert_fail();
     program_t *p = &vm.programs->data[1].program;
     exec_sti(&vm, p);
-    u_char next = get_next_instruction(&vm, p);
+    u_char next = get_instruction(&vm, p);
     cr_assert_eq(next, 0);
     op_tab[next].func(&vm, p);
     cr_assert_not_null(vm.last_live);

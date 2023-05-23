@@ -39,7 +39,6 @@ typedef struct prog_s {
 VEC_DEF(prog_t, prog);
 
 typedef struct vm_s {
-    int cycle;
     int cycle_to_die;
     int nbr_cycles_to_dump;
     int nbr_live;
