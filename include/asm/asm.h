@@ -24,7 +24,7 @@
 
 typedef struct op_name_s {
     int id;
-    const int nb_param;
+    const int params;
     const uint8_t hex;
     const char *name;
     const int *index;
@@ -69,7 +69,7 @@ enum {
 static const op_name_t OP_NAME[] = {
     {
         .id = LIVE,
-        .nb_param = 0,
+        .params = 1,
         .hex = 0x01,
         .name = "live",
         .index = (int[]) {UNDEFINED},
@@ -77,7 +77,7 @@ static const op_name_t OP_NAME[] = {
     },
     {
         .id = LD,
-        .nb_param = 1,
+        .params = 2,
         .hex = 0x02,
         .name = "ld",
         .index = (int[]) {UNDEFINED, REGISTER},
@@ -85,7 +85,7 @@ static const op_name_t OP_NAME[] = {
     },
     {
         .id = ST,
-        .nb_param = 1,
+        .params = 2,
         .hex = 0x03,
         .name = "st",
         .index = (int[]) {REGISTER,  UNDEFINED},
@@ -93,7 +93,7 @@ static const op_name_t OP_NAME[] = {
     },
     {
         .id = ADD,
-        .nb_param = 2,
+        .params = 3,
         .hex = 0x04,
         .name = "add",
         .index = (int[]) {REGISTER,  REGISTER, REGISTER},
@@ -101,7 +101,7 @@ static const op_name_t OP_NAME[] = {
     },
     {
         .id = SUB,
-        .nb_param = 2,
+        .params = 3,
         .hex = 0x05,
         .name = "sub",
         .index = (int[]) {REGISTER,  REGISTER, REGISTER},
@@ -109,7 +109,7 @@ static const op_name_t OP_NAME[] = {
     },
     {
         .id = AND,
-        .nb_param = 2,
+        .params = 3,
         .hex = 0x06,
         .name = "and",
         .index = (int[]) {UNDEFINED,  UNDEFINED, REGISTER},
@@ -117,7 +117,7 @@ static const op_name_t OP_NAME[] = {
     },
     {
         .id = OR,
-        .nb_param = 2,
+        .params = 3,
         .hex = 0x07,
         .name = "or",
         .index = (int[]) {UNDEFINED,  UNDEFINED, REGISTER},
@@ -125,7 +125,7 @@ static const op_name_t OP_NAME[] = {
     },
     {
         .id = XOR,
-        .nb_param = 2,
+        .params = 3,
         .hex = 0x08,
         .name = "xor",
         .index = (int[]) {UNDEFINED,  UNDEFINED, REGISTER},
@@ -133,7 +133,7 @@ static const op_name_t OP_NAME[] = {
     },
     {
         .id = ZJMP,
-        .nb_param = 0,
+        .params = 1,
         .hex = 0x09,
         .name = "zjmp",
         .index = (int[]) {INDEX},
@@ -141,7 +141,7 @@ static const op_name_t OP_NAME[] = {
     },
     {
         .id = LDI,
-        .nb_param = 2,
+        .params = 3,
         .hex = 0x0a,
         .name = "ldi",
         .index = (int[]) {REGEX,  REGEX, REGISTER},
@@ -149,7 +149,7 @@ static const op_name_t OP_NAME[] = {
     },
     {
         .id = STI,
-        .nb_param = 2,
+        .params = 3,
         .hex = 0x0b,
         .name = "sti",
         .index = (int[]) {REGISTER,  REGEX, REGEX},
@@ -157,7 +157,7 @@ static const op_name_t OP_NAME[] = {
     },
     {
         .id = FORK,
-        .nb_param = 0,
+        .params = 1,
         .hex = 0x0c,
         .name = "fork",
         .index = (int[]) {INDEX},
@@ -165,7 +165,7 @@ static const op_name_t OP_NAME[] = {
     },
     {
         .id = LLD,
-        .nb_param = 1,
+        .params = 2,
         .hex = 0x0d,
         .name = "lld",
         .index = (int[]) {UNDEFINED, REGISTER},
@@ -173,7 +173,7 @@ static const op_name_t OP_NAME[] = {
     },
     {
         .id = LLDI,
-        .nb_param = 2,
+        .params = 3,
         .hex = 0x0e,
         .name = "lldi",
         .index = (int[]) {REGEX,  REGEX, REGISTER},
@@ -181,7 +181,7 @@ static const op_name_t OP_NAME[] = {
     },
     {
         .id = LFORK,
-        .nb_param = 0,
+        .params = 1,
         .hex = 0x0f,
         .name = "lfork",
         .index = (int[]) {INDEX},
@@ -189,7 +189,7 @@ static const op_name_t OP_NAME[] = {
     },
     {
         .id = AFF,
-        .nb_param = 0,
+        .params = 1,
         .hex = 0x10,
         .name = "aff",
         .index = (int[]) {REGISTER},

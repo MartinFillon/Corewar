@@ -9,12 +9,15 @@
 
 #include "my_str.h"
 
-#include "asm/asm.h"
 #include "corewar/op.h"
+#include "asm/asm.h"
+#include "asm/error.h"
 
 static void find_for_params(vec_str_t *input, size_t i, int *size)
 {
     for (size_t idx = 1; idx < input->size; idx++){
+        if (str_startswith(input->data[idx], STR("#")))
+            break;
         if (input->data[idx]->length == 0)
             continue;
         if (input->data[idx]->data[0] == 'r'){

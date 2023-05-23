@@ -34,6 +34,7 @@ int launch_parser(asm_t *assembler, char const *filepath)
     if (parse_labels(content, assembler) == ERROR ||
         parse_body(content, assembler, &buffer) == ERROR) {
         vec_free(content);
+        free(buffer);
         return ERROR;
     }
     free(buffer);

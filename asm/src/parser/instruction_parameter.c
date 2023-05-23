@@ -36,16 +36,19 @@ static void get_coding_byte(str_t *param_type, str_t **buffer, int index)
     str_cadd(buffer, coding_byte);
 }
 
-static void get_parameters(
+static int get_parameters(
     vec_str_t *params, str_t **buffer, size_t index, asm_t *assembler
 )
 {
+    int status = 0;
     long value = 0;
     size_t size = OP_NAME[index].size;
 
     for (size_t i = 0; i < params->size; i++) {
+        str_ltrim(&params->data[i], ' ');
+        str_ltrim(&params->data[i], '\t');
         if (str_startswith(params->data[i], STR(DIRECT_CHAR))) {
-            manage_direct(params->data[i], buffer, size, assembler);
+            status = manage_direct(params->data[i], buffer, size, assembler);
         }
         if (str_startswith(params->data[i], STR("r"))) {
             value = my_atoi(params->data[i]->data + 1);
@@ -53,9 +56,10 @@ static void get_parameters(
         }
         if (!str_startswith(params->data[i], STR("r")) &&
             !str_startswith(params->data[i], STR(DIRECT_CHAR))) {
-            manage_indirect(params->data[i], buffer, size);
+            status = manage_indirect(params->data[i], buffer, size);
         }
     }
+    return status;
 }
 
 static str_t *add_parameter(vec_str_t *params, str_t *param_type)
@@ -83,22 +87,22 @@ int parse_instruction_parameter(
 {
     champ_t champ = {0};
     str_t *param_type = str_create("");
+    int status = 0;
 
     str_trim(&param, '\t');
     str_trim(&param, ' ');
-    if (str_count(param, ',') != OP_NAME[index].nb_param){
-        my_dprintf(2, "%s: Invalid nbr of parameters\n", OP_NAME[index].name);
-        my_dprintf(2, "Expected %d, got %d\n", OP_NAME[index].nb_param + 1,
-            str_count(param, ',') + 1);
+    if ((str_count(param, ',') + 1) != OP_NAME[index].params){
+        my_dprintf(2, "%s: Invalid nbr of parameters\nExpected %d, got %d\n",
+        OP_NAME[index].name, OP_NAME[index].params, str_count(param, ',') + 1);
         return ERROR;
     }
     champ.params = str_split(param, STR(SEPARATOR_CHAR));
     param_type = add_parameter(champ.params, param_type);
     str_cadd(buffer, ((char) OP_NAME[index].hex));
     get_coding_byte(param_type, buffer, index);
-    get_parameters(champ.params, buffer, index, assembler);
+    status = get_parameters(champ.params, buffer, index, assembler);
     champ.line_size = (int)(*buffer)->length;
     vec_pushback(&assembler->champ, &champ);
     free(param_type);
-    return SUCCESS;
+    return status;
 }
