@@ -29,7 +29,7 @@ static void get_indirect(size_t type, long nbr, str_t **buffer)
 void manage_indirect(str_t *param, str_t **buffer, size_t type)
 {
     int value = 0;
-    str_t *tmp = str_create(param->data + 1);
+    str_t *tmp = str_create(param->data);
 
     value = my_atoi(tmp->data);
     if (value == 0 && tmp->data[0] != '0'){
