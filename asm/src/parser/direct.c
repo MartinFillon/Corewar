@@ -46,7 +46,7 @@ static void get_direct_int(size_t type, long nbr, str_t **buffer)
     get_direct_index(type, nbr, buffer);
 }
 
-void manage_direct(str_t *param, str_t **buffer, size_t type, asm_t *assembler)
+int manage_direct(str_t *param, str_t **buffer, size_t type, asm_t *assembler)
 {
     int value = 0;
     str_t *tmp = str_create(param->data + 1);
@@ -54,14 +54,15 @@ void manage_direct(str_t *param, str_t **buffer, size_t type, asm_t *assembler)
     if (tmp->data[0] == LABEL_CHAR){
         get_label_value(tmp, assembler, buffer);
         free(tmp);
-        return;
+        return SUCCESS;
     }
     value = my_atoi(tmp->data);
     if (value == 0 && tmp->data[0] != '0'){
-        my_dprintf(2, " invalid parameter (%%%s)\n", tmp->data);
+        my_dprintf(2, "body: Invalid parameter (%%%s)\n", tmp->data);
         free(tmp);
-        return;
+        return ERROR;
     }
     get_direct_int(type, value, buffer);
     free(tmp);
+    return SUCCESS;
 }

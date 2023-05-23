@@ -65,8 +65,9 @@ int parse_labels(vec_str_t *lines, asm_t *assembler)
     for (size_t i = 0; i < lines->size; i++){
         exclude_instructions(lines->data[i], assembler, lines);
     }
-    if (find_duplicates(assembler->labels, lines) == ERROR)
+    if (find_duplicates(assembler->labels, lines) == ERROR){
         return ERROR;
+    }
     return SUCCESS;
 }
 

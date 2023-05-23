@@ -27,8 +27,8 @@ int parse_instruction_parameter(
     str_t *param, size_t index, asm_t *assembler, str_t **buffer
 );
 
-void manage_direct(str_t *param, str_t **buffer, size_t type, asm_t *assembler);
+int manage_direct(str_t *param, str_t **buffer, size_t type, asm_t *assembler);
 
-void manage_indirect(str_t *param, str_t **buffer, size_t type);
+int manage_indirect(str_t *param, str_t **buffer, size_t type);
 
 #endif /* !BODY_H */
