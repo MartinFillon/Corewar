@@ -12,6 +12,13 @@
 #include "corewar/corewar.h"
 #include "corewar/op.h"
 
+
+void interpret_binary(int *a, u_char t, vm_t *vm, int st)
+{
+    if (t == 0b11)
+        *a = vm->arena[(st + *a % IDX_MOD) % MEM_SIZE];
+}
+
 int exec_and(vm_t *vm, program_t *p)
 {
     u_char *arg_types = (u_char[4]){0};
@@ -26,15 +33,12 @@ int exec_and(vm_t *vm, program_t *p)
     get_arg(&arg1, vm->arena, &p->pc, arg_types[0]);
     get_arg(&arg2, vm->arena, &p->pc, arg_types[1]);
     get_arg(&reg, vm->arena, &p->pc, arg_types[2]);
-    if (arg_types[0] == 0b11)
-        arg1 = vm->arena[(st + arg1 % IDX_MOD) % MEM_SIZE];
-    if (arg_types[1] == 0b11)
-        arg2 = vm->arena[(st + arg2 % IDX_MOD) % MEM_SIZE];
+    interpret_binary(&arg1, arg_types[0], vm, st);
+    interpret_binary(&arg2,arg_types[1], vm, st);
     if (arg_types[0] == T_REG)
         arg1 = p->registers[arg1 - 1];
     if (arg_types[1] == T_REG)
         arg2 = p->registers[arg2 - 1];
-    p->registers[reg - 1] = arg1 & arg2;
-    p->carry = p->registers[reg - 1] == 0;
+    p->carry = (p->registers[reg - 1] = arg1 & arg2) == 0;
     return 0;
 }
