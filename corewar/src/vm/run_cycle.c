@@ -5,7 +5,6 @@
 ** run single cycle
 */
 
-#include <stdio.h>
 #include "my_stdio.h"
 #include "my_stdlib.h"
 #include "my_vec.h"
@@ -57,8 +56,6 @@ void run_cycle(vm_t *vm)
             );
 
             update_cycle_to_wait(vm, program);
-
-            my_dprintf(2,"cycle_to_wait: %d\n", program->cycle_to_wait);
         }
     }
 }

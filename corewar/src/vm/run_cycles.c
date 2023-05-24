@@ -11,15 +11,24 @@
 #include "corewar/corewar.h"
 #include "corewar/op.h"
 
+#include "stdlib.h"
+
 static void UNUSED check_alive(vm_t *vm)
 {
     for (size_t i = 0; i < vm->programs->size; ++i) {
+        my_printf(
+            "prog_id: %d, is_alive: %d\n", i,
+            vm->programs->data[i].program.is_alive
+        );
+
         if (vm->programs->data[i].program.is_alive == false) {
             vm->programs->data[i].is_running = false;
         }
 
         vm->programs->data[i].program.is_alive = false;
     }
+        exit(0);
+
 }
 
 static bool programs_alive(vm_t *vm)
@@ -57,9 +66,9 @@ void run_vm(vm_t *vm)
             dump_memory(vm);
             break;
         }
-        // if (nb_cycle > 0 && nb_cycle % CYCLE_TO_DIE == 0) {
-        //     check_alive(vm);
-        // }
+        if (nb_cycle > 0 && nb_cycle % CYCLE_TO_DIE == 0) {
+            check_alive(vm);
+        }
 
         run_cycle(vm);
 

@@ -65,23 +65,9 @@ u_char get_instruction(vm_t *vm, program_t *program);
 void dump_memory(vm_t *vm);
 void update_cycle_to_wait(vm_t *vm, program_t *program);
 
-void interpret_binary(int *a, u_char t, vm_t *vm, int st);
-
-
 // PROGRAM
 prog_t init_prog(void);
 void print_progs(vec_prog_t *progs);
 
-
-// GETTERS
-int get_arg(int *arg, u_char *memory, int *pc, u_char arg_type);
-int get_direct(u_char *mememory, int memory_index);
-void get_arg_types(u_char *memory, int memory_index, u_char *arg_types);
-int get_indirect(u_char *memory, int memory_index);
-int convert_index(u_char type, program_t *p, int st, vm_t *vm);
-int convert_index_long(u_char type, program_t *p, int st, vm_t *vm);
-
-//Writers
-void write_int(u_char *memory, int index, int content);
 
 #endif /* !COREWAR_H_ */
