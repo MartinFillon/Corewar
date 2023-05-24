@@ -56,7 +56,7 @@ static int get_parameters(
         }
         if (!str_startswith(params->data[i], STR("r")) &&
             !str_startswith(params->data[i], STR(DIRECT_CHAR))) {
-            status = manage_indirect(params->data[i], buffer, size);
+            status = manage_indirect(params->data[i], buffer, size, assembler);
         }
     }
     return status;

@@ -26,9 +26,10 @@ int launch_parser(asm_t *assembler, char const *filepath)
     str_t *buffer = str_create("");
 
     header.magic = swap_endian(COREWAR_EXEC_MAGIC);
-    content = parse_header(filepath, &header);
-    if (content == NULL)
+    if ((content = parse_header(filepath, &header)) == NULL){
+        free(buffer);
         return ERROR;
+    }
     assembler->header = &header;
     write_file(assembler);
     if (parse_labels(content, assembler) == ERROR ||
