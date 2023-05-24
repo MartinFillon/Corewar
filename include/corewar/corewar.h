@@ -63,6 +63,7 @@ bool load_programs(vm_t *vm);
 void order_programs_by_number(vec_prog_t *programs);
 u_char get_instruction(vm_t *vm, program_t *program);
 void dump_memory(vm_t *vm);
+void update_cycle_to_wait(vm_t *vm, program_t *program);
 
 void interpret_binary(int *a, u_char t, vm_t *vm, int st);
 
