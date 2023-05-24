@@ -16,6 +16,8 @@ int exec_aff(vm_t *vm, program_t *p)
 
     p->pc = (p->pc + 2) % MEM_SIZE;
     get_arg(&reg, vm->arena, &p->pc, T_REG);
+    if (reg.reg < 1 || reg.reg > REG_NUMBER)
+        return 0;
     my_dprintf(1, "%c", p->registers[reg.reg - 1]);
     return 0;
 }

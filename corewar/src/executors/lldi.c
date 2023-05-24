@@ -23,6 +23,8 @@ int exec_lldi(vm_t *vm, program_t *p)
     arg1 = convert_index_long(arg_types[0], p, st, vm);
     arg2 = convert_index_long(arg_types[1], p, st, vm);
     get_arg(&reg, vm->arena, &p->pc, T_REG);
+    if (reg.reg < 1 || reg.reg > REG_NUMBER)
+        return 0;
     address = (arg1 + arg2);
     p->registers[reg.reg - 1] = vm->arena[(st + address) % MEM_SIZE];
     p->carry = p->registers[reg.reg - 1] == 0;

@@ -5,6 +5,7 @@
 ** get_arg
 */
 
+#include <complex.h>
 #include "corewar/corewar.h"
 #include "corewar/instructions.h"
 #include "corewar/op.h"
@@ -13,8 +14,11 @@ int convert_index(u_char type, program_t *p, int st, vm_t *vm)
 {
     arg_types_t arg = {0};
     get_arg(&arg, vm->arena, &p->pc, (type == T_REG) ? T_REG : 0b11);
-    if (type == T_REG)
+    if (type == T_REG) {
+        if (arg.reg < 1 || arg.reg > REG_NUMBER)
+            return 0;
         return p->registers[arg.reg - 1];
+    }
     if (type == T_DIR)
         return arg.dir;
     if (type == 0b11)
@@ -26,8 +30,11 @@ int convert_index_long(u_char type, program_t *p, int st, vm_t *vm)
 {
     arg_types_t arg = {0};
     get_arg(&arg, vm->arena, &p->pc, (type == T_REG) ? T_REG : 0b11);
-    if (type == T_REG)
+    if (type == T_REG) {
+        if (arg.reg < 1 || arg.reg > REG_NUMBER)
+            return 0;
         return p->registers[arg.reg - 1];
+    }
     if (type == T_DIR)
         return arg.dir;
     if (type == 0b11)

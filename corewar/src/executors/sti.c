@@ -21,6 +21,8 @@ int exec_sti(vm_t *vm, program_t *p)
     get_arg(&reg, vm->arena, &p->pc, arg_types[0]);
     arg1.dir = convert_index(arg_types[1], p, st, vm);
     arg2.dir = convert_index(arg_types[2], p, st, vm);
+    if (reg.reg < 1 || reg.reg > REG_NUMBER)
+        return 0;
     write_int(
         vm->arena, (st + (arg1.dir + arg2.dir) % IDX_MOD) % MEM_SIZE,
         swap_endian(p->registers[reg.reg - 1])

@@ -20,6 +20,11 @@ int exec_sub(vm_t *vm, program_t *p)
     get_arg(&reg2, vm->arena, &p->pc, T_REG);
     get_arg(&reg3, vm->arena, &p->pc, T_REG);
 
+    if ((reg1.reg < 1 || reg1.reg > REG_NUMBER) ||
+        (reg2.reg < 1 || reg2.reg > REG_NUMBER) ||
+        (reg3.reg < 1 || reg3.reg > REG_NUMBER))
+        return 0;
+
     p->registers[reg3.reg - 1] =
         p->registers[reg1.reg - 1] - p->registers[reg2.reg - 1];
     p->carry = p->registers[reg3.reg - 1] == 0;

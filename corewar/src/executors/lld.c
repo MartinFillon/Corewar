@@ -21,7 +21,7 @@ int exec_lld(vm_t *vm, program_t *p)
     p->pc = (p->pc + 1) % MEM_SIZE;
     get_arg(&arg, vm->arena, &p->pc, arg_types[0]);
     get_arg(&reg, vm->arena, &p->pc, T_REG);
-    if (reg.reg == 0)
+    if (reg.reg < 1 || reg.reg > REG_NUMBER)
         return 0;
     p->registers[reg.reg - 1] = (arg_types[0] == T_DIR)
         ? arg.dir
