@@ -6,6 +6,7 @@
 */
 
 #include "corewar/corewar.h"
+#include "corewar/op.h"
 
 prog_t init_prog(void)
 {
@@ -27,4 +28,25 @@ prog_t init_prog(void)
     };
 
     return prog;
+}
+
+prog_t dup_program(program_t *p)
+{
+    prog_t tmp = {
+        .program =
+            {
+                .body = NULL,
+                .carry = p->carry,
+                .cycle_to_wait = 0,
+                .is_alive = p->is_alive,
+                .pc = -1,
+                .header = p->header,
+            },
+        .is_running = true,
+        .address = -1,
+        .number = -1,
+        .path = NULL,
+    };
+
+    return tmp;
 }

@@ -68,6 +68,7 @@ void update_cycle_to_wait(vm_t *vm, program_t *program);
 // PROGRAM
 prog_t init_prog(void);
 void print_progs(vec_prog_t *progs);
+prog_t dup_program(program_t *p);
 
 
 #endif /* !COREWAR_H_ */
