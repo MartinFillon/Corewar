@@ -17,6 +17,23 @@
 #include "asm/labels.h"
 #include "asm/error.h"
 
+static bool check_for_label(str_t *line, size_t index)
+{
+    str_t *tmp = str_create(line->data);
+
+    if (my_strncmp(line->data, OP_NAME[index].name,
+        my_strlen(OP_NAME[index].name)) == 0
+        && line->data[my_strlen(OP_NAME[index].name)] != ':' ){
+            str_slice(&tmp, 0, my_strlen(OP_NAME[index].name));
+            if (tmp->data[0] == ' ' || tmp->data[0] == '\t'){
+                free(tmp);
+                return false;
+            }
+    }
+    free(tmp);
+    return true;
+}
+
 static void exclude_instructions(
     str_t *line, asm_t *assembler, vec_str_t *lines
 )
@@ -25,9 +42,7 @@ static void exclude_instructions(
     label_t label = {0};
 
     for (size_t i = 0; i < AFF; i++){
-        if (my_strncmp(line->data, OP_NAME[i].name,
-            my_strlen(OP_NAME[i].name)) == 0 &&
-            line->data[my_strlen(OP_NAME[i].name)] != ':'){
+        if (check_for_label(line, i) == false){
             return;
         }
     }
@@ -85,6 +100,7 @@ void get_label_value(
         if (str_compare(label, assembler->labels->data[i].label) == 0){
             value = assembler->labels->data[i].location -
             find_pos((*buffer)->length, assembler);
+            printf("pos %ld\n", value);
             break;
         }
     }

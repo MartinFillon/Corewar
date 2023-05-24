@@ -18,6 +18,44 @@
 #include "corewar/op.h"
 #include "asm/asm.h"
 #include "asm/body.h"
+#include "asm/error.h"
+
+int check_instructions(vec_str_t *params, size_t index, asm_t *assembler)
+{
+    (void)assembler;
+
+    if ((int)params->size != OP_NAME[index].params){
+        my_dprintf(2, "%s: Invalid nbr of parameters\nExpected %d, got %d\n",
+        OP_NAME[index].name, OP_NAME[index].params, params->size);
+        return ERROR;
+    }
+    return OP_NAME[index].check_inst(index, params);
+}
+
+static int get_parameters(
+    vec_str_t *params, str_t **buffer, size_t index, asm_t *assembler
+)
+{
+    int status = 0;
+    size_t size = OP_NAME[index].size;
+
+    if (check_instructions(params, index, assembler) == ERROR)
+        return ERROR;
+    for (size_t i = 0; i < params->size; i++) {
+        str_ltrim(&params->data[i], ' ');
+        str_ltrim(&params->data[i], '\t');
+        if (str_startswith(params->data[i], STR(DIRECT_CHAR))) {
+            status = manage_direct(params->data[i], buffer, size, assembler);
+        }
+        if (str_startswith(params->data[i], STR("r")))
+            str_cadd(buffer, (long)my_atoi(params->data[i]->data + 1));
+        if (!str_startswith(params->data[i], STR("r")) &&
+            !str_startswith(params->data[i], STR(DIRECT_CHAR))) {
+            status = manage_indirect(params->data[i], buffer, size, assembler);
+        }
+    }
+    return status;
+}
 
 static void get_coding_byte(str_t *param_type, str_t **buffer, int index)
 {
@@ -34,32 +72,6 @@ static void get_coding_byte(str_t *param_type, str_t **buffer, int index)
         }
     }
     str_cadd(buffer, coding_byte);
-}
-
-static int get_parameters(
-    vec_str_t *params, str_t **buffer, size_t index, asm_t *assembler
-)
-{
-    int status = 0;
-    long value = 0;
-    size_t size = OP_NAME[index].size;
-
-    for (size_t i = 0; i < params->size; i++) {
-        str_ltrim(&params->data[i], ' ');
-        str_ltrim(&params->data[i], '\t');
-        if (str_startswith(params->data[i], STR(DIRECT_CHAR))) {
-            status = manage_direct(params->data[i], buffer, size, assembler);
-        }
-        if (str_startswith(params->data[i], STR("r"))) {
-            value = my_atoi(params->data[i]->data + 1);
-            str_cadd(buffer, value);
-        }
-        if (!str_startswith(params->data[i], STR("r")) &&
-            !str_startswith(params->data[i], STR(DIRECT_CHAR))) {
-            status = manage_indirect(params->data[i], buffer, size, assembler);
-        }
-    }
-    return status;
 }
 
 static str_t *add_parameter(vec_str_t *params, str_t *param_type)
@@ -91,11 +103,6 @@ int parse_instruction_parameter(
 
     str_trim(&param, '\t');
     str_trim(&param, ' ');
-    if ((str_count(param, ',') + 1) != OP_NAME[index].params){
-        my_dprintf(2, "%s: Invalid nbr of parameters\nExpected %d, got %d\n",
-        OP_NAME[index].name, OP_NAME[index].params, str_count(param, ',') + 1);
-        return ERROR;
-    }
     champ.params = str_split(param, STR(SEPARATOR_CHAR));
     param_type = add_parameter(champ.params, param_type);
     str_cadd(buffer, ((char) OP_NAME[index].hex));
