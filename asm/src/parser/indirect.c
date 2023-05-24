@@ -26,11 +26,16 @@ static void get_indirect(size_t type, long nbr, str_t **buffer)
     }
 }
 
-int manage_indirect(str_t *param, str_t **buffer, size_t type)
+int manage_indirect(str_t *param, str_t **buffer, size_t type, asm_t *assembler)
 {
     int value = 0;
     str_t *tmp = str_create(param->data);
 
+    if (tmp->data[0] == LABEL_CHAR){
+        get_label_value(tmp, assembler, buffer, type);
+        free(tmp);
+        return SUCCESS;
+    }
     value = my_atoi(tmp->data);
     if (value == 0 && tmp->data[0] != '0'){
         my_dprintf(2, "body: Invalid parameter (%%%s)\n", tmp->data);
