@@ -80,11 +80,12 @@ void get_label_value(
     long value = 0;
 
     str_slice(&label, 1, label->length);
+    str_cadd(&label, ':');
     for (size_t i = 0; i < assembler->labels->size; i++){
-        if (str_ncompare(label, assembler->labels->data[i].label,
-            label->length) == 0){
+        if (str_compare(label, assembler->labels->data[i].label) == 0){
             value = assembler->labels->data[i].location -
             find_pos((*buffer)->length, assembler);
+            break;
         }
     }
     get_direct_int(type, value, buffer);
