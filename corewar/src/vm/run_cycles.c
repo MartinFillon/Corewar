@@ -11,11 +11,11 @@
 #include "corewar/corewar.h"
 #include "corewar/op.h"
 
-#include "stdlib.h"
-
 static void check_alive(vm_t *vm)
 {
     for (size_t i = 0; i < vm->programs->size; ++i) {
+        if (vm->programs->data[i].address == -1)
+            continue;
 
         if (vm->programs->data[i].program.is_alive == false) {
             vm->programs->data[i].is_running = false;
@@ -29,9 +29,12 @@ static bool programs_alive(vm_t *vm)
 {
     int count = 0;
 
-    for (size_t i = 0; i < vm->programs->size; ++i)
+    for (size_t i = 0; i < vm->programs->size; ++i) {
+        if (vm->programs->data[i].address == -1)
+            continue;
         if (vm->programs->data[i].is_running == true)
-            count += 1;
+            count++;
+    }
 
     return count > 1;
 }
@@ -49,6 +52,7 @@ static void print_winner(vm_t *vm)
 static void run_vm_init(vm_t *vm)
 {
     vm->cycle_to_die = CYCLE_TO_DIE;
+
     for (size_t i = 0; i < vm->programs->size; ++i)
         update_cycle_to_wait(vm, &vm->programs->data[i].program);
 }
@@ -64,7 +68,6 @@ void run_vm(vm_t *vm)
             break;
         }
         if (nb_cycle > 0 && nb_cycle % vm->cycle_to_die == 0) {
-            my_dprintf(2, "nbr_live: %d\n", vm->nbr_live);
             check_alive(vm);
         }
 

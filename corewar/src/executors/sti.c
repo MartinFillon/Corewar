@@ -15,9 +15,8 @@ int exec_sti(vm_t *vm, program_t *p)
     arg_types_t arg1 = {0};
     arg_types_t arg2 = {0};
     int st = p->pc;
-    p->pc = (p->pc + 1) % MEM_SIZE;
-    get_arg_types(vm->arena, p->pc, arg_types);
-    p->pc = (p->pc + 1) % MEM_SIZE;
+
+    get_arg_types(vm->arena, &p->pc, arg_types);
     get_arg(&reg, vm->arena, &p->pc, arg_types[0]);
     arg1.dir = convert_index(arg_types[1], p, st, vm);
     arg2.dir = convert_index(arg_types[2], p, st, vm);

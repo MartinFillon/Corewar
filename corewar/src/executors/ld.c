@@ -16,11 +16,9 @@ int exec_ld(vm_t *vm, program_t *p)
     arg_types_t arg1 = {0};
     int st = p->pc;
 
-    p->pc = (p->pc + 1) % MEM_SIZE;
-    get_arg_types(vm->arena, p->pc, arg_types);
-    p->pc = (p->pc + 1) % MEM_SIZE;
+    get_arg_types(vm->arena, &p->pc, arg_types);
     get_arg(&arg1, vm->arena, &p->pc, arg_types[0]);
-    get_arg(&reg, vm->arena, &p->pc, arg_types[1]);
+    get_arg(&reg, vm->arena, &p->pc, T_REG);
     if (reg.reg < 1 || reg.reg > REG_NUMBER)
         return 0;
     p->registers[reg.reg - 1] = (arg_types[0] == T_DIR)

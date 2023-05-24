@@ -37,6 +37,7 @@ SRC = 	src/main.c								\
 		src/executors/sub.c						\
 		src/executors/xor.c						\
 		src/executors/zjmp.c					\
+		src/executors/utils.c					\
 		src/arguments/parse_arguments.c			\
 		src/arguments/parse_argv.c				\
 		src/programs/check_program.c			\

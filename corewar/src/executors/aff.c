@@ -14,7 +14,7 @@ int exec_aff(vm_t *vm, program_t *p)
 {
     arg_types_t reg = {0};
 
-    p->pc = (p->pc + 2) % MEM_SIZE;
+    inc_pc(&p->pc, 2);
     get_arg(&reg, vm->arena, &p->pc, T_REG);
     if (reg.reg < 1 || reg.reg > REG_NUMBER)
         return 0;

@@ -16,7 +16,7 @@ int exec_add(vm_t *vm, program_t *p)
     arg_types_t reg2 = {0};
     arg_types_t reg3 = {0};
 
-    p->pc = (p->pc + 2) % MEM_SIZE;
+    inc_pc(&p->pc, 2);
     get_arg(&reg1, vm->arena, &p->pc, T_REG);
     get_arg(&reg2, vm->arena, &p->pc, T_REG);
     get_arg(&reg3, vm->arena, &p->pc, T_REG);

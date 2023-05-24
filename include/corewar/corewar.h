@@ -49,6 +49,7 @@ bool check_progs_sizes(vm_t *vm);
 // UTILS
 int swap_endian(int val);
 u_char get_bits(u_char byte, int start, int count);
+void inc_pc(int *pc, int inc);
 
 
 // VM
@@ -64,6 +65,7 @@ void order_programs_by_number(vec_prog_t *programs);
 u_char get_instruction(vm_t *vm, program_t *program);
 void dump_memory(vm_t *vm);
 void update_cycle_to_wait(vm_t *vm, program_t *program);
+
 
 // PROGRAM
 prog_t init_prog(void);
