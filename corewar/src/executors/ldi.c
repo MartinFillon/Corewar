@@ -7,12 +7,13 @@
 
 #include <sys/types.h>
 #include "corewar/corewar.h"
+#include "corewar/instructions.h"
 #include "corewar/op.h"
 
 int exec_ldi(vm_t *vm, program_t *p)
 {
     u_char *arg_types = (u_char[4]){0};
-    int reg = -1;
+    arg_types_t reg = {0};
     int arg1 = 0;
     int arg2 = 0;
     int st = p->pc;
@@ -25,7 +26,7 @@ int exec_ldi(vm_t *vm, program_t *p)
     arg2 = convert_index(arg_types[1], p, st, vm);
     get_arg(&reg, vm->arena, &p->pc, arg_types[2]);
     address = (arg1 + arg2) % IDX_MOD;
-    p->registers[reg - 1] = vm->arena[(st + address) % MEM_SIZE];
-    p->carry = p->registers[reg - 1] == 0;
+    p->registers[reg.reg - 1] = vm->arena[(st + address) % MEM_SIZE];
+    p->carry = p->registers[reg.reg - 1] == 0;
     return 0;
 }
