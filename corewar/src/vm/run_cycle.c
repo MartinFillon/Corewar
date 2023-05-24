@@ -37,6 +37,7 @@ void run_cycle(vm_t *vm)
         program_t *program = &vm->programs->data[i].program;
 
         if (program->cycle_to_wait > 0) {
+            my_dprintf(2, "cycle to wait: %d, prog_id: %d\n", program->cycle_to_wait, i);
             program->cycle_to_wait--;
             continue;
         }
@@ -56,6 +57,7 @@ void run_cycle(vm_t *vm)
             );
 
             update_cycle_to_wait(vm, program);
-        }
+        } else
+            program->pc = (program->pc + 1) % MEM_SIZE;
     }
 }

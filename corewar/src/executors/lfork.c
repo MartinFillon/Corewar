@@ -20,6 +20,7 @@ int exec_lfork(vm_t *vm, program_t *p)
     prog_t tmp = dup_program(p);
     tmp.program.pc = ((st + arg.ind) % MEM_SIZE);
     my_memcpy(tmp.program.registers, p->registers, sizeof(p->registers));
+    update_cycle_to_wait(vm, &tmp.program);
     vec_pushback(&vm->programs, &tmp);
     return 0;
 }

@@ -13,13 +13,9 @@
 
 #include "stdlib.h"
 
-static void UNUSED check_alive(vm_t *vm)
+static void check_alive(vm_t *vm)
 {
     for (size_t i = 0; i < vm->programs->size; ++i) {
-        my_printf(
-            "prog_id: %d, is_alive: %d\n", i,
-            vm->programs->data[i].program.is_alive
-        );
 
         if (vm->programs->data[i].program.is_alive == false) {
             vm->programs->data[i].is_running = false;
@@ -27,17 +23,17 @@ static void UNUSED check_alive(vm_t *vm)
 
         vm->programs->data[i].program.is_alive = false;
     }
-        exit(0);
-
 }
 
 static bool programs_alive(vm_t *vm)
 {
+    int count = 0;
+
     for (size_t i = 0; i < vm->programs->size; ++i)
         if (vm->programs->data[i].is_running == true)
-            return true;
+            count += 1;
 
-    return false;
+    return count > 1;
 }
 
 static void print_winner(vm_t *vm)
@@ -52,6 +48,7 @@ static void print_winner(vm_t *vm)
 
 static void run_vm_init(vm_t *vm)
 {
+    vm->cycle_to_die = CYCLE_TO_DIE;
     for (size_t i = 0; i < vm->programs->size; ++i)
         update_cycle_to_wait(vm, &vm->programs->data[i].program);
 }
@@ -66,7 +63,8 @@ void run_vm(vm_t *vm)
             dump_memory(vm);
             break;
         }
-        if (nb_cycle > 0 && nb_cycle % CYCLE_TO_DIE == 0) {
+        if (nb_cycle > 0 && nb_cycle % vm->cycle_to_die == 0) {
+            my_dprintf(2, "nbr_live: %d\n", vm->nbr_live);
             check_alive(vm);
         }
 
