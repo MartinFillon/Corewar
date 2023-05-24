@@ -26,19 +26,6 @@ void write_header(vec_str_t *body, asm_t *assembler)
     fwrite(assembler->header, sizeof(header_t), 1, assembler->file);
 }
 
-static int check_header_size(header_t *header)
-{
-    if (my_strlen(header->prog_name) > PROG_NAME_LENGTH) {
-        my_dprintf(2, "header: Champion name too long\n");
-        return ERROR;
-    }
-    if (my_strlen(header->comment) > COMMENT_LENGTH) {
-        my_dprintf(2, "header: Champion comment too long\n");
-        return ERROR;
-    }
-    return SUCCESS;
-}
-
 static int cleanup_header(header_t *header)
 {
     char *comment_temp = my_strchr(header->comment, '"');
@@ -49,7 +36,7 @@ static int cleanup_header(header_t *header)
         return ERROR;
     }
     if (comment_temp == NULL){
-        my_dprintf(2, "header: .comment\n");
+        my_dprintf(2, "header: Invalid .comment\n");
         return ERROR;
     }
     *comment_temp = '\0';
@@ -58,22 +45,34 @@ static int cleanup_header(header_t *header)
     return SUCCESS;
 }
 
-static int fill_header(vec_str_t *champ, header_t *header)
+static void fill_name_comment(vec_str_t *champ, header_t *header, size_t i)
 {
     int quote_idx = 0;
+    str_t *tmp = NULL;
 
+    if (str_startswith(champ->data[i], STR(NAME_CMD_STRING)) &&
+    (quote_idx = str_find(champ->data[i], STR("\""), 0)) != -1){
+        tmp = str_create(champ->data[i]->data + quote_idx + 1);
+        cleanup_quotes(&tmp);
+        my_strcpy(header->prog_name, tmp->data);
+    }
+    if (str_startswith(champ->data[i], STR(COMMENT_CMD_STRING )) &&
+    (quote_idx = str_find(champ->data[i], STR("\""), 0)) != -1){
+        tmp = str_create(champ->data[i]->data + quote_idx + 1);
+        cleanup_quotes(&tmp);
+        my_strcpy(header->comment, tmp->data);
+    }
+    free(tmp);
+}
+
+static int fill_header(vec_str_t *champ, header_t *header)
+{
     for (size_t i = 0; i < champ->size; ++i) {
-        if (str_startswith(champ->data[i], STR(NAME_CMD_STRING)) &&
-        (quote_idx = str_find(champ->data[i], STR("\""), 0)) != -1)
-            my_strcpy(header->prog_name, champ->data[i]->data + quote_idx + 1);
-        if (str_startswith(champ->data[i], STR(COMMENT_CMD_STRING )) &&
-        (quote_idx = str_find(champ->data[i], STR("\""), 0)) != -1)
-            my_strcpy(header->comment, champ->data[i]->data + quote_idx + 1);
+        fill_name_comment(champ, header, i);
     }
     if (header->comment[0] == '\0' || header->prog_name[0] == '\0' ||
-        cleanup_header(header) == ERROR || check_header_size(header) == ERROR){
+        cleanup_header(header) == ERROR || check_header_size(header) == ERROR)
             return ERROR;
-        }
     return SUCCESS;
 }
 
