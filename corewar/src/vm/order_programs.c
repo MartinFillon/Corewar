@@ -38,7 +38,7 @@ static int order_by_number(const void *a, const void *b)
     prog_t const *prog_a = a;
     prog_t const *prog_b = b;
 
-    return prog_b->number - prog_a->number;
+    return prog_a->number - prog_b->number;
 }
 
 void order_programs_by_number(vec_prog_t *programs)
@@ -46,7 +46,7 @@ void order_programs_by_number(vec_prog_t *programs)
     bool *used_numbers = (bool[4]){0, 0, 0, 0};
     fill_used_numbers(programs, used_numbers);
 
-    for (long i = programs->size; i >= 0; --i) {
+    for (size_t i = 0; i < programs->size; ++i) {
         if (programs->data[i].number != -1)
             continue;
 
