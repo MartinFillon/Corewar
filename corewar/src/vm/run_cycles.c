@@ -35,21 +35,27 @@ static void print_winner(vm_t *vm)
 {
     if (vm->last_live != NULL) {
         my_printf(
-            "The player %d(%s)has won.\n",
-            vm->last_live->registers[0],
+            "The player %d(%s)has won.\n", vm->last_live->registers[0],
             vm->last_live->header.prog_name
         );
     }
 }
 
+static void run_vm_init(vm_t *vm)
+{
+    for (size_t i = 0; i < vm->programs->size; ++i)
+        update_cycle_to_wait(vm, &vm->programs->data[i].program);
+}
+
 void run_vm(vm_t *vm)
 {
     int nb_cycle = 0;
+    run_vm_init(vm);
 
     while (programs_alive(vm)) {
         if (nb_cycle == vm->nbr_cycles_to_dump) {
             dump_memory(vm);
-            return;
+            break;
         }
         // if (nb_cycle > 0 && nb_cycle % CYCLE_TO_DIE == 0) {
         //     check_alive(vm);
