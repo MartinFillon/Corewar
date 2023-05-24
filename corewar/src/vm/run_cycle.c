@@ -12,14 +12,14 @@
 #include "corewar/corewar.h"
 #include "corewar/op.h"
 
-static u_char get_next_instruction(vm_t *vm, program_t *program)
+u_char get_next_instruction(vm_t *vm, program_t *program)
 {
-    u_char next_instruction_idx = vm->arena[program->pc] - 1;
+    u_char next_instruction_idx = vm->arena[program->pc];
 
     if (next_instruction_idx < 1 || next_instruction_idx > 16)
         next_instruction_idx = INVALID_INSTRUCTION;
 
-    return next_instruction_idx;
+    return next_instruction_idx - 1;
 }
 
 void run_cycle(vm_t *vm)
