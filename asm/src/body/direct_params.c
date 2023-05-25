@@ -55,7 +55,6 @@ int manage_direct(str_t *param, str_t **buffer, size_t type, asm_t *assembler)
     long value = 0;
     str_t *tmp = str_create(param->data + 1);
 
-    printf("===%%%s\n", tmp->data);
     if (tmp->data[0] == LABEL_CHAR){
         get_label_value(tmp, assembler, buffer, type);
         free(tmp);
