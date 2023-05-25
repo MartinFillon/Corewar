@@ -15,7 +15,7 @@
 #include "corewar/op.h"
 #include "asm/asm.h"
 #include "asm/header.h"
-#include "asm/error.h"
+#include "asm/utils.h"
 
 void write_header(vec_str_t *body, asm_t *assembler)
 {

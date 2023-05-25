@@ -220,6 +220,4 @@ int launch_parser(asm_t *assembler, char const *filepath);
 
 void write_file(asm_t *assembler);
 
-int str_count(str_t *str, char c);
-
 #endif /* !ASM_H_ */
