@@ -9,34 +9,20 @@
 
 int check_load_base(size_t instruction, vec_str_t *params)
 {
-    printf("%s : ", OP_NAME[instruction].name);
-    for (size_t i = 0; i < params->size; i++)
-        printf("[%s], ", params->data[i]->data);
-    printf("\n");
+    if (params->data[1]->data[0] != 'r'){
+        my_dprintf(2, "%s: takes a register as parameter\n",
+        OP_NAME[instruction].name);
+        return ERROR;
+    }
     return SUCCESS;
 }
 
 int check_load_further(size_t instruction, vec_str_t *params)
 {
-    printf("%s : ", OP_NAME[instruction].name);
-    for (size_t i = 0; i < params->size; i++)
-        printf("[%s], ", params->data[i]->data);
-    printf("\n");
+    if (params->data[2]->data[0] != 'r'){
+        my_dprintf(2, "%s: takes a register as 3rd parameter\n",
+        OP_NAME[instruction].name);
+        return ERROR;
+    }
     return SUCCESS;
 }
-
-/*
-
-LD && LLD : 2 parameters
-first parameter into the second parameter,
-second == register.
-
-*/
-
-/*
-
-LDI && LLDI : 3 parameters
-1st && 2nd == index or register
-3rd == register
-
-*/

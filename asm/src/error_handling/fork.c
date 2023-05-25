@@ -5,20 +5,16 @@
 ** fork
 */
 
+#include "my_stdio.h"
+
 #include "asm/asm.h"
 
 int check_fork(size_t instruction, vec_str_t *params)
 {
-    printf("%s : ", OP_NAME[instruction].name);
-    for (size_t i = 0; i < params->size; i++)
-        printf("[%s], ", params->data[i]->data);
-    printf("\n");
+    if (params->data[0]->data[0] == 'r'){
+        my_dprintf(2, "%s: takes an index as parameter\n",
+        OP_NAME[instruction].name);
+        return ERROR;
+    }
     return SUCCESS;
 }
-
-/*
-
-FORK && LFORK:
-takes 1 parameter, which must be an index.
-
-*/

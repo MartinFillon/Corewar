@@ -12,26 +12,26 @@
 
 int check_st(size_t instruction, vec_str_t *params)
 {
-    printf("%s : ", OP_NAME[instruction].name);
-    for (size_t i = 0; i < params->size; i++)
-        printf("[%s], ", params->data[i]->data);
-    printf("\n");
+    if (params->data[0]->data[0] != 'r'){
+        my_dprintf(2, "%s: takes a register as 1st parameter\n",
+        OP_NAME[instruction].name);
+        return ERROR;
+    }
+    if (params->data[1]->data[0] != 'r' && my_atoi(params->data[1]->data) == 0
+        && params->data[1]->data != '0'){
+        my_dprintf(2, "%s: takes a register or a number as 2nd parameter\n",
+        OP_NAME[instruction].name);
+        return ERROR;
+    }
     return SUCCESS;
 }
 
 int check_sti(size_t instruction, vec_str_t *params)
 {
-    printf("%s : ", OP_NAME[instruction].name);
-    for (size_t i = 0; i < params->size; i++)
-        printf("[%s], ", params->data[i]->data);
-    printf("\n");
+    if (params->data[0]->data[0] != 'r'){
+        my_dprintf(2, "%s: takes a register as 1st parameter\n",
+        OP_NAME[instruction].name);
+        return ERROR;
+    }
     return SUCCESS;
 }
-
-/* ST : takes 2 parameters.
-1st == resgister, 2nd register or a number
-
-STI : takes 3 parameters.
-1st == register, 2nd & 3rd == index or register
-
-*/
