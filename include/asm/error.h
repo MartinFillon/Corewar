@@ -11,6 +11,8 @@
 
 int check_args(int argc, char **argv);
 
+void clean_comments_lines(str_t **line);
+
 void clean_comments(vec_str_t **words);
 
 void cleanup_quotes(str_t **str);
