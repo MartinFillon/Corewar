@@ -22,8 +22,6 @@
 
 int check_instructions(vec_str_t *params, size_t index, asm_t *assembler)
 {
-    (void)assembler;
-
     if ((int)params->size != OP_NAME[index].params){
         my_dprintf(2, "%s: Invalid nbr of parameters\nExpected %d, got %d\n",
         OP_NAME[index].name, OP_NAME[index].params, params->size);
@@ -47,8 +45,9 @@ static int get_parameters(
         if (str_startswith(params->data[i], STR(DIRECT_CHAR))) {
             status = manage_direct(params->data[i], buffer, size, assembler);
         }
-        if (str_startswith(params->data[i], STR("r")))
+        if (str_startswith(params->data[i], STR("r"))){
             str_cadd(buffer, (long)my_atoi(params->data[i]->data + 1));
+        }
         if (!str_startswith(params->data[i], STR("r")) &&
             !str_startswith(params->data[i], STR(DIRECT_CHAR))) {
             status = manage_indirect(params->data[i], buffer, size, assembler);
