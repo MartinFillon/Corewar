@@ -12,7 +12,7 @@ SRC	=	$(addprefix src/, main.c						\
 			utils.c										\
 			parser.c 									\
 			header/parse_write_header.c 				\
-			parser/find_prog_size.c 					\
+			header/find_prog_size.c 					\
 			body/parse_body.c							\
 			body/direct_params.c 						\
 			body/indirect_params.c 						\
