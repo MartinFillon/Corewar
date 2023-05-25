@@ -13,6 +13,7 @@
     #include "corewar/op.h"
     #include "asm/body.h"
     #include "asm/labels.h"
+    #include "asm/error.h"
     #define UNUSED __attribute__((unused))
 
     #define ERROR 84
@@ -29,7 +30,9 @@ typedef struct op_name_s {
     const char *name;
     const int *index;
     size_t size;
+    int (*check_inst)(size_t, vec_str_t *);
 } op_name_t;
+
 
 typedef struct asm_s {
     FILE *file;
@@ -74,6 +77,7 @@ static const op_name_t OP_NAME[] = {
         .name = "live",
         .index = (int[]) {UNDEFINED},
         .size = 4,
+        .check_inst = &check_live
     },
     {
         .id = LLDI,
@@ -82,6 +86,7 @@ static const op_name_t OP_NAME[] = {
         .name = "lldi",
         .index = (int[]) {REGEX,  REGEX, REGISTER},
         .size = 2,
+        .check_inst = &check_load_further
     },
     {
         .id = LFORK,
@@ -90,6 +95,7 @@ static const op_name_t OP_NAME[] = {
         .name = "lfork",
         .index = (int[]) {INDEX},
         .size = 2,
+        .check_inst = &check_fork
     },
     {
         .id = LLD,
@@ -98,6 +104,7 @@ static const op_name_t OP_NAME[] = {
         .name = "lld",
         .index = (int[]) {UNDEFINED, REGISTER},
         .size = 4,
+        .check_inst = &check_load_base
     },
     {
         .id = LDI,
@@ -106,6 +113,7 @@ static const op_name_t OP_NAME[] = {
         .name = "ldi",
         .index = (int[]) {REGEX,  REGEX, REGISTER},
         .size = 2,
+        .check_inst = &check_load_further
     },
     {
         .id = LD,
@@ -114,6 +122,7 @@ static const op_name_t OP_NAME[] = {
         .name = "ld",
         .index = (int[]) {UNDEFINED, REGISTER},
         .size = 4,
+        .check_inst = &check_load_base
     },
     {
         .id = STI,
@@ -122,6 +131,7 @@ static const op_name_t OP_NAME[] = {
         .name = "sti",
         .index = (int[]) {REGISTER,  REGEX, REGEX},
         .size = 2,
+        .check_inst = &check_sti
     },
     {
         .id = ST,
@@ -130,6 +140,7 @@ static const op_name_t OP_NAME[] = {
         .name = "st",
         .index = (int[]) {REGISTER,  UNDEFINED},
         .size = 0,
+        .check_inst = &check_st
     },
     {
         .id = ADD,
@@ -138,6 +149,7 @@ static const op_name_t OP_NAME[] = {
         .name = "add",
         .index = (int[]) {REGISTER,  REGISTER, REGISTER},
         .size = 0,
+        .check_inst = &check_arithm
     },
     {
         .id = SUB,
@@ -146,6 +158,7 @@ static const op_name_t OP_NAME[] = {
         .name = "sub",
         .index = (int[]) {REGISTER,  REGISTER, REGISTER},
         .size = 0,
+        .check_inst = &check_arithm
     },
     {
         .id = AND,
@@ -154,6 +167,7 @@ static const op_name_t OP_NAME[] = {
         .name = "and",
         .index = (int[]) {UNDEFINED,  UNDEFINED, REGISTER},
         .size = 4,
+        .check_inst = &check_bitwise
     },
     {
         .id = XOR,
@@ -162,6 +176,7 @@ static const op_name_t OP_NAME[] = {
         .name = "xor",
         .index = (int[]) {UNDEFINED,  UNDEFINED, REGISTER},
         .size = 4,
+        .check_inst = &check_bitwise
     },
     {
         .id = OR,
@@ -170,6 +185,7 @@ static const op_name_t OP_NAME[] = {
         .name = "or",
         .index = (int[]) {UNDEFINED,  UNDEFINED, REGISTER},
         .size = 4,
+        .check_inst = &check_bitwise
     },
     {
         .id = ZJMP,
@@ -178,6 +194,7 @@ static const op_name_t OP_NAME[] = {
         .name = "zjmp",
         .index = (int[]) {INDEX},
         .size = 2,
+        .check_inst = &check_zjmp
     },
     {
         .id = FORK,
@@ -186,6 +203,7 @@ static const op_name_t OP_NAME[] = {
         .name = "fork",
         .index = (int[]) {INDEX},
         .size = 2,
+        .check_inst = &check_fork
     },
     {
         .id = AFF,
@@ -194,6 +212,7 @@ static const op_name_t OP_NAME[] = {
         .name = "aff",
         .index = (int[]) {REGISTER},
         .size = 0,
+        .check_inst = &check_aff
     }
 };
 

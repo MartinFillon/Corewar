@@ -12,17 +12,15 @@
 
 #include "asm/asm.h"
 
-static void get_indirect(size_t type, long nbr, str_t **buffer)
+static void get_indirect(long nbr, str_t **buffer)
 {
-    if (type == IND_SIZE) {
-        if (nbr < 0) {
-            nbr = 65536 + nbr;
-            str_cadd(buffer, (nbr / 256));
-            str_cadd(buffer, (nbr % 256));
-        } else {
-            str_cadd(buffer, (nbr / 256));
-            str_cadd(buffer, (nbr % 256));
-        }
+    if (nbr < 0) {
+        nbr = 65536 + nbr;
+        str_cadd(buffer, (nbr / 256));
+        str_cadd(buffer, (nbr % 256));
+    } else {
+        str_cadd(buffer, (nbr / 256));
+        str_cadd(buffer, (nbr % 256));
     }
 }
 
@@ -42,7 +40,7 @@ int manage_indirect(str_t *param, str_t **buffer, size_t type, asm_t *assembler)
         free(tmp);
         return ERROR;
     }
-    get_indirect(type, value, buffer);
+    get_indirect(value, buffer);
     free(tmp);
     return SUCCESS;
 }
