@@ -36,7 +36,7 @@ void run_cycle(vm_t *vm)
     for (size_t i = 0; i < vm->programs->size; ++i) {
         program_t *program = &vm->programs->data[i].program;
 
-        if (program->cycle_to_wait > 0) {
+        if (program->cycle_to_wait > 1) {
             my_dprintf(2, "cycle to wait: %d, prog_id: %d\n", program->cycle_to_wait, i);
             program->cycle_to_wait--;
             continue;

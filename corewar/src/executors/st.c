@@ -12,20 +12,24 @@
 
 int exec_st(vm_t *vm, program_t *p)
 {
-    u_char *arg_types = (u_char[4]){0};
-    arg_types_t reg = {0};
-    arg_types_t arg1 = {0};
+    argument_t *args = (argument_t[4]){0};
+    ind_state_t ind_state = {vm->arena, p->pc, true};
     int st = p->pc;
 
-    get_arg_types(vm->arena, &p->pc, arg_types);
-    get_arg(&reg, vm->arena, &p->pc, arg_types[0]);
-    get_arg(&arg1, vm->arena, &p->pc, arg_types[1]);
-
-    if (reg.reg < 1 || reg.reg > REG_NUMBER)
-        return 0;
-
-    p->registers[reg.reg - 1] = (arg_types[1] == T_REG)
-        ? p->registers[arg1.reg - 1]
-        : vm->arena[(st + arg1.ind % IDX_MOD) % MEM_SIZE];
+    get_arg_types(vm->arena, &p->pc, args);
+    for (int i = 0; i < 2; ++i) {
+        get_arg(&args[i], vm->arena, &p->pc);
+        if (args[i].arg_type == T_REG && (args[i].data.reg == -1))
+            return 0;
+    }
+    if (args[1].arg_type == T_REG) {
+        p->registers[args[1].data.reg - 1] = get_value(&args[0], p, &ind_state);
+    } else {
+        write_int(
+            vm->arena, (st + get_value(&args[1], p, &ind_state)) % MEM_SIZE,
+            get_value(&args[0], p, &ind_state)
+        );
+    }
+    p->carry = get_value(&args[0], p, &ind_state) == 0;
     return 0;
 }

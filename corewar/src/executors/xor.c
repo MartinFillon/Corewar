@@ -11,32 +11,17 @@
 
 int exec_xor(vm_t *vm, program_t *p)
 {
-    u_char *arg_types = (u_char[4]){0};
-    int st = p->pc;
-    arg_types_t reg = {0}, arg1 = {0}, arg2 = {0};
+    argument_t *args = (argument_t[4]){0};
+    ind_state_t ind_state = {vm->arena, p->pc, true};
 
-    get_arg_types(vm->arena, &p->pc, arg_types);
-    get_arg(&arg1, vm->arena, &p->pc, arg_types[0]);
-    get_arg(&arg2, vm->arena, &p->pc, arg_types[1]);
-    get_arg(&reg, vm->arena, &p->pc, T_REG);
-
-    if (arg_types[0] == 0b11)
-        arg1.dir = vm->arena[(st + arg1.ind % IDX_MOD) % MEM_SIZE];
-    if (arg_types[1] == 0b11)
-        arg2.dir = vm->arena[(st + arg2.ind % IDX_MOD) % MEM_SIZE];
-
-    if (arg_types[0] == T_REG) {
-        if (arg1.reg > 0 && arg1.reg < REG_NUMBER)
+    get_arg_types(vm->arena, &p->pc, args);
+    for (int i = 0; i < 3; ++i) {
+        get_arg(&args[i], vm->arena, &p->pc);
+        if (args[i].arg_type == T_REG && (args[i].data.reg == -1))
             return 0;
-        arg1.dir = p->registers[arg1.reg - 1];
     }
-    if (arg_types[1] == T_REG) {
-        if (arg2.reg > 0 && arg2.reg < REG_NUMBER)
-            return 0;
-        arg2.dir = p->registers[arg2.reg - 1];
-    }
-
-    p->registers[reg.reg - 1] = arg1.dir ^ arg2.dir;
-    p->carry = (p->registers[reg.reg - 1] == 0);
+    p->registers[args[2].data.reg - 1] =
+        get_value(&args[0], p, &ind_state) & get_value(&args[1], p, &ind_state);
+    p->carry = p->registers[args[2].data.reg - 1] == 0;
     return 0;
 }

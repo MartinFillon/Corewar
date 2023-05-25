@@ -12,12 +12,14 @@
 
 int exec_aff(vm_t *vm, program_t *p)
 {
-    arg_types_t reg = {0};
+    argument_t *args = (argument_t[4]){0};
 
-    inc_pc(&p->pc, 2);
-    get_arg(&reg, vm->arena, &p->pc, T_REG);
-    if (reg.reg < 1 || reg.reg > REG_NUMBER)
-        return 0;
-    my_dprintf(1, "%c", p->registers[reg.reg - 1]);
+    get_arg_types(vm->arena, &p->pc, args);
+    for (int i = 0; i < 1; ++i) {
+        get_arg(&args[i], vm->arena, &p->pc);
+        if (args[i].arg_type == T_REG && (args[i].data.reg == -1))
+            return 0;
+    }
+    my_dprintf(1, "%c", p->registers[args[0].data.reg - 1] % 256);
     return 0;
 }

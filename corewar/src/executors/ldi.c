@@ -12,21 +12,25 @@
 
 int exec_ldi(vm_t *vm, program_t *p)
 {
-    u_char *arg_types = (u_char[4]){0};
-    arg_types_t reg = {0};
-    int arg1 = 0;
-    int arg2 = 0;
+    argument_t *args = (argument_t[4]){0};
+    ind_state_t ind_state = {vm->arena, p->pc, true};
     int st = p->pc;
-    int address = 0;
 
-    get_arg_types(vm->arena, &p->pc, arg_types);
-    arg1 = convert_index(arg_types[0], p, st, vm);
-    arg2 = convert_index(arg_types[1], p, st, vm);
-    get_arg(&reg, vm->arena, &p->pc, arg_types[2]);
-    address = (arg1 + arg2) % IDX_MOD;
-    if (reg.reg < 1 || reg.reg > REG_NUMBER)
-        return 0;
-    p->registers[reg.reg - 1] = vm->arena[(st + address) % MEM_SIZE];
-    p->carry = p->registers[reg.reg - 1] == 0;
+    get_arg_types(vm->arena, &p->pc, args);
+    args[0].is_index = true;
+    args[1].is_index = true;
+    for (int i = 0; i < 2; ++i) {
+        get_arg(&args[i], vm->arena, &p->pc);
+        if (args[i].arg_type == T_REG && (args[i].data.reg == -1))
+            return 0;
+    }
+    p->registers[args[1].data.reg - 1] = read_int(
+        vm->arena,
+        (st +
+         (get_value(&args[0], p, &ind_state) +
+          get_value(&args[1], p, &ind_state)) %
+             IDX_MOD) %
+            MEM_SIZE
+    );
     return 0;
 }

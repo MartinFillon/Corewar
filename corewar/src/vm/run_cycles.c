@@ -16,8 +16,11 @@ static void check_alive(vm_t *vm)
     for (size_t i = 0; i < vm->programs->size; ++i) {
         if (vm->programs->data[i].address == -1)
             continue;
-
         if (vm->programs->data[i].program.is_alive == false) {
+            my_dprintf(
+                2, "prog is dead %s\n",
+                vm->programs->data[i].program.header.prog_name
+            );
             vm->programs->data[i].is_running = false;
         }
 
@@ -68,12 +71,18 @@ void run_vm(vm_t *vm)
             break;
         }
         if (nb_cycle > 0 && nb_cycle % vm->cycle_to_die == 0) {
+            my_dprintf(
+                2, "cycle_to_die: %d, nb_cycle %d, nbr_live %d\n",
+                vm->cycle_to_die, nb_cycle, vm->nbr_live
+            );
+            my_dprintf(2, "last live: %s\n", vm->last_live->header.prog_name);
             check_alive(vm);
         }
 
         run_cycle(vm);
 
         if (vm->nbr_live >= NBR_LIVE) {
+            my_dprintf(2, "nbr_live: %d\n", vm->nbr_live);
             vm->cycle_to_die -= CYCLE_DELTA;
             vm->nbr_live = 0;
         }

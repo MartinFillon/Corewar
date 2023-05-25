@@ -21,6 +21,7 @@ SRC = 	src/main.c								\
 		src/executors/getters/get_arg_types.c	\
 		src/executors/getters/get_indirect.c	\
 		src/executors/writers/write_int.c		\
+		src/executors/writers/read_int.c		\
 		src/executors/add.c						\
 		src/executors/aff.c						\
 		src/executors/and.c						\

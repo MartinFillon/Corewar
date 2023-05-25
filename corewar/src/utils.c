@@ -7,6 +7,11 @@
 
 #include "corewar/instructions.h"
 
+int swap_endian_short(int val)
+{
+    return ((val & 0x00ff) << 8 | (val & 0xff00) >> 8);
+}
+
 int swap_endian(int val)
 {
     return (

@@ -8,25 +8,21 @@
 #include "corewar/arguments.h"
 #include "corewar/corewar.h"
 #include "corewar/instructions.h"
+#include "corewar/op.h"
 
 int exec_sub(vm_t *vm, program_t *p)
 {
-    arg_types_t reg1 = {0};
-    arg_types_t reg2 = {0};
-    arg_types_t reg3 = {0};
+    argument_t *args = (argument_t[4]){0};
+    ind_state_t ind_state = {vm->arena, p->pc, true};
 
-    p->pc = (p->pc + 2) % MEM_SIZE;
-    get_arg(&reg1, vm->arena, &p->pc, T_REG);
-    get_arg(&reg2, vm->arena, &p->pc, T_REG);
-    get_arg(&reg3, vm->arena, &p->pc, T_REG);
-
-    if ((reg1.reg < 1 || reg1.reg > REG_NUMBER) ||
-        (reg2.reg < 1 || reg2.reg > REG_NUMBER) ||
-        (reg3.reg < 1 || reg3.reg > REG_NUMBER))
-        return 0;
-
-    p->registers[reg3.reg - 1] =
-        p->registers[reg1.reg - 1] - p->registers[reg2.reg - 1];
-    p->carry = p->registers[reg3.reg - 1] == 0;
+    get_arg_types(vm->arena, &p->pc, args);
+    for (int i = 0; i < 3; ++i) {
+        get_arg(&args[i], vm->arena, &p->pc);
+        if (args[i].arg_type == T_REG && (args[i].data.reg == -1))
+            return 0;
+    }
+    p->registers[args[2].data.reg - 1] = get_value(&args[0], p, &ind_state) -
+        get_value(&args[1], p, &ind_state);
+    p->carry = p->registers[args[2].data.reg - 1] == 0;
     return 0;
 }
