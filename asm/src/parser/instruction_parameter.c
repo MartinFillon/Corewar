@@ -20,7 +20,7 @@
 #include "asm/body.h"
 #include "asm/error.h"
 
-int check_instructions(vec_str_t *params, size_t index, asm_t *assembler)
+static int check_instructions(vec_str_t *params, size_t index)
 {
     if ((int)params->size != OP_NAME[index].params){
         my_dprintf(2, "%s: Invalid nbr of parameters\nExpected %d, got %d\n",
@@ -37,7 +37,7 @@ static int get_parameters(
     int status = 0;
     size_t size = OP_NAME[index].size;
 
-    if (check_instructions(params, index, assembler) == ERROR)
+    if (check_instructions(params, index) == ERROR)
         return ERROR;
     for (size_t i = 0; i < params->size; i++) {
         str_ltrim(&params->data[i], ' ');
