@@ -11,6 +11,16 @@
 
 #include "asm/asm.h"
 
+void clean_comments(vec_str_t **words)
+{
+    for (size_t i = 0; i < (*words)->size; i++){
+        if ((*words)->data[i]->data[0] == COMMENT_CHAR){
+            vec_remove(*words, i);
+            i--;
+        }
+    }
+}
+
 int check_args(int argc, char **argv)
 {
     if (argc != 2){

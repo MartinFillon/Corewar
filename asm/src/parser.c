@@ -17,7 +17,7 @@
 #include "asm/header.h"
 #include "asm/body.h"
 #include "asm/labels.h"
-#include "asm/error.h"
+#include "asm/utils.h"
 
 int launch_parser(asm_t *assembler, char const *filepath)
 {

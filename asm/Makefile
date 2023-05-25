@@ -9,25 +9,24 @@ CC	?=	gcc
 
 SRC	=	$(addprefix src/, main.c						\
 			create_file.c								\
-			parser/parser.c								\
-			parser/utils.c								\
-			parser/header.c 							\
-			parser/prog_size.c 							\
-			parser/body.c								\
-			parser/direct.c 							\
-			parser/indirect.c 							\
-			parser/instruction_parameter.c				\
-			labels/labels.c								\
+			utils.c										\
+			parser.c 									\
+			header/parse_write_header.c 				\
+			header/find_prog_size.c 					\
+			body/parse_body.c							\
+			body/direct_params.c 						\
+			body/indirect_params.c 						\
+			body/instruction_parameter.c				\
+			labels/parse_labels.c						\
 			labels/label_address.c 						\
 			error_handling/handle_errors.c				\
-			error_handling/cleanup.c					\
+			error_handling/impossible_labels.c			\
+			error_handling/base_actions.c 				\
+			error_handling/fork_actions.c				\
 			error_handling/arithmetic_bitwise.c			\
-			error_handling/fork.c 						\
 			error_handling/load_values_ld.c 			\
 			error_handling/stores_value_st.c 			\
-			error_handling/instruction_handling.c 		\
-			error_handling/header.c 					\
-			error_handling/big_endian.c)
+			error_handling/header.c)
 
 NAME = asm
 

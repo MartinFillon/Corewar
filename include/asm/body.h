@@ -21,8 +21,6 @@ typedef struct asm_s asm_t;
 
 int parse_body(vec_str_t *body, asm_t *assembler, str_t **buffer);
 
-long find_name(str_t *str, str_t *find);
-
 int parse_instruction_parameter(
     str_t *param, size_t index, asm_t *assembler, str_t **buffer
 );

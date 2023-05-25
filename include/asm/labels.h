@@ -25,6 +25,6 @@ void get_label_value(
     str_t *label, asm_t *assembler, str_t **buffer, size_t type
 );
 
-int find_pos(size_t length, asm_t *assembler);
+int find_duplicates(vec_label_t *labels);
 
 #endif /* !LABELS_H_ */
