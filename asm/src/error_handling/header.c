@@ -27,6 +27,5 @@ void cleanup_quotes(str_t **str)
 {
     if (str_find((*str), STR("\""), 0) != -1){
         str_slice(str, 0, str_find((*str), STR("\""), 0));
-        str_cadd(str, '\"');
     }
 }
