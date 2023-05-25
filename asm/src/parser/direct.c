@@ -13,16 +13,20 @@
 #include "asm/asm.h"
 #include "asm/labels.h"
 
+static const long BITS_DIR_MAX = 4294967296;
+static const long BITS_IND_MAX = 65536;
+static const long MAX_BYTE_VAL = 256;
+
 static void get_direct_index(size_t type, long nbr, str_t **buffer)
 {
     if (type == IND_SIZE) {
         if (nbr < 0) {
-            nbr = 65536 + nbr;
-            str_cadd(buffer, (nbr / (long)256));
-            str_cadd(buffer, (nbr % (long)256));
+            nbr = BITS_IND_MAX + nbr;
+            str_cadd(buffer, (nbr / MAX_BYTE_VAL));
+            str_cadd(buffer, (nbr % MAX_BYTE_VAL));
         } else {
-            str_cadd(buffer, (nbr / (long)256));
-            str_cadd(buffer, (nbr % (long)256));
+            str_cadd(buffer, (nbr / MAX_BYTE_VAL));
+            str_cadd(buffer, (nbr % MAX_BYTE_VAL));
         }
     }
 }
@@ -31,16 +35,16 @@ void get_direct_int(size_t type, long nbr, str_t **buffer)
 {
     if (type == DIR_SIZE) {
         if (nbr < 0) {
-            nbr = 4294967296 + nbr;
-            str_cadd(buffer, (nbr / 16777216));
-            str_cadd(buffer, (nbr / 65536) % (long)256);
-            str_cadd(buffer, (nbr / (long)256) % (long)256);
-            str_cadd(buffer, (nbr % (long)256));
+            nbr = BITS_DIR_MAX + nbr;
+            str_cadd(buffer, (nbr / (BITS_IND_MAX * BITS_IND_MAX)));
+            str_cadd(buffer, (nbr / BITS_IND_MAX) % MAX_BYTE_VAL);
+            str_cadd(buffer, (nbr / MAX_BYTE_VAL) % MAX_BYTE_VAL);
+            str_cadd(buffer, (nbr % MAX_BYTE_VAL));
         } else {
-            str_cadd(buffer, (nbr / 16777216));
-            str_cadd(buffer, (nbr / 65536 % (long)256));
-            str_cadd(buffer, ((nbr / (long)256) % (long)256));
-            str_cadd(buffer, (nbr % (long)256));
+            str_cadd(buffer, (nbr / (BITS_IND_MAX * BITS_IND_MAX)));
+            str_cadd(buffer, (nbr / BITS_IND_MAX % MAX_BYTE_VAL));
+            str_cadd(buffer, ((nbr / MAX_BYTE_VAL) % MAX_BYTE_VAL));
+            str_cadd(buffer, (nbr % MAX_BYTE_VAL));
         }
     }
     get_direct_index(type, nbr, buffer);
