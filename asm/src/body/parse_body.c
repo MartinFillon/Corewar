@@ -88,6 +88,7 @@ static int check_special_case(str_t *line)
 int parse_body(vec_str_t *body, asm_t *assembler, str_t **buffer)
 {
     for (size_t i = 0; i < body->size; i++) {
+        clean_comments_lines(&body->data[i]);
         if (body->data[i]->data[0] == COMMENT_CHAR ||
             body->data[i]->length == 0 || body->data[i]->data[0] == '.' ||
             check_special_case(body->data[i]) == ERROR) {
@@ -98,11 +99,9 @@ int parse_body(vec_str_t *body, asm_t *assembler, str_t **buffer)
     }
     write_header(body, assembler);
     for (size_t i = 0; i < body->size; i++) {
-        if (manage_instruction(body->data[i], assembler, buffer) == ERROR){
+        if (manage_instruction(body->data[i], assembler, buffer) == ERROR)
             return ERROR;
-        }
     }
-    fwrite((*buffer)->data, sizeof(char), (*buffer)->length,
-    assembler->file);
+    fwrite((*buffer)->data, sizeof(char), (*buffer)->length, assembler->file);
     return SUCCESS;
 }
