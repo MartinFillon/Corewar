@@ -42,7 +42,7 @@ typedef struct vm_s {
     int cycle_to_die;
     int nbr_cycles_to_dump;
     int nbr_live;
-    program_t const *last_live;
+    prog_t const *last_live;
 
     u_char arena[MEM_SIZE];
     vec_prog_t *programs;

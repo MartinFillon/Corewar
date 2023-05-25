@@ -5,6 +5,9 @@
 ** st
 */
 
+#include <stdio.h>
+#include "my_stdio.h"
+
 #include "corewar/arguments.h"
 #include "corewar/corewar.h"
 #include "corewar/instructions.h"
@@ -18,10 +21,16 @@ int exec_st(vm_t *vm, program_t *p)
 
     get_arg_types(vm->arena, &p->pc, args);
     for (int i = 0; i < 2; ++i) {
+        dprintf(2, "arg_type: %d\n", args[i].arg_type);
+    }
+    for (int i = 0; i < 2; ++i) {
         get_arg(&args[i], vm->arena, &p->pc);
+        if (args[i].arg_type == T_REG)
+            dprintf(2, "reg: %d\n", args[i].data.reg);
         if (args[i].arg_type == T_REG && (args[i].data.reg == -1))
             return 0;
     }
+    debug_args(args);
     if (args[1].arg_type == T_REG) {
         p->registers[args[1].data.reg - 1] = get_value(&args[0], p, &ind_state);
     } else {

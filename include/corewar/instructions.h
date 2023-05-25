@@ -65,6 +65,7 @@ void get_ind_value(
     arg_types_t *indirect, u_char *memory, int start, bool _idx_mod
 );
 int get_value(argument_t *args, program_t *p, ind_state_t *ind_state);
+void debug_args(argument_t *args);
 
 //Writers
 void write_int(u_char *memory, int index, int content);

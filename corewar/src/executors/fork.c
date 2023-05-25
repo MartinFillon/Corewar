@@ -5,6 +5,7 @@
 ** fork
 */
 
+#include <stdio.h>
 #include "my_stdlib.h"
 
 #include "corewar/arguments.h"
@@ -14,6 +15,7 @@
 
 int exec_fork(vm_t *vm, program_t *p)
 {
+    static int count = 0;
     argument_t *args = (argument_t[4]){0};
     int st = p->pc;
 
@@ -23,9 +25,11 @@ int exec_fork(vm_t *vm, program_t *p)
     for (int i = 0; i < 1; ++i) {
         get_arg(&args[i], vm->arena, &p->pc);
     }
+    debug_args(args);
     prog_t tmp = dup_program(p);
     tmp.program.pc = (st + (args[0].data.ind.ind % IDX_MOD)) % MEM_SIZE;
     my_memcpy(tmp.program.registers, p->registers, sizeof(p->registers));
+    dprintf(2, "count: %d, %p\n", count++, vm->programs);
     update_cycle_to_wait(vm, &tmp.program);
     vec_pushback(&vm->programs, &tmp);
     return 0;

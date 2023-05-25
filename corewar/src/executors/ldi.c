@@ -24,6 +24,7 @@ int exec_ldi(vm_t *vm, program_t *p)
         if (args[i].arg_type == T_REG && (args[i].data.reg == -1))
             return 0;
     }
+    debug_args(args);
     p->registers[args[1].data.reg - 1] = read_int(
         vm->arena,
         (st +

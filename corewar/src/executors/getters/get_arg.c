@@ -6,6 +6,10 @@
 */
 
 #include <stdbool.h>
+#include <stdio.h>
+
+#include "my_stdio.h"
+
 #include "corewar/corewar.h"
 #include "corewar/instructions.h"
 #include "corewar/op.h"
@@ -31,6 +35,7 @@ arg_types_t get_ind(u_char *memory, int *pc)
     arg.ind.ind = 0;
     my_memcpy(&arg.ind.ind, memory + *pc, IND_SIZE);
     inc_pc(pc, IND_SIZE);
+    arg.ind.ind = swap_endian_short(arg.ind.ind);
     return arg;
 }
 
@@ -76,9 +81,6 @@ void get_arg(argument_t *arg, u_char *memory, int *pc)
         arg->data = GETTERS[arg->arg_type](memory, pc);
     if (arg->is_index == true && arg->arg_type != T_REG)
         arg->data = get_ind(memory, pc);
-    if (arg->arg_type == T_DIR && arg->is_index) {
-        arg->data.ind.ind = swap_endian_short(arg->data.ind.ind);
-    }
     if (arg->is_index == true && arg->arg_type == T_REG)
-        get_reg(memory, pc);
+        arg->data = get_reg(memory, pc);
 }

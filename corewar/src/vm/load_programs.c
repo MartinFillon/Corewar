@@ -7,6 +7,8 @@
 
 #include <stdbool.h>
 
+#include <stdio.h>
+
 #include "my_json.h"
 #include "my_stdio.h"
 #include "my_stdlib.h"
@@ -29,7 +31,7 @@ static bool check_overlap(vm_t *vm, int mem_idx, int prog_size)
 {
     for (int i = 0; i < prog_size; ++i) {
         if (vm->arena[(mem_idx + i) % MEM_SIZE] != 0) {
-            my_dprintf(2, "Error: overlap detected\n");
+            dprintf(2, "Error: overlap detected\n");
             return true;
         }
     }

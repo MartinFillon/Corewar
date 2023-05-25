@@ -21,6 +21,7 @@ int exec_lld(vm_t *vm, program_t *p)
         if (args[i].arg_type == T_REG && (args[i].data.reg == -1))
             return 0;
     }
+    debug_args(args);
     if (args[0].arg_type == T_REG || args[0].arg_type == T_DIR)
         p->registers[args[1].data.reg - 1] = get_value(&args[0], p, &ind_state);
     if (args[0].arg_type == T_IND)

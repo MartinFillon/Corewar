@@ -5,6 +5,8 @@
 ** aff
 */
 
+#include <stdio.h>
+
 #include "my_stdio.h"
 
 #include "corewar/corewar.h"
@@ -20,6 +22,7 @@ int exec_aff(vm_t *vm, program_t *p)
         if (args[i].arg_type == T_REG && (args[i].data.reg == -1))
             return 0;
     }
-    my_dprintf(1, "%c", p->registers[args[0].data.reg - 1] % 256);
+    debug_args(args);
+    dprintf(1, "%c", p->registers[args[0].data.reg - 1] % 256);
     return 0;
 }

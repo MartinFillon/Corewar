@@ -20,6 +20,7 @@ int exec_or(vm_t *vm, program_t *p)
         if (args[i].arg_type == T_REG && (args[i].data.reg == -1))
             return 0;
     }
+    debug_args(args);
     p->registers[args[2].data.reg - 1] =
         get_value(&args[0], p, &ind_state) | get_value(&args[1], p, &ind_state);
     p->carry = p->registers[args[2].data.reg - 1] == 0;

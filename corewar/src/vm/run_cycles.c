@@ -5,6 +5,8 @@
 ** run cycles
 */
 
+#include "stdio.h"
+
 #include "my_stdio.h"
 
 #include "corewar/arguments.h"
@@ -17,7 +19,7 @@ static void check_alive(vm_t *vm)
         if (vm->programs->data[i].address == -1)
             continue;
         if (vm->programs->data[i].program.is_alive == false) {
-            my_dprintf(
+            dprintf(
                 2, "prog is dead %s\n",
                 vm->programs->data[i].program.header.prog_name
             );
@@ -46,8 +48,8 @@ static void print_winner(vm_t *vm)
 {
     if (vm->last_live != NULL) {
         my_printf(
-            "The player %d(%s)has won.\n", vm->last_live->registers[0],
-            vm->last_live->header.prog_name
+            "The player %d(%s)has won.\n", vm->last_live->number,
+            vm->last_live->program.header.prog_name
         );
     }
 }
@@ -71,22 +73,24 @@ void run_vm(vm_t *vm)
             break;
         }
         if (nb_cycle > 0 && nb_cycle % vm->cycle_to_die == 0) {
-            my_dprintf(
+            dprintf(
                 2, "cycle_to_die: %d, nb_cycle %d, nbr_live %d\n",
                 vm->cycle_to_die, nb_cycle, vm->nbr_live
             );
-            my_dprintf(2, "last live: %s\n", vm->last_live->header.prog_name);
+            if (vm->last_live != NULL)
+                dprintf(2, "last live: %s\n", vm->last_live->program.header.prog_name);
             check_alive(vm);
         }
 
         run_cycle(vm);
 
         if (vm->nbr_live >= NBR_LIVE) {
-            my_dprintf(2, "nbr_live: %d\n", vm->nbr_live);
+            dprintf(2, "nbr_live: %d\n", vm->nbr_live);
             vm->cycle_to_die -= CYCLE_DELTA;
             vm->nbr_live = 0;
         }
         nb_cycle++;
     }
     print_winner(vm);
+    dprintf(2, "vm->programs->size: %ld\n", vm->programs->size);
 }
