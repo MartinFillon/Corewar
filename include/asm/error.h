@@ -19,7 +19,6 @@ void cleanup_quotes(str_t **str);
 
 int check_header_size(header_t *header);
 
-
 int check_sti(size_t instruction, vec_str_t *params);
 int check_st(size_t instruction, vec_str_t *params);
 int check_load_base(size_t instruction, vec_str_t *params);
