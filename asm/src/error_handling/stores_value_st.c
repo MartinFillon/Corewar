@@ -5,8 +5,8 @@
 ** stores_value_st
 */
 
-#include "my_str.h"
-#include "my_vec.h"
+#include "my_stdio.h"
+#include "my_stdlib.h"
 
 #include "asm/asm.h"
 
@@ -18,7 +18,7 @@ int check_st(size_t instruction, vec_str_t *params)
         return ERROR;
     }
     if (params->data[1]->data[0] != 'r' && my_atoi(params->data[1]->data) == 0
-        && params->data[1]->data != '0'){
+        && params->data[1]->data[0] != '0'){
         my_dprintf(2, "%s: takes a register or a number as 2nd parameter\n",
         OP_NAME[instruction].name);
         return ERROR;

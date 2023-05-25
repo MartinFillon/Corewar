@@ -100,7 +100,6 @@ void get_label_value(
         if (str_compare(label, assembler->labels->data[i].label) == 0){
             value = assembler->labels->data[i].location -
             find_pos((*buffer)->length, assembler);
-            printf("pos %ld\n", value);
             break;
         }
     }

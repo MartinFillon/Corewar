@@ -5,6 +5,8 @@
 ** load_values_ld
 */
 
+#include "my_stdio.h"
+
 #include "asm/asm.h"
 
 int check_load_base(size_t instruction, vec_str_t *params)
