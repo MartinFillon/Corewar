@@ -50,7 +50,5 @@ bool start_vm(vm_t *vm)
     if (load_programs(vm) == false)
         return false;
 
-    vec_reverse(vm->programs);
-
     return true;
 }

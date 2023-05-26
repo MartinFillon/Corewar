@@ -74,11 +74,10 @@ static void run_vm_init(vm_t *vm)
 
 void run_vm(vm_t *vm)
 {
-    int nb_cycle = 1;
+    int nb_cycle = 0;
     run_vm_init(vm);
 
     while (programs_alive(vm)) {
-
         if (nb_cycle == vm->nbr_cycles_to_dump) {
             dump_memory(vm);
             break;
@@ -92,7 +91,6 @@ void run_vm(vm_t *vm)
         }
 
         run_cycle(vm);
-
         nb_cycle++;
     }
     print_winner(vm);

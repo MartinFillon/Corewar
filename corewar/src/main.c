@@ -5,8 +5,6 @@
 ** main
 */
 
-#include <stdlib.h>
-
 #include "corewar/corewar.h"
 
 int main(int ac, char const *const *av)
