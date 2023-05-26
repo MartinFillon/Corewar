@@ -6,50 +6,57 @@
 */
 
 #include "corewar/corewar.h"
+#include "corewar/instructions.h"
 #include "corewar/op.h"
+#include "my_stdlib.h"
 
-int convert_index(u_char type, program_t *p, int st, vm_t *vm)
+static get_arg_t GETTERS[] = {NULL, &get_reg, &get_dir, &get_ind};
+
+
+arg_types_t get_reg(u_char *memory, int *pc)
 {
-    int arg = 0;
-    get_arg(&arg, vm->arena, &p->pc, (type == T_REG) ? T_REG : 0b11);
-    if (type == T_REG)
-        return p->registers[arg - 1];
-    if (type == T_DIR)
-        return arg;
-    if (type == 0b11)
-        return vm->arena[(st + arg % IDX_MOD) % MEM_SIZE];
-    return 0;
+    arg_types_t arg = {0};
+
+    arg.reg = memory[*pc % MEM_SIZE];
+    inc_pc(pc, 1);
+    if (arg.reg < 1 || arg.reg > REG_NUMBER)
+        arg.reg = CHAR_MAX;
+    return arg;
 }
 
-int convert_index_long(u_char type, program_t *p, int st, vm_t *vm)
+void get_ind_value(
+    arg_types_t *indirect, u_char *memory, int start, bool _idx_mod
+)
 {
-    int arg = 0;
-    get_arg(&arg, vm->arena, &p->pc, (type == T_REG) ? T_REG : 0b11);
-    if (type == T_REG)
-        return p->registers[arg - 1];
-    if (type == T_DIR)
-        return arg;
-    if (type == 0b11)
-        return vm->arena[(st + arg) % MEM_SIZE];
-    return 0;
+    if (_idx_mod)
+        indirect->ind.value =
+            memory[(start + (indirect->ind.ind % IDX_MOD)) % MEM_SIZE];
+    else
+        indirect->ind.value = memory[(start + indirect->ind.ind) % MEM_SIZE];
 }
 
-int get_arg(int *arg, u_char *memory, int *pc, u_char arg_type)
+int get_value(argument_t *args, program_t *p, ind_state_t *ind_state)
 {
-    if (arg_type == 0b10) {
-        *arg = get_direct(memory, *pc);
-        *pc = (*pc + DIR_SIZE) % MEM_SIZE;
-        return 1;
+    if (args->arg_type == T_REG &&
+        (args->data.reg >= 1 && args->data.reg <= REG_NUMBER)) {
+        return p->registers[args->data.reg - 1];
     }
-    if (arg_type == 0b11) {
-        *arg = get_indirect(memory, *pc);
-        *pc = (*pc + IND_SIZE) % MEM_SIZE;
-        return 1;
-    }
-    if (arg_type == 0b01) {
-        *arg = memory[*pc] % (REG_NUMBER + 1);
-        *pc = (*pc + 1) % MEM_SIZE;
-        return 1;
-    }
-    return 0;
+    if (args->arg_type == T_DIR)
+        return args->data.dir;
+    get_ind_value(
+        &args->data, ind_state->memory, ind_state->start, ind_state->_idx_mod
+    );
+    return args->data.ind.value;
+}
+
+void get_arg(argument_t *arg, u_char *memory, int *pc)
+{
+    if (arg->arg_type == 0)
+        return;
+    if (arg->is_index == false)
+        arg->data = GETTERS[arg->arg_type](memory, pc);
+    else if (arg->is_index == true && arg->arg_type != T_REG)
+        arg->data = get_ind(memory, pc);
+    else
+        arg->data = get_reg(memory, pc);
 }

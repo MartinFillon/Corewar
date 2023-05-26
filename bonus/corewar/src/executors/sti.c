@@ -5,24 +5,34 @@
 ** sti
 */
 
+#include <stdbool.h>
+#include <stdio.h>
+#include "corewar/arguments.h"
 #include "corewar/corewar.h"
+#include "corewar/instructions.h"
+#include "corewar/op.h"
+
+#include "my_stdio.h"
+#include "my_stdlib.h"
 
 int exec_sti(vm_t *vm, program_t *p)
 {
-    u_char *arg_types = (u_char[4]){0};
-    int reg = -1;
-    int arg1 = 0;
-    int arg2 = 0;
+    argument_t *args = (argument_t[4]){0};
+    ind_state_t ind_state = {vm->arena, p->pc, true};
     int st = p->pc;
-    p->pc = (p->pc + 1) % MEM_SIZE;
-    get_arg_types(vm->arena, p->pc, arg_types);
-    p->pc = (p->pc + 1) % MEM_SIZE;
-    get_arg(&reg, vm->arena, &p->pc, arg_types[0]);
-    arg1 = convert_index(arg_types[1], p, st, vm);
-    arg2 = convert_index(arg_types[2], p, st, vm);
+
+    get_arg_types(vm->arena, &p->pc, args);
+    args[1].is_index = true;
+    args[2].is_index = true;
+    for (int i = 0; i < 3; ++i) {
+        get_arg(&args[i], vm->arena, &p->pc);
+        if (args[i].arg_type == 0 ||
+            (args[i].arg_type == T_REG && (args[i].data.reg == CHAR_MAX)))
+            return 0;
+    }
     write_int(
-        vm->arena, (st + (arg1 + arg2) % IDX_MOD) % MEM_SIZE,
-        swap_endian(p->registers[reg - 1])
-    );
+        vm->arena, (st + (get_value(&args[1], p, &ind_state) +
+        get_value(&args[2], p, &ind_state)) % IDX_MOD) % MEM_SIZE,
+        swap_endian(get_value(&args[0], p, &ind_state)));
     return 0;
 }

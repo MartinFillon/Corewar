@@ -5,17 +5,21 @@
 ** get_indirect
 */
 
-#include "corewar/op.h"
+#include "my_stdlib.h"
 
 #include "corewar/corewar.h"
+#include "corewar/instructions.h"
+#include "corewar/op.h"
 
-int get_indirect(u_char *memory, int memory_index)
+arg_types_t get_ind(u_char *memory, int *pc)
 {
-    int direct = 0;
+    arg_types_t arg = {0};
 
-    for (int i = 0; i < IND_SIZE; i++) {
-        direct <<= 8;
-        direct += memory[memory_index + i];
+    arg.ind.ind = 0;
+    if (*pc + IND_SIZE < MEM_SIZE) {
+        my_memcpy(&arg.ind.ind, &memory[*pc % MEM_SIZE], IND_SIZE);
     }
-    return direct;
+    inc_pc(pc, IND_SIZE);
+    arg.ind.ind = swap_endian_short(arg.ind.ind);
+    return arg;
 }

@@ -49,12 +49,13 @@ void order_programs_by_number(vec_prog_t *programs)
     for (size_t i = 0; i < programs->size; ++i) {
         if (programs->data[i].number != -1)
             continue;
-
         programs->data[i].number = get_next_available_number(used_numbers) + 1;
     }
 
     vec_sort(programs, &order_by_number);
 
-    for (size_t i = 0; i < programs->size; ++i)
+    for (size_t i = 0; i < programs->size; ++i) {
         programs->data[i].program.registers[0] = programs->data[i].number;
+        programs->data[i].program.pid = programs->data[i].number;
+    }
 }

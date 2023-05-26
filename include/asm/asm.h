@@ -76,7 +76,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x01,
         .name = "live",
         .index = (int[]) {UNDEFINED},
-        .size = 4,
+        .size = DIR_SIZE,
         .check_inst = &check_live
     },
     {
@@ -85,7 +85,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x0e,
         .name = "lldi",
         .index = (int[]) {REGEX,  REGEX, REGISTER},
-        .size = 2,
+        .size = IND_SIZE,
         .check_inst = &check_load_further
     },
     {
@@ -94,7 +94,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x0f,
         .name = "lfork",
         .index = (int[]) {INDEX},
-        .size = 2,
+        .size = IND_SIZE,
         .check_inst = &check_fork
     },
     {
@@ -103,7 +103,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x0d,
         .name = "lld",
         .index = (int[]) {UNDEFINED, REGISTER},
-        .size = 4,
+        .size = DIR_SIZE,
         .check_inst = &check_load_base
     },
     {
@@ -112,7 +112,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x0a,
         .name = "ldi",
         .index = (int[]) {REGEX,  REGEX, REGISTER},
-        .size = 2,
+        .size = IND_SIZE,
         .check_inst = &check_load_further
     },
     {
@@ -121,7 +121,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x02,
         .name = "ld",
         .index = (int[]) {UNDEFINED, REGISTER},
-        .size = 4,
+        .size = DIR_SIZE,
         .check_inst = &check_load_base
     },
     {
@@ -130,7 +130,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x0b,
         .name = "sti",
         .index = (int[]) {REGISTER,  REGEX, REGEX},
-        .size = 2,
+        .size = IND_SIZE,
         .check_inst = &check_sti
     },
     {
@@ -166,7 +166,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x06,
         .name = "and",
         .index = (int[]) {UNDEFINED,  UNDEFINED, REGISTER},
-        .size = 4,
+        .size = DIR_SIZE,
         .check_inst = &check_bitwise
     },
     {
@@ -175,7 +175,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x08,
         .name = "xor",
         .index = (int[]) {UNDEFINED,  UNDEFINED, REGISTER},
-        .size = 4,
+        .size = DIR_SIZE,
         .check_inst = &check_bitwise
     },
     {
@@ -184,7 +184,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x07,
         .name = "or",
         .index = (int[]) {UNDEFINED,  UNDEFINED, REGISTER},
-        .size = 4,
+        .size = DIR_SIZE,
         .check_inst = &check_bitwise
     },
     {
@@ -193,7 +193,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x09,
         .name = "zjmp",
         .index = (int[]) {INDEX},
-        .size = 2,
+        .size = IND_SIZE,
         .check_inst = &check_zjmp
     },
     {
@@ -202,7 +202,7 @@ static const op_name_t OP_NAME[] = {
         .hex = 0x0c,
         .name = "fork",
         .index = (int[]) {INDEX},
-        .size = 2,
+        .size = IND_SIZE,
         .check_inst = &check_fork
     },
     {
