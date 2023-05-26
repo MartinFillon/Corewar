@@ -5,6 +5,7 @@
 ** fork
 */
 
+#include "my_stdio.h"
 #include "my_stdlib.h"
 
 #include "corewar/corewar.h"
@@ -23,7 +24,11 @@ int exec_fork(vm_t *vm, program_t *p)
     }
 
     prog_t tmp = dup_program(p);
+    my_dprintf(
+        2, "{\"action\":\"fork\",\"name\":\"%s\"}\n", p->header.prog_name
+    );
     tmp.program.pc = (st + (args[0].data.ind.ind % IDX_MOD)) % MEM_SIZE;
+    update_cycle_to_wait(vm, &tmp.program);
     vec_pushback(&vm->programs, &tmp);
     return 0;
 }

@@ -5,7 +5,6 @@
 ** st
 */
 
-#include <stdio.h>
 #include "my_stdio.h"
 
 #include "corewar/arguments.h"
@@ -30,11 +29,12 @@ int exec_st(vm_t *vm, program_t *p)
     if (args[1].arg_type == T_REG) {
         p->registers[args[1].data.reg - 1] = get_value(&args[0], p, &ind_state);
     } else {
-        write_addr =(st + get_value(&args[1], p, &ind_state)) % MEM_SIZE;
-        write_int(
-            vm->arena, write_addr,
-            get_value(&args[0], p, &ind_state));
-        printf("{name:%s, address:%d, size:%d}\n", p->header.prog_name, write_addr, REG_SIZE);
+        write_addr = (st + get_value(&args[1], p, &ind_state)) % MEM_SIZE;
+        write_int(vm->arena, write_addr, get_value(&args[0], p, &ind_state));
+        my_dprintf(
+            2, "{\"action\":\"memory\",\"name\":\"%s\",\"address\":%d,\"size\":%d}\n",
+            p->header.prog_name, write_addr, REG_SIZE
+        );
     }
     return 0;
 }
