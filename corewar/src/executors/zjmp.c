@@ -21,7 +21,6 @@ int exec_zjmp(vm_t *vm, program_t *p)
     arg[0].is_index = true;
     get_arg(&arg[0], vm->arena, &p->pc);
 
-    // my_dprintf(2, "ZJMP: %d\n", p->carry);
     if (p->carry == true)
         p->pc = (address + (arg[0].data.ind.ind % IDX_MOD)) % MEM_SIZE;
     return 0;

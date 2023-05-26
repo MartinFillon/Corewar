@@ -12,11 +12,9 @@ all:
 
 clean:
 	@for i in $(SRC); do make -C $$i clean; done
-	make -C tests clean
 
 fclean:	clean
 	@for i in $(SRC); do make -C $$i fclean; done
-	make -C tests fclean
 
 re:	fclean all
 

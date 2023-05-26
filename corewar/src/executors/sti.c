@@ -30,15 +30,9 @@ int exec_sti(vm_t *vm, program_t *p)
             (args[i].arg_type == T_REG && (args[i].data.reg == CHAR_MAX)))
             return 0;
     }
-    // debug_args(args);
     write_int(
-        vm->arena,
-        (st +
-         (get_value(&args[1], p, &ind_state) +
-          get_value(&args[2], p, &ind_state)) %
-             IDX_MOD) %
-            MEM_SIZE,
-        swap_endian(get_value(&args[0], p, &ind_state))
-    );
+        vm->arena, (st + (get_value(&args[1], p, &ind_state) +
+        get_value(&args[2], p, &ind_state)) % IDX_MOD) % MEM_SIZE,
+        swap_endian(get_value(&args[0], p, &ind_state)));
     return 0;
 }

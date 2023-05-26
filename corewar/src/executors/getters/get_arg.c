@@ -12,31 +12,6 @@
 
 static get_arg_t GETTERS[] = {NULL, &get_reg, &get_dir, &get_ind};
 
-arg_types_t get_dir(u_char *memory, int *pc)
-{
-    arg_types_t arg = {0};
-
-    arg.dir = 0;
-    if (*pc + DIR_SIZE < MEM_SIZE) {
-        my_memcpy(&arg.dir, &memory[*pc % MEM_SIZE], DIR_SIZE);
-    }
-    arg.dir = swap_endian(arg.dir);
-    inc_pc(pc, DIR_SIZE);
-    return arg;
-}
-
-arg_types_t get_ind(u_char *memory, int *pc)
-{
-    arg_types_t arg = {0};
-
-    arg.ind.ind = 0;
-    if (*pc + IND_SIZE < MEM_SIZE) {
-        my_memcpy(&arg.ind.ind, &memory[*pc % MEM_SIZE], IND_SIZE);
-    }
-    inc_pc(pc, IND_SIZE);
-    arg.ind.ind = swap_endian_short(arg.ind.ind);
-    return arg;
-}
 
 arg_types_t get_reg(u_char *memory, int *pc)
 {
@@ -82,6 +57,6 @@ void get_arg(argument_t *arg, u_char *memory, int *pc)
         arg->data = GETTERS[arg->arg_type](memory, pc);
     else if (arg->is_index == true && arg->arg_type != T_REG)
         arg->data = get_ind(memory, pc);
-    else if (arg->is_index == true && arg->arg_type == T_REG)
+    else
         arg->data = get_reg(memory, pc);
 }
