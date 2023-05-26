@@ -33,24 +33,22 @@ void update_cycle_to_wait(vm_t *vm, program_t *program)
 
 void run_cycle(vm_t *vm)
 {
-    for (size_t i = 0; i < vm->programs->size; ++i) {
+    size_t size = vm->programs->size;
+
+    for (size_t i = 0; i < size; ++i) {
         if (vm->programs->data[i].is_running == false)
             continue;
-
-        program_t *program = &vm->programs->data[i].program;
-
-        if (program->cycle_to_wait > 1) {
-            program->cycle_to_wait--;
+        if (vm->programs->data[i].program.cycle_to_wait > 1) {
+            vm->programs->data[i].program.cycle_to_wait--;
             continue;
         }
-
-        u_char instruction_idx = get_instruction(vm, program);
-
+        u_char instruction_idx =
+            get_instruction(vm, &vm->programs->data[i].program);
         if (instruction_idx != INVALID_INSTRUCTION) {
-            op_tab[instruction_idx].func(vm, program);
-            update_cycle_to_wait(vm, program);
+            op_tab[instruction_idx].func(vm, &vm->programs->data[i].program);
+            update_cycle_to_wait(vm, &vm->programs->data[i].program);
         } else {
-            inc_pc(&program->pc, 1);
+            inc_pc(&vm->programs->data[i].program.pc, 1);
         }
     }
 }

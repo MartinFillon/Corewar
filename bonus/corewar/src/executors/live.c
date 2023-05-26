@@ -37,6 +37,9 @@ int exec_live(vm_t *vm, program_t *p)
     my_printf(
         "The player %d(%s)is alive.\n", pl->number, pl->program.header.prog_name
     );
+    my_dprintf(
+        2, "{\"action\":\"live\",\"name\":\"%s\",\"alive\":true}\n", pl->program.header.prog_name
+    );
     vm->last_live = pl;
     vm->nbr_live++;
     pl->program.is_alive = true;

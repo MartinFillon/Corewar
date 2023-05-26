@@ -52,8 +52,8 @@ NAME = corewar
 OBJ = $(SRC:.c=.o)
 
 CFLAGS		+=	-Wall -Wextra -Werror
-CPPFLAGS	+=	-I../include
-LDFLAGS		+=	-L../lib
+CPPFLAGS	+=	-I../../include
+LDFLAGS		+=	-L../../lib
 LDLIBS		+=	-lmy
 
 ifeq ($(DEBUG),1)
