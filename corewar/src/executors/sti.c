@@ -26,13 +26,17 @@ int exec_sti(vm_t *vm, program_t *p)
     args[2].is_index = true;
     for (int i = 0; i < 3; ++i) {
         get_arg(&args[i], vm->arena, &p->pc);
-        if (args[i].arg_type == T_REG && (args[i].data.reg == -1))
+        if (args[i].arg_type == 0 ||
+            (args[i].arg_type == T_REG && (args[i].data.reg == CHAR_MAX)))
             return 0;
     }
-    debug_args(args);
+    // debug_args(args);
     write_int(
         vm->arena,
-        (st + (get_value(&args[1], p, &ind_state) + get_value(&args[2], p, &ind_state) % IDX_MOD)) %
+        (st +
+         (get_value(&args[1], p, &ind_state) +
+          get_value(&args[2], p, &ind_state)) %
+             IDX_MOD) %
             MEM_SIZE,
         swap_endian(get_value(&args[0], p, &ind_state))
     );

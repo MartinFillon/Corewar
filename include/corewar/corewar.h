@@ -48,6 +48,7 @@ bool check_progs_sizes(vm_t *vm);
 
 // UTILS
 int swap_endian(int val);
+int swap_endian_short(int val);
 u_char get_bits(u_char byte, int start, int count);
 void inc_pc(int *pc, int inc);
 

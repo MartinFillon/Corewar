@@ -5,12 +5,11 @@
 ** aff
 */
 
-#include <stdio.h>
-
 #include "my_stdio.h"
 
 #include "corewar/corewar.h"
 #include "corewar/instructions.h"
+#include "corewar/op.h"
 
 int exec_aff(vm_t *vm, program_t *p)
 {
@@ -19,10 +18,11 @@ int exec_aff(vm_t *vm, program_t *p)
     get_arg_types(vm->arena, &p->pc, args);
     for (int i = 0; i < 1; ++i) {
         get_arg(&args[i], vm->arena, &p->pc);
-        if (args[i].arg_type == T_REG && (args[i].data.reg == -1))
+        if (args[i].arg_type == T_REG && (args[i].data.reg == CHAR_MAX))
             return 0;
     }
-    debug_args(args);
-    dprintf(1, "%c", p->registers[args[0].data.reg - 1] % 256);
+    my_printf(
+        "%c", (char){p->registers[(args[0].data.reg - 1) % REG_NUMBER] % 256}
+    );
     return 0;
 }

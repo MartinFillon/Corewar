@@ -26,6 +26,7 @@ typedef struct program_s {
     bool carry;
     bool is_alive;
     int cycle_to_wait;
+    int pid;
 } program_t;
 
 typedef struct prog_s {
@@ -43,9 +44,9 @@ typedef struct vm_s {
     int nbr_cycles_to_dump;
     int nbr_live;
     prog_t const *last_live;
+    vec_prog_t *programs;
 
     u_char arena[MEM_SIZE];
-    vec_prog_t *programs;
 } vm_t;
 
 

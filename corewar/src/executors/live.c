@@ -17,12 +17,12 @@
 static prog_t *find_program(vm_t *vm, arg_types_t arg)
 {
     for (size_t i = 0; i < vm->programs->size; i++) {
-        dprintf(2,
-            "vm->programs->data[%ld].address: %d, reg: %d, number: %d\n", i,
-            vm->programs->data[i].address,
-            vm->programs->data[i].program.registers[0],
-            vm->programs->data[i].number
-        );
+        // my_printf(
+        //     "vm->programs->data[%d].address: %d, reg: %d, number: %d\n", i,
+        //     vm->programs->data[i].address,
+        //     vm->programs->data[i].program.registers[0],
+        //     vm->programs->data[i].number
+        // );
         if (vm->programs->data[i].address != -1 &&
             vm->programs->data[i].is_running &&
             vm->programs->data[i].number == arg.dir)
@@ -36,19 +36,16 @@ int exec_live(vm_t *vm, program_t *p)
 {
     argument_t *arg = (argument_t[4]){0};
 
-    dprintf(2, "exec live as %s\n", p->header.prog_name);
-
     inc_pc(&p->pc, 1);
     arg[0].arg_type = T_DIR;
     get_arg(&arg[0], vm->arena, &p->pc);
 
-    debug_args(arg);
+    // debug_args(arg);
     prog_t *pl = find_program(vm, arg[0].data);
-    dprintf(2, "arg = %d\n", arg[0].data.dir);
     if (pl == NULL)
         return 0;
     my_printf(
-        "The player %d(%s)is alive.\n", arg[0].data.dir, pl->program.header.prog_name
+        "The player %d(%s)is alive.\n", pl->number, pl->program.header.prog_name
     );
     vm->last_live = pl;
     vm->nbr_live++;

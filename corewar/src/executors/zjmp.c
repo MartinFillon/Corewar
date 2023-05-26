@@ -5,7 +5,8 @@
 ** zjmp
 */
 
-#include "stdio.h"
+#include "my_stdio.h"
+
 #include "corewar/corewar.h"
 #include "corewar/instructions.h"
 #include "corewar/op.h"
@@ -19,9 +20,9 @@ int exec_zjmp(vm_t *vm, program_t *p)
     arg[0].arg_type = T_DIR;
     arg[0].is_index = true;
     get_arg(&arg[0], vm->arena, &p->pc);
-    debug_args(arg);
-    dprintf(2, "ZJMP: %d\n", p->carry);
-    if (p->carry == 1)
+
+    // my_dprintf(2, "ZJMP: %d\n", p->carry);
+    if (p->carry == true)
         p->pc = (address + (arg[0].data.ind.ind % IDX_MOD)) % MEM_SIZE;
     return 0;
 }

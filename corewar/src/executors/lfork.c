@@ -21,11 +21,9 @@ int exec_lfork(vm_t *vm, program_t *p)
     for (int i = 0; i < 1; ++i) {
         get_arg(&args[i], vm->arena, &p->pc);
     }
-    debug_args(args);
+
     prog_t tmp = dup_program(p);
     tmp.program.pc = (st + (args[0].data.ind.ind)) % MEM_SIZE;
-    my_memcpy(tmp.program.registers, p->registers, sizeof(p->registers));
-    update_cycle_to_wait(vm, &tmp.program);
     vec_pushback(&vm->programs, &tmp);
     return 0;
 }

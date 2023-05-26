@@ -9,7 +9,8 @@
     #define INSTRUCTIONS_H_
 
     #include <stdbool.h>
-#include "corewar.h"
+
+    #include "corewar/corewar.h"
 
 typedef struct indirect_s {
     short ind;
@@ -70,5 +71,6 @@ void debug_args(argument_t *args);
 //Writers
 void write_int(u_char *memory, int index, int content);
 int read_int(u_char *memory, int index);
-int swap_endian_short(int val);
+
+
 #endif /* !INSTRUCTIONS_H_ */

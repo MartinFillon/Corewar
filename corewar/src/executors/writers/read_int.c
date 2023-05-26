@@ -7,9 +7,15 @@
 
 #include "my_stdlib.h"
 
+#include "corewar/corewar.h"
+
 int read_int(u_char *memory, int index)
 {
-    int i = 0;
-    my_memcpy(&i, memory + index, sizeof(int));
-    return i;
+    int val = 0;
+
+    if (index + sizeof(int) < MEM_SIZE) {
+        my_memcpy(&val, &memory[index], sizeof(int));
+    }
+
+    return val;
 }

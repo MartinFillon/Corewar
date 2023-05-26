@@ -5,6 +5,7 @@
 ** get_arg
 */
 
+#include <limits.h>
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -22,7 +23,9 @@ arg_types_t get_dir(u_char *memory, int *pc)
     arg_types_t arg = {0};
 
     arg.dir = 0;
-    my_memcpy(&arg.dir, memory + *pc, DIR_SIZE);
+    if (*pc + DIR_SIZE < MEM_SIZE) {
+        my_memcpy(&arg.dir, &memory[*pc % MEM_SIZE], DIR_SIZE);
+    }
     arg.dir = swap_endian(arg.dir);
     inc_pc(pc, DIR_SIZE);
     return arg;
@@ -33,7 +36,9 @@ arg_types_t get_ind(u_char *memory, int *pc)
     arg_types_t arg = {0};
 
     arg.ind.ind = 0;
-    my_memcpy(&arg.ind.ind, memory + *pc, IND_SIZE);
+    if (*pc + IND_SIZE < MEM_SIZE) {
+        my_memcpy(&arg.ind.ind, &memory[*pc % MEM_SIZE], IND_SIZE);
+    }
     inc_pc(pc, IND_SIZE);
     arg.ind.ind = swap_endian_short(arg.ind.ind);
     return arg;
@@ -43,10 +48,10 @@ arg_types_t get_reg(u_char *memory, int *pc)
 {
     arg_types_t arg = {0};
 
-    arg.reg = memory[*pc];
+    arg.reg = memory[*pc % MEM_SIZE];
     inc_pc(pc, 1);
     if (arg.reg < 1 || arg.reg > REG_NUMBER)
-        arg.reg = -1;
+        arg.reg = CHAR_MAX;
     return arg;
 }
 
@@ -63,8 +68,11 @@ void get_ind_value(
 
 int get_value(argument_t *args, program_t *p, ind_state_t *ind_state)
 {
-    if (args->arg_type == T_REG)
+    if (args->arg_type == T_REG) {
+        if (args->data.reg < 1 || args->data.reg > REG_NUMBER)
+            return CHAR_MAX;
         return p->registers[args->data.reg - 1];
+    }
     if (args->arg_type == T_DIR)
         return args->data.dir;
     get_ind_value(
@@ -79,8 +87,8 @@ void get_arg(argument_t *arg, u_char *memory, int *pc)
         return;
     if (arg->is_index == false)
         arg->data = GETTERS[arg->arg_type](memory, pc);
-    if (arg->is_index == true && arg->arg_type != T_REG)
+    else if (arg->is_index == true && arg->arg_type != T_REG)
         arg->data = get_ind(memory, pc);
-    if (arg->is_index == true && arg->arg_type == T_REG)
+    else if (arg->is_index == true && arg->arg_type == T_REG)
         arg->data = get_reg(memory, pc);
 }
