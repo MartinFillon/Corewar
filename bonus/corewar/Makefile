@@ -16,11 +16,13 @@ SRC = 	src/main.c								\
 		src/vm/dump_memory.c					\
 		src/vm/run_cycles.c						\
 		src/vm/run_cycle.c						\
+		src/vm/alive.c							\
 		src/executors/getters/get_direct.c		\
 		src/executors/getters/get_arg.c			\
 		src/executors/getters/get_arg_types.c	\
 		src/executors/getters/get_indirect.c	\
 		src/executors/writers/write_int.c		\
+		src/executors/writers/read_int.c		\
 		src/executors/add.c						\
 		src/executors/aff.c						\
 		src/executors/and.c						\
@@ -37,6 +39,7 @@ SRC = 	src/main.c								\
 		src/executors/sub.c						\
 		src/executors/xor.c						\
 		src/executors/zjmp.c					\
+		src/executors/utils.c					\
 		src/arguments/parse_arguments.c			\
 		src/arguments/parse_argv.c				\
 		src/programs/check_program.c			\
@@ -54,7 +57,6 @@ LDFLAGS		+=	-L../lib
 LDLIBS		+=	-lmy
 
 ifeq ($(DEBUG),1)
-	CC = clang
 	CFLAGS += -g3 -fsanitize=address
 	LDFLAGS += -fsanitize=address
 endif
