@@ -18,11 +18,6 @@ fclean:	clean
 	@for i in $(SRC); do make -C $$i fclean; done
 	make -C tests fclean
 
-tests_run:
-	make -C tests/ re
-	clear
-	-./unit_tests
-
 re:	fclean all
 
 .PHONY: all clean fclean re tests_run
