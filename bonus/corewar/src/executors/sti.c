@@ -20,6 +20,7 @@ int exec_sti(vm_t *vm, program_t *p)
     argument_t *args = (argument_t[4]){0};
     ind_state_t ind_state = {vm->arena, p->pc, true};
     int st = p->pc;
+    int write_addr = 0;
 
     get_arg_types(vm->arena, &p->pc, args);
     args[1].is_index = true;
@@ -30,9 +31,11 @@ int exec_sti(vm_t *vm, program_t *p)
             (args[i].arg_type == T_REG && (args[i].data.reg == CHAR_MAX)))
             return 0;
     }
+    write_addr =(st + (get_value(&args[1], p, &ind_state) +
+        get_value(&args[2], p, &ind_state)) % IDX_MOD) % MEM_SIZE;
     write_int(
-        vm->arena, (st + (get_value(&args[1], p, &ind_state) +
-        get_value(&args[2], p, &ind_state)) % IDX_MOD) % MEM_SIZE,
+        vm->arena, write_addr,
         swap_endian(get_value(&args[0], p, &ind_state)));
+    printf("{name:%s, address:%d, size:%d}\n", p->header.prog_name, write_addr, REG_SIZE);
     return 0;
 }
