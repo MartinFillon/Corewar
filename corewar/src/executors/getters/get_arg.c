@@ -5,12 +5,6 @@
 ** get_arg
 */
 
-#include <limits.h>
-#include <stdbool.h>
-#include <stdio.h>
-
-#include "my_stdio.h"
-
 #include "corewar/corewar.h"
 #include "corewar/instructions.h"
 #include "corewar/op.h"
@@ -68,9 +62,8 @@ void get_ind_value(
 
 int get_value(argument_t *args, program_t *p, ind_state_t *ind_state)
 {
-    if (args->arg_type == T_REG) {
-        if (args->data.reg < 1 || args->data.reg > REG_NUMBER)
-            return CHAR_MAX;
+    if (args->arg_type == T_REG &&
+        (args->data.reg >= 1 && args->data.reg <= REG_NUMBER)) {
         return p->registers[args->data.reg - 1];
     }
     if (args->arg_type == T_DIR)
