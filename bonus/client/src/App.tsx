@@ -1,29 +1,34 @@
-import { useEffect, useRef } from "react";
-import { io } from "socket.io-client";
+import { useState } from "react";
+import Header from "./components/Header";
+import SetupFight from "./components/SetupFight";
+import Arena from "./components/Arena";
+import Champion from "../../server/src/types/champion";
 
-function App() {
-  const socketRef = useRef(io("http://localhost:3000"));
+type CurrentView = "setup" | "fight";
 
-  useEffect(() => {
-    socketRef.current.on("noArg", () => {
-      console.log("noArg");
-    });
-
-    console.log(socketRef.current);
-  }, []);
+const App = () => {
+  const [currentView, setCurrentView] = useState<CurrentView>("setup");
+  const [arenaChamps, setArenaChamps] = useState<Champion[]>([]);
 
   return (
-    <main className="flex h-screen items-center justify-around">
-      <button
-        className="text-xl border rounded-lg p-2"
-        onClick={() => {
-          socketRef.current.emit("hello");
-        }}
-      >
-        start
-      </button>
+    <main className="flex flex-col min-h-screen items-center">
+      <Header />
+
+      {
+        {
+          setup: (
+            <SetupFight
+              onStart={(champs) => {
+                setArenaChamps(champs);
+                setCurrentView("fight");
+              }}
+            />
+          ),
+          fight: <Arena champions={arenaChamps} />,
+        }[currentView]
+      }
     </main>
   );
-}
+};
 
 export default App;

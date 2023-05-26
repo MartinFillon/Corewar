@@ -1,11 +1,16 @@
+import { ChildProcessWithoutNullStreams } from "child_process";
+import Champion from "./champion";
+
 export interface ServerToClientEvents {
-  noArg: () => void;
-  basicEmit: (a: number, b: string, c: Buffer) => void;
-  withAck: (d: string, callback: (e: number) => void) => void;
+  error: (message: string) => void;
+  setChampions: (champions: Champion[]) => void;
+  // setFight: (fightPID: number) => void;
+  // setFightStatus: (isFighting: boolean) => void;
 }
 
 export interface ClientToServerEvents {
-  hello: () => void;
+  getChampions: () => void;
+  requestFight: (champions: Champion[]) => void;
 }
 
 export interface InterServerEvents {
@@ -13,6 +18,6 @@ export interface InterServerEvents {
 }
 
 export interface SocketData {
-  name: string;
-  age: number;
+  fightProc?: ChildProcessWithoutNullStreams;
+  isFighting: boolean;
 }
