@@ -21,7 +21,7 @@ int check_live(size_t instruction, vec_str_t *params)
 
 int check_zjmp(size_t instruction, vec_str_t *params)
 {
-    if (params->data[0]->data[0] == 'r')
+    if (params->data[0]->data[0] != '%')
         my_dprintf(2, "%s: takes an index as parameter\n",
         OP_NAME[instruction].name);
     return SUCCESS;
