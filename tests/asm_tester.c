@@ -115,3 +115,29 @@ Test(wrong_file, errbase, .init = redirect_all_std)
     launch_parser(&champ, "no_file.cor");
     cr_assert(ERROR);
 }
+
+Test(parse_body, errbase, .init = redirect_all_std)
+{
+    asm_t champ;
+    str_t *line = str_create("live %1\nlive %2\n");
+    vec_str_t *body = str_split(line, STR("\n"));
+    str_t *buffer = str_create("");
+    str_t *expected = str_create("");
+    parse_body(body, &champ, &buffer);
+    str_cadd(&expected, 0x01);
+    get_direct_int(DIR_SIZE, 1, &expected);
+    get_direct_int(DIR_SIZE, 2, &expected);
+    cr_assert(buffer == expected);
+}
+
+Test(direct_index, params, .init = redirect_all_std)
+{
+    str_t *buffer = str_create("");
+    str_t *expected = str_create("");
+    get_direct_int(DIR_SIZE, 3, &buffer);
+    str_cadd(&expected, 3 / (65536 * 256));
+    str_cadd(&expected, (3 / 65536) % 256);
+    str_cadd(&expected, (3 / 256) % 256);
+    str_cadd(&expected, 3 / 256);
+    cr_assert(buffer == expected);
+}
