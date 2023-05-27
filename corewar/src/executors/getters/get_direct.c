@@ -5,17 +5,21 @@
 ** get_direct
 */
 
+#include "my_stdlib.h"
+
 #include "corewar/op.h"
-
 #include "corewar/corewar.h"
+#include "corewar/instructions.h"
 
-int get_direct(u_char *memory, int memory_index)
+arg_types_t get_dir(u_char *memory, int *pc)
 {
-    int direct = 0;
+    arg_types_t arg = {0};
 
-    for (int i = 0; i < DIR_SIZE; i++) {
-        direct <<= 8;
-        direct += memory[memory_index + i];
+    arg.dir = 0;
+    if (*pc + DIR_SIZE < MEM_SIZE) {
+        my_memcpy(&arg.dir, &memory[*pc % MEM_SIZE], DIR_SIZE);
     }
-    return direct;
+    arg.dir = swap_endian(arg.dir);
+    inc_pc(pc, DIR_SIZE);
+    return arg;
 }

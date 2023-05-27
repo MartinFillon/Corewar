@@ -5,25 +5,11 @@
 ** load programs into memory
 */
 
-#include <stdbool.h>
-
-#include "my_json.h"
 #include "my_stdio.h"
 #include "my_stdlib.h"
-#include "my_vec.h"
 
 #include "corewar/arguments.h"
 #include "corewar/corewar.h"
-
-static int get_total_programs_size(vec_prog_t *programs)
-{
-    int total_size = 0;
-
-    for (size_t i = 0; i < programs->size; ++i)
-        total_size += programs->data[i].program.header.prog_size;
-
-    return total_size;
-}
 
 static bool check_overlap(vm_t *vm, int mem_idx, int prog_size)
 {
@@ -40,8 +26,7 @@ static bool check_overlap(vm_t *vm, int mem_idx, int prog_size)
 bool load_programs(vm_t *vm)
 {
     vec_prog_t *programs = vm->programs;
-    int total_size = get_total_programs_size(programs);
-    int mem_gap = (MEM_SIZE - total_size) / programs->size;
+    int mem_gap = MEM_SIZE / programs->size;
     int mem_idx = 0;
 
     for (size_t i = 0; i < programs->size; ++i) {
@@ -55,8 +40,7 @@ bool load_programs(vm_t *vm)
         programs->data[i].address = mem_idx;
         programs->data[i].program.pc = mem_idx;
         my_memcpy(vm->arena + mem_idx, p->body, p->header.prog_size);
-        mem_idx += programs->data[i].program.header.prog_size + mem_gap;
-        mem_idx %= MEM_SIZE;
+        mem_idx = (mem_idx + mem_gap) % MEM_SIZE;
     }
     return true;
 }

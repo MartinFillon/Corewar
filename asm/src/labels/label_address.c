@@ -51,6 +51,7 @@ void get_label_value(
 {
     long value = 0;
 
+    (type == 0) ? type = IND_SIZE : 0;
     str_slice(&label, 1, label->length);
     str_cadd(&label, ':');
     for (size_t i = 0; i < assembler->labels->size; i++){

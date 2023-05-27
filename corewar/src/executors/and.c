@@ -5,40 +5,25 @@
 ** and
 */
 
-#include <stdio.h>
-#include <sys/types.h>
-
 #include "corewar/arguments.h"
 #include "corewar/corewar.h"
+#include "corewar/instructions.h"
 #include "corewar/op.h"
-
-
-void interpret_binary(int *a, u_char t, vm_t *vm, int st)
-{
-    if (t == 0b11)
-        *a = vm->arena[(st + *a % IDX_MOD) % MEM_SIZE];
-}
 
 int exec_and(vm_t *vm, program_t *p)
 {
-    u_char *arg_types = (u_char[4]){0};
-    int reg = -1;
-    int arg1 = 0;
-    int arg2 = 0;
-    int st = p->pc;
+    argument_t *args = (argument_t[4]){0};
+    ind_state_t ind_state = {vm->arena, p->pc, true};
 
-    p->pc = (p->pc + 1) % MEM_SIZE;
-    get_arg_types(vm->arena, p->pc, arg_types);
-    p->pc = (p->pc + 1) % MEM_SIZE;
-    get_arg(&arg1, vm->arena, &p->pc, arg_types[0]);
-    get_arg(&arg2, vm->arena, &p->pc, arg_types[1]);
-    get_arg(&reg, vm->arena, &p->pc, arg_types[2]);
-    interpret_binary(&arg1, arg_types[0], vm, st);
-    interpret_binary(&arg2,arg_types[1], vm, st);
-    if (arg_types[0] == T_REG)
-        arg1 = p->registers[arg1 - 1];
-    if (arg_types[1] == T_REG)
-        arg2 = p->registers[arg2 - 1];
-    p->carry = (p->registers[reg - 1] = arg1 & arg2) == 0;
+    get_arg_types(vm->arena, &p->pc, args);
+    for (int i = 0; i < 3; ++i) {
+        get_arg(&args[i], vm->arena, &p->pc);
+        if (args[i].arg_type == 0 ||
+            (args[i].arg_type == T_REG && (args[i].data.reg == CHAR_MAX)))
+            return 0;
+    }
+    p->registers[args[2].data.reg - 1] =
+        get_value(&args[0], p, &ind_state) & get_value(&args[1], p, &ind_state);
+    p->carry = p->registers[args[2].data.reg - 1] == 0;
     return 0;
 }

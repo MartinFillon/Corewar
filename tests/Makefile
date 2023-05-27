@@ -7,45 +7,9 @@
 
 CC = gcc
 
-SRC_VM = ../corewar/
-
 SRC_ASM = ../asm/
 
-SRC = 	$(SRC_VM)src/utils.c							\
-		$(SRC_VM)src/op.c								\
-		$(SRC_VM)src/vm/vm.c							\
-		$(SRC_VM)src/vm/load_programs.c					\
-		$(SRC_VM)src/vm/order_programs.c				\
-		$(SRC_VM)src/vm/dump_memory.c					\
-		$(SRC_VM)src/vm/run_cycles.c					\
-		$(SRC_VM)src/vm/run_cycle.c						\
-		$(SRC_VM)src/executors/getters/get_direct.c		\
-		$(SRC_VM)src/executors/getters/get_arg.c		\
-		$(SRC_VM)src/executors/getters/get_arg_types.c	\
-		$(SRC_VM)src/executors/getters/get_indirect.c	\
-		$(SRC_VM)src/executors/writers/write_int.c		\
-		$(SRC_VM)src/executors/add.c					\
-		$(SRC_VM)src/executors/aff.c					\
-		$(SRC_VM)src/executors/and.c					\
-		$(SRC_VM)src/executors/fork.c					\
-		$(SRC_VM)src/executors/ld.c						\
-		$(SRC_VM)src/executors/ldi.c					\
-		$(SRC_VM)src/executors/lfork.c					\
-		$(SRC_VM)src/executors/live.c					\
-		$(SRC_VM)src/executors/lld.c					\
-		$(SRC_VM)src/executors/lldi.c					\
-		$(SRC_VM)src/executors/or.c						\
-		$(SRC_VM)src/executors/st.c						\
-		$(SRC_VM)src/executors/sti.c					\
-		$(SRC_VM)src/executors/sub.c					\
-		$(SRC_VM)src/executors/xor.c					\
-		$(SRC_VM)src/executors/zjmp.c					\
-		$(SRC_VM)src/arguments/parse_arguments.c		\
-		$(SRC_VM)src/arguments/parse_argv.c				\
-		$(SRC_VM)src/programs/check_program.c			\
-		$(SRC_VM)src/programs/programs.c				\
-		$(SRC_VM)src/programs/read_program.c			\
-		$(SRC_ASM)src/header/parse_write_header.c 		\
+SRC = 	$(SRC_ASM)src/header/parse_write_header.c 		\
 		$(SRC_ASM)src/header/find_prog_size.c 			\
 		$(SRC_ASM)src/body/parse_body.c					\
 		$(SRC_ASM)src/body/direct_params.c 				\
@@ -65,8 +29,7 @@ SRC = 	$(SRC_VM)src/utils.c							\
 		$(SRC_ASM)src/utils_asm.c						\
 		$(SRC_ASM)src/parser.c
 
-TESTS 	=	instructions_tester.c	\
-			asm_tester.c
+TESTS 	=	asm_tester.c
 
 LDLIBS 		+= -lcriterion -lgcov --coverage
 CFLAGS		+=	-Wall -Wextra -Werror --coverage

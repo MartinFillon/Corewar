@@ -11,6 +11,15 @@
 
 #include "asm/asm.h"
 
+void clean_comments_lines(str_t **line)
+{
+    if (str_find(*line, STR("#"), 0) != -1){
+        str_slice(line, 0, str_find(*line, STR("#"), 0));
+        str_trim(line, ' ');
+        str_trim(line, '\t');
+    }
+}
+
 void clean_comments(vec_str_t **words)
 {
     for (size_t i = 0; i < (*words)->size; i++){
