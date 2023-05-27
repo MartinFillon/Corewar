@@ -1,11 +1,11 @@
 import { ChildProcessWithoutNullStreams } from "child_process";
 import Champion from "./champion";
+import { FightUpdate } from "./fight";
 
 export interface ServerToClientEvents {
   error: (message: string) => void;
   setChampions: (champions: Champion[]) => void;
-  // setFight: (fightPID: number) => void;
-  // setFightStatus: (isFighting: boolean) => void;
+  pushFightUpdate: (update: FightUpdate) => void;
 }
 
 export interface ClientToServerEvents {

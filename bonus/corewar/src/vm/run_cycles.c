@@ -20,6 +20,10 @@ static void print_winner(vm_t *vm)
             "The player %d(%s)has won.\n", vm->last_live->number,
             vm->last_live->program.header.prog_name
         );
+        my_dprintf(
+            2, "{\"action\":\"winner\",\"pid\":%d}\n",
+            vm->last_live->program.pid
+        );
     }
 }
 
@@ -37,7 +41,9 @@ void run_vm(vm_t *vm)
     run_vm_init(vm);
 
     while (programs_alive(vm)) {
-        my_dprintf(2, "{\"action\":\"cycle\",\"nb_cycle\":%d}\n", nb_cycle);
+        if (nb_cycle % 3 == 0) {
+            my_dprintf(2, "{\"action\":\"cycle\",\"nb_cycle\":%d}\n", nb_cycle);
+        }
         if (nb_cycle == vm->nbr_cycles_to_dump) {
             dump_memory(vm);
             break;
