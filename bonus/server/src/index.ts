@@ -10,7 +10,7 @@ import { spawn } from "child_process";
 import ReadLine from "readline";
 import { streamUpdates } from "./fight";
 
-const COREWAR_BIN = "../corewar/corewar";
+const COREWAR_BIN = "./corewar";
 
 const io = new Server<
   ClientToServerEvents,
