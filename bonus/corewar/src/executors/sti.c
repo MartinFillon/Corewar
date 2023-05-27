@@ -38,8 +38,8 @@ int exec_sti(vm_t *vm, program_t *p)
         vm->arena, write_addr, swap_endian(get_value(&args[0], p, &ind_state))
     );
     my_dprintf(
-        2, "{\"action\":\"memory\",\"name\":\"%s\",\"address\":%d,\"size\":%d}\n",
-        p->header.prog_name, write_addr, REG_SIZE
+        2, "{\"action\":\"memory\",\"pid\":%d,\"address\":%d,\"size\":%d}\n",
+        p->pid, write_addr, REG_SIZE
     );
     return 0;
 }

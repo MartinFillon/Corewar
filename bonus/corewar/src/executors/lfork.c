@@ -24,9 +24,7 @@ int exec_lfork(vm_t *vm, program_t *p)
     }
 
     prog_t tmp = dup_program(p);
-    my_dprintf(
-        2, "{\"action\":\"fork\",\"name\":\"%s\"}\n", p->header.prog_name
-    );
+    my_dprintf(2, "{\"action\":\"fork\",\"pid\":%d}\n", p->pid);
     tmp.program.pc = (st + (args[0].data.ind.ind)) % MEM_SIZE;
     update_cycle_to_wait(vm, &tmp.program);
     vec_pushback(&vm->programs, &tmp);

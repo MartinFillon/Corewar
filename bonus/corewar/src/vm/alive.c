@@ -5,6 +5,8 @@
 ** alive
 */
 
+#include "my_stdio.h"
+
 #include "corewar/corewar.h"
 
 static void kill_children(vec_prog_t *progs, int number)
@@ -27,6 +29,10 @@ void check_alive(vm_t *vm)
 
         if (vm->programs->data[i].program.is_alive == false) {
             vm->programs->data[i].is_running = false;
+            my_dprintf(
+                2, "{\"action\":\"dead\",\"pid\":%d}\n",
+                vm->programs->data[i].number
+            );
             kill_children(vm->programs, vm->programs->data[i].number);
         }
 

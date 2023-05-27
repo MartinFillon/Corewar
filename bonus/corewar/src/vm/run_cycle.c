@@ -45,6 +45,11 @@ void run_cycle(vm_t *vm)
         u_char instruction_idx =
             get_instruction(vm, &vm->programs->data[i].program);
         if (instruction_idx != INVALID_INSTRUCTION) {
+            my_dprintf(
+                2, "{\"action\":\"exec\",\"pid\":%d,\"pc\":%d}\n",
+                vm->programs->data[i].program.pid,
+                vm->programs->data[i].program.pc % MEM_SIZE
+            );
             op_tab[instruction_idx].func(vm, &vm->programs->data[i].program);
             update_cycle_to_wait(vm, &vm->programs->data[i].program);
         } else {
