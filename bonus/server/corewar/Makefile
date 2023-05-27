@@ -52,8 +52,8 @@ NAME = corewar
 OBJ = $(SRC:.c=.o)
 
 CFLAGS		+=	-Wall -Wextra -Werror
-CPPFLAGS	+=	-I../../include
-LDFLAGS		+=	-L../../lib
+CPPFLAGS	+=	-I./include
+LDFLAGS		+=	-L./lib
 LDLIBS		+=	-lmy
 
 ifeq ($(DEBUG),1)
@@ -61,17 +61,22 @@ ifeq ($(DEBUG),1)
 	LDFLAGS += -fsanitize=address
 endif
 
-all: $(NAME)
+all: lib $(NAME)
 
 $(NAME): $(OBJ)
 	$(CC) -o $(NAME) $(OBJ) $(LDFLAGS) $(LDLIBS)
 
+lib:
+	make -C ./lib
+
 clean:
 	$(RM) $(OBJ)
+	make -C ./lib clean
 
 fclean: clean
 	$(RM) $(NAME)
+	make -C ./lib fclean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re lib
