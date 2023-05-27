@@ -1,4 +1,5 @@
 import Champion from "../../../../server/src/types/champion";
+import humanFileSize from "../../utils/humanFileSize";
 
 type ChampionListProps = {
   pipeline: Champion[];
@@ -12,7 +13,13 @@ const ChampionList = ({ pipeline, onRemove }: ChampionListProps) => (
         <div className="card-body">
           <h2 className="card-title">{item.name}</h2>
 
-          <small className="font-mono">{item.path}</small>
+          <div className="flex flex-wrap gap-1 justify-between items-center font-mono">
+            <small className="badge badge-sm whitespace-nowrap">
+              {item.path.length > 15 ? `...${item.path.slice(-15)}` : item.path}
+            </small>
+
+            <small className="badge badge-sm">{humanFileSize(item.size)}</small>
+          </div>
 
           <p className="text-lg">{item.comment}</p>
 

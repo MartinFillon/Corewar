@@ -17,9 +17,7 @@ const SetupFight = ({ onStart }: SetupFightProps) => {
   }
 
   return (
-    <div className="flex flex-col items-center">
-      <h1 className="text-2xl mb-4">Setup arena</h1>
-
+    <div className="flex flex-col items-center mt-8">
       <AddChampion
         champions={champions}
         onAdd={(champ) => {
