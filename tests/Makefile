@@ -7,44 +7,66 @@
 
 CC = gcc
 
-SRC_DIR = ../corewar/
+SRC_VM = ../corewar/
 
-SRC = 	$(SRC_DIR)src/utils.c								\
-		$(SRC_DIR)src/op.c								\
-		$(SRC_DIR)src/vm/vm.c								\
-		$(SRC_DIR)src/vm/load_programs.c					\
-		$(SRC_DIR)src/vm/order_programs.c					\
-		$(SRC_DIR)src/vm/dump_memory.c					\
-		$(SRC_DIR)src/vm/run_cycles.c						\
-		$(SRC_DIR)src/vm/run_cycle.c						\
-		$(SRC_DIR)src/executors/getters/get_direct.c		\
-		$(SRC_DIR)src/executors/getters/get_arg.c			\
-		$(SRC_DIR)src/executors/getters/get_arg_types.c	\
-		$(SRC_DIR)src/executors/getters/get_indirect.c	\
-		$(SRC_DIR)src/executors/writers/write_int.c		\
-		$(SRC_DIR)src/executors/add.c						\
-		$(SRC_DIR)src/executors/aff.c						\
-		$(SRC_DIR)src/executors/and.c						\
-		$(SRC_DIR)src/executors/fork.c					\
-		$(SRC_DIR)src/executors/ld.c						\
-		$(SRC_DIR)src/executors/ldi.c						\
-		$(SRC_DIR)src/executors/lfork.c					\
-		$(SRC_DIR)src/executors/live.c					\
-		$(SRC_DIR)src/executors/lld.c						\
-		$(SRC_DIR)src/executors/lldi.c					\
-		$(SRC_DIR)src/executors/or.c						\
-		$(SRC_DIR)src/executors/st.c						\
-		$(SRC_DIR)src/executors/sti.c						\
-		$(SRC_DIR)src/executors/sub.c						\
-		$(SRC_DIR)src/executors/xor.c						\
-		$(SRC_DIR)src/executors/zjmp.c					\
-		$(SRC_DIR)src/arguments/parse_arguments.c			\
-		$(SRC_DIR)src/arguments/parse_argv.c				\
-		$(SRC_DIR)src/programs/check_program.c			\
-		$(SRC_DIR)src/programs/programs.c					\
-		$(SRC_DIR)src/programs/read_program.c
+SRC_ASM = ../asm/
 
-TESTS 	=	instructions_tester.c
+SRC = 	$(SRC_VM)src/utils.c							\
+		$(SRC_VM)src/op.c								\
+		$(SRC_VM)src/vm/vm.c							\
+		$(SRC_VM)src/vm/load_programs.c					\
+		$(SRC_VM)src/vm/order_programs.c				\
+		$(SRC_VM)src/vm/dump_memory.c					\
+		$(SRC_VM)src/vm/run_cycles.c					\
+		$(SRC_VM)src/vm/run_cycle.c						\
+		$(SRC_VM)src/executors/getters/get_direct.c		\
+		$(SRC_VM)src/executors/getters/get_arg.c		\
+		$(SRC_VM)src/executors/getters/get_arg_types.c	\
+		$(SRC_VM)src/executors/getters/get_indirect.c	\
+		$(SRC_VM)src/executors/writers/write_int.c		\
+		$(SRC_VM)src/executors/add.c					\
+		$(SRC_VM)src/executors/aff.c					\
+		$(SRC_VM)src/executors/and.c					\
+		$(SRC_VM)src/executors/fork.c					\
+		$(SRC_VM)src/executors/ld.c						\
+		$(SRC_VM)src/executors/ldi.c					\
+		$(SRC_VM)src/executors/lfork.c					\
+		$(SRC_VM)src/executors/live.c					\
+		$(SRC_VM)src/executors/lld.c					\
+		$(SRC_VM)src/executors/lldi.c					\
+		$(SRC_VM)src/executors/or.c						\
+		$(SRC_VM)src/executors/st.c						\
+		$(SRC_VM)src/executors/sti.c					\
+		$(SRC_VM)src/executors/sub.c					\
+		$(SRC_VM)src/executors/xor.c					\
+		$(SRC_VM)src/executors/zjmp.c					\
+		$(SRC_VM)src/arguments/parse_arguments.c		\
+		$(SRC_VM)src/arguments/parse_argv.c				\
+		$(SRC_VM)src/programs/check_program.c			\
+		$(SRC_VM)src/programs/programs.c				\
+		$(SRC_VM)src/programs/read_program.c			\
+		$(SRC_ASM)src/header/parse_write_header.c 		\
+		$(SRC_ASM)src/header/find_prog_size.c 			\
+		$(SRC_ASM)src/body/parse_body.c					\
+		$(SRC_ASM)src/body/direct_params.c 				\
+		$(SRC_ASM)src/body/indirect_params.c 			\
+		$(SRC_ASM)src/body/instruction_parameter.c		\
+		$(SRC_ASM)src/labels/parse_labels.c				\
+		$(SRC_ASM)src/labels/label_address.c 			\
+		$(SRC_ASM)src/error_handling/handle_errors.c	\
+		$(SRC_ASM)src/error_handling/impossible_labels.c\
+		$(SRC_ASM)src/error_handling/base_actions.c 	\
+		$(SRC_ASM)src/error_handling/fork_actions.c		\
+		$(SRC_ASM)src/error_handling/arithmetic_bitwise.c\
+		$(SRC_ASM)src/error_handling/load_values_ld.c 	\
+		$(SRC_ASM)src/error_handling/stores_value_st.c 	\
+		$(SRC_ASM)src/error_handling/header.c			\
+		$(SRC_ASM)src/create_file.c						\
+		$(SRC_ASM)src/utils_asm.c						\
+		$(SRC_ASM)src/parser.c
+
+TESTS 	=	instructions_tester.c	\
+			asm_tester.c
 
 LDLIBS 		+= -lcriterion -lgcov --coverage
 CFLAGS		+=	-Wall -Wextra -Werror --coverage
