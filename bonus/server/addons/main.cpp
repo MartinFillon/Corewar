@@ -7,6 +7,7 @@
 
 #include <fstream>
 #include <napi.h>
+#include <stdint.h>
 
 #define PROG_NAME_LENGTH 128
 #define COMMENT_LENGTH 2048
@@ -18,6 +19,14 @@ typedef struct header_s {
     int prog_size;
     char comment[COMMENT_LENGTH + 1];
 } header_t;
+
+int32_t swap_endian(int32_t val)
+{
+    return (
+        ((val & 0x000000FF) << 24) | ((val & 0x0000FF00) << 8) |
+        ((val & 0x00FF0000) >> 8) | ((val & 0xFF000000) >> 24)
+    );
+}
 
 Napi::Object readHeader(const Napi::CallbackInfo &info)
 {
@@ -45,6 +54,7 @@ Napi::Object readHeader(const Napi::CallbackInfo &info)
 
     returnValue.Set("name", header.prog_name);
     returnValue.Set("comment", header.comment);
+    returnValue.Set("progSize", swap_endian(header.prog_size));
 
     return returnValue;
 }

@@ -5,9 +5,10 @@ import {
   ServerToClientEvents,
   SocketData,
 } from "./types/ws";
-import { getChampions } from "./champions";
+import { checkValidChampions, getChampions } from "./champions";
 import { spawn } from "child_process";
 import ReadLine from "readline";
+import { streamUpdates } from "./fight";
 
 const COREWAR_BIN = "../corewar/corewar";
 
@@ -43,29 +44,34 @@ io.on("connection", (socket) => {
       return;
     }
 
+    try {
+      checkValidChampions(champions);
+    } catch (e) {
+      socket.emit("error", (e as Error).message);
+      return;
+    }
+
     client.isFighting = true;
     client.fightProc = spawn(
       COREWAR_BIN,
       champions.map((c) => c.path)
     );
 
-    const rl = ReadLine.createInterface({
-      input: client.fightProc.stderr,
+    client.fightProc.on("error", (e) => {
+      socket.emit("error", (e as Error).message);
+      client.isFighting = false;
+      client.fightProc = undefined;
     });
 
     client.fightProc.stdout.on("data", () => {});
 
-    rl.on("line", (line) => {
-      console.log(JSON.parse(line));
+    const rl = ReadLine.createInterface({
+      input: client.fightProc.stderr,
     });
 
+    streamUpdates(rl, socket, 5);
 
-    client.fightProc.on("close", (code) => {
-      if (code !== 0) {
-        console.log("fight failed");
-      }
-
-      console.log(`child process exited with code ${code}`);
+    client.fightProc.on("close", () => {
       client.isFighting = false;
       client.fightProc = undefined;
     });
