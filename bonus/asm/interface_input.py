@@ -26,10 +26,9 @@ def enter_parametre(f, main_frame, the_instruction):
         direct_param = tk.CTkEntry(master=main_frame, placeholder_text="direct (%)")
         direct_param.pack(pady=10, padx=10)
         result = direct_param.get()
-        print("RESULT = " + result)
-        # if result and result[0] == "%":
-        f.write(result)
-        print(result + " ")
+        if result and result[0] == "%":
+            f.write(result)
+            print(result + " ")
 
     def register(f):
         register_param = tk.CTkEntry(master=main_frame, placeholder_text="register (r)")
@@ -126,53 +125,53 @@ def enter_parametre(f, main_frame, the_instruction):
         f.write(the_instruction + "\n")
     match the_instruction:
         case "live":
-            subbutton = tk.CTkButton(master=main_frame, text="Next", command=singles(f))
-            subbutton.pack(pady=10, padx=10)
+            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=singles(f))
+            subbutton.pack(pady=5, padx=5)
         case "ld":
-            subbutton = tk.CTkButton(master=main_frame, text="Next", command=load(f))
-            subbutton.pack(pady=10, padx=10)
+            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=load(f))
+            subbutton.pack(pady=5, padx=5)
         case "st":
-            subbutton = tk.CTkButton(master=main_frame, text="Next", command=st(f))
-            subbutton.pack(pady=10, padx=10)
+            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=st(f))
+            subbutton.pack(pady=5, padx=5)
         case "add":
-            subbutton = tk.CTkButton(master=main_frame, text="Next", command=arithmetics(f))
-            subbutton.pack(pady=10, padx=10)
+            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=arithmetics(f))
+            subbutton.pack(pady=5, padx=5)
         case "sub":
-            subbutton = tk.CTkButton(master=main_frame, text="Next", command=arithmetics(f))
-            subbutton.pack(pady=10, padx=10)
+            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=arithmetics(f))
+            subbutton.pack(pady=5, padx=5)
         case "and":
-            subbutton = tk.CTkButton(master=main_frame, text="Next", command=bitwise(f))
-            subbutton.pack(pady=10, padx=10)
+            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=bitwise(f))
+            subbutton.pack(pady=5, padx=5)
         case "or":
-            subbutton = tk.CTkButton(master=main_frame, text="Next", command=bitwise(f))
-            subbutton.pack(pady=10, padx=10)
+            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=bitwise(f))
+            subbutton.pack(pady=5, padx=5)
         case "xor":
-            subbutton = tk.CTkButton(master=main_frame, text="Next", command=bitwise(f))
-            subbutton.pack(pady=10, padx=10)
+            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=bitwise(f))
+            subbutton.pack(pady=5, padx=5)
         case "zjmp":
-            subbutton = tk.CTkButton(master=main_frame, text="Next", command=singles(f))
-            subbutton.pack(pady=10, padx=10)
+            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=singles(f))
+            subbutton.pack(pady=5, padx=5)
         case "ldi":
-            subbutton = tk.CTkButton(master=main_frame, text="Next", command=loadindex(f))
-            subbutton.pack(pady=10, padx=10)
+            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=loadindex(f))
+            subbutton.pack(pady=5, padx=5)
         case "sti":
-            subbutton = tk.CTkButton(master=main_frame, text="Next", command=sti(f))
-            subbutton.pack(pady=10, padx=10)
+            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=sti(f))
+            subbutton.pack(pady=5, padx=5)
         case "fork":
-            subbutton = tk.CTkButton(master=main_frame, text="Next", command=singles(f))
-            subbutton.pack(pady=10, padx=10)
+            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=singles(f))
+            subbutton.pack(pady=5, padx=5)
         case "lld":
-            subbutton = tk.CTkButton(master=main_frame, text="Next", command=load(f))
-            subbutton.pack(pady=10, padx=10)
+            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=load(f))
+            subbutton.pack(pady=5, padx=5)
         case "lldi":
-            subbutton = tk.CTkButton(master=main_frame, text="Next", command=loadindex(f))
-            subbutton.pack(pady=10, padx=10)
+            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=loadindex(f))
+            subbutton.pack(pady=5, padx=5)
         case "lfork":
-            subbutton = tk.CTkButton(master=main_frame, text="Next", command=singles(f))
-            subbutton.pack(pady=10, padx=10)
+            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=singles(f))
+            subbutton.pack(pady=5, padx=5)
         case "aff":
-            subbutton = tk.CTkButton(master=main_frame, text="Next", command=aff(f))
-            subbutton.pack(pady=10, padx=10)
+            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=aff(f))
+            subbutton.pack(pady=5, padx=5)
         case _:
             if (the_instruction[-1] != ":"):
                 print("Invalid Instruction or label (add : for label)")
@@ -198,13 +197,14 @@ def start_body(f):
             print(the_instruction + "\t")
 
         if (the_instruction[-1] == ":" or is_instruction(the_instruction) == True):
-            label = tk.CTkLabel(master=main_frame, justify=tk.LEFT, text=the_instruction)
-            label.pack(pady=10, padx=10)
+            textlab = tk.CTkLabel(master=main_frame, justify=tk.LEFT, text=the_instruction)
+            textlab.pack(pady=10, padx=10)
 
-        enter_parametre(f, main_frame, the_instruction)
+        add_param = tk.CTkButton(master=main_frame, text="Enter Parametre", command=enter_parametre(f, main_frame, the_instruction))
+        add_param.pack(pady=5, padx=5)
 
-        asm_button = tk.CTkButton(master=main_frame, text="Submit", command=enter_instruction)
-        asm_button.pack(pady=10, padx=10)
+    asm_button = tk.CTkButton(master=main_frame, text="Submit", command=enter_instruction)
+    asm_button.pack(pady=10, padx=10)
 
     asm.mainloop()
 
@@ -219,6 +219,14 @@ def start_header():
     file_entry = tk.CTkEntry(master=frame, placeholder_text="Champion (filename)")
     file_entry.pack(pady=50, padx=10)
 
+    label = tk.CTkLabel(master=frame, justify=tk.LEFT, text="HEADER")
+    label.pack(pady=10, padx=10)
+
+    header_name = tk.CTkEntry(master=frame, placeholder_text="name")
+    header_name.pack(pady=10, padx=10)
+
+    comment_name = tk.CTkEntry(master=frame, placeholder_text="comment")
+    comment_name.pack(pady=10, padx=10)
 
     def enter_header():
         print("Name: " + header_name.get())
@@ -228,17 +236,7 @@ def start_header():
         f = open(filename, "w")
         f.write("\t.name \"" + header_name.get() + "\"\n")
         f.write("\t.comment \"" + comment_name.get() + "\"\n\n")
-        root.quit()
         start_body(f)
-
-    label = tk.CTkLabel(master=frame, justify=tk.LEFT, text="HEADER")
-    label.pack(pady=10, padx=10)
-
-    header_name = tk.CTkEntry(master=frame, placeholder_text="name")
-    header_name.pack(pady=10, padx=10)
-
-    comment_name = tk.CTkEntry(master=frame, placeholder_text="comment")
-    comment_name.pack(pady=10, padx=10)
 
     button = tk.CTkButton(master=frame, text="Submit", command=enter_header)
     button.pack(pady=10, padx=10)
