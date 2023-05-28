@@ -22,6 +22,7 @@ const Arena = ({ champions, onExit }: ArenaProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [error, setError] = useState("");
   const [nbCycles, setNbCycles] = useState<number>(0);
+  const [cycleToDie, setCycleToDie] = useState<number>(0);
   const [winnerPid, setWinnerPid] = useState<number>(-1);
   const [fighters, setFighters] = useState<Fighter[]>(
     champions.map((champion) => ({
@@ -94,6 +95,9 @@ const Arena = ({ champions, onExit }: ArenaProps) => {
             return newFighters;
           });
           break;
+        case "cycle_to_die":
+          setCycleToDie(update.cycle_to_die);
+          break;
       }
     });
 
@@ -131,7 +135,11 @@ const Arena = ({ champions, onExit }: ArenaProps) => {
         <PcList fighters={fighters} canvasRef={canvasRef} />
       </div>
 
-      <LiveScore fighters={fighters} nbCycles={nbCycles} />
+      <LiveScore
+        fighters={fighters}
+        nbCycles={nbCycles}
+        cycleToDie={cycleToDie}
+      />
     </div>
   );
 };

@@ -10,4 +10,5 @@ export type FightUpdate =
   | { action: "cycle"; nb_cycle: number }
   | { action: "winner"; pid: number }
   | { action: "dead"; pid: number }
-  | { action: "exec"; pid: number; pc: number };
+  | { action: "exec"; pid: number; pc: number }
+  | { action: "cycle_to_die"; cycle_to_die: number };
