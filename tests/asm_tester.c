@@ -83,20 +83,6 @@ Test(size_prog_label, header)
     cr_assert_eq(header.prog_size, 0);
 }
 
-// Test(header_name, header)
-// {
-//     header_t header = {0};
-//     parse_header("abel.s", &header);
-//     cr_assert_str_eq(header.prog_name, "Abel");
-// }
-
-// Test(header_comment, header)
-// {
-//     header_t header = {0};
-//     parse_header("abel.s", &header);
-//     cr_assert_str_eq(header.comment, "L'amer noir.");
-// }
-
 Test(header_wrong_file, errbase)
 {
     header_t header = {0};
@@ -146,5 +132,3 @@ Test(indirect_index, params)
     str_cadd(&expected, 3 % 256);
     cr_assert_str_eq(buffer->data, expected->data);
 }
-
-
