@@ -13,7 +13,8 @@
 void free_vm(vm_t *vm)
 {
     for (size_t i = 0; i < vm->programs->size; ++i)
-        if (vm->programs->data[i].program.body != NULL)
+        if (vm->programs->data[i].address != -1 &&
+            vm->programs->data[i].program.body != NULL)
             free(vm->programs->data[i].program.body);
 
     free(vm->programs);
