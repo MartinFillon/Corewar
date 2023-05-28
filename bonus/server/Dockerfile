@@ -48,10 +48,10 @@ FROM node:18 as app
 
 WORKDIR /app
 
-COPY ./champions ./champions
 COPY --from=builder_addon /app/ ./addons/
 COPY --from=builder_corewar /app/corewar .
 COPY --from=builder_server /app/ .
+COPY ./champions ./champions
 
 EXPOSE 3000
 
