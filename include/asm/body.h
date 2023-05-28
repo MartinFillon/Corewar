@@ -31,6 +31,8 @@ int manage_indirect(
     str_t *param, str_t **buffer, size_t type, asm_t *assembler
 );
 
+void get_indirect(long nbr, str_t **buffer);
+
 void get_direct_int(size_t type, long nbr, str_t **buffer);
 
 #endif /* !BODY_H */

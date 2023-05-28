@@ -43,7 +43,7 @@ static void further_in_parameters(vec_str_t *input, int *size)
     } else {
         *size += 1;
     }
-    for (size_t i = 0; i < AFF; i++){
+    for (size_t i = 0; i <= AFF; i++){
         if (my_strcmp(input->data[0]->data, OP_NAME[i].name) == 0){
             find_for_params(input, i, size);
         }

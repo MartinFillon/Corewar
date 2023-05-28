@@ -15,7 +15,7 @@
 static const int BITS_IND_MAX = 65536;
 static const int MAX_BYTE_VAL = 256;
 
-static void get_indirect(long nbr, str_t **buffer)
+void get_indirect(long nbr, str_t **buffer)
 {
     if (nbr < 0) {
         nbr = BITS_IND_MAX + nbr;
