@@ -1,6 +1,7 @@
 	.name "Jon snow"
 	.comment "Winter is coming"
 
+crow:
 	sti r1, %:crow, %1
 
 hi:	live %234
