@@ -30,6 +30,10 @@ static void print_winner(vm_t *vm)
 static void run_vm_init(vm_t *vm)
 {
     vm->cycle_to_die = CYCLE_TO_DIE;
+    my_dprintf(
+        2, "{\"action\":\"cycle_to_die\",\"cycle_to_die\":%d}\n",
+        vm->cycle_to_die
+    );
 
     for (size_t i = 0; i < vm->programs->size; ++i)
         update_cycle_to_wait(vm, &vm->programs->data[i].program);
@@ -54,6 +58,10 @@ void run_vm(vm_t *vm)
         }
         if (vm->nbr_live >= NBR_LIVE) {
             vm->cycle_to_die -= CYCLE_DELTA;
+            my_dprintf(
+                2, "{\"action\":\"cycle_to_die\",\"cycle_to_die\":%d}\n",
+                vm->cycle_to_die
+            );
             vm->nbr_live = 0;
         }
 
