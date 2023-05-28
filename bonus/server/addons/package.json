@@ -1,0 +1,21 @@
+{
+  "name": "corewar_read_header",
+  "version": "1.0.0",
+  "description": "read .cor files",
+  "main": "index.ts",
+  "gypfile": true,
+  "scripts": {
+    "build": "node-gyp rebuild",
+    "clean": "node-gyp clean",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Martin Saldinger",
+  "license": "ISC",
+  "dependencies": {
+    "node-addon-api": "^6.1.0"
+  },
+  "devDependencies": {
+    "node-gyp": "^9.3.1"
+  }
+}

@@ -13,7 +13,6 @@
 #include "corewar/corewar.h"
 #include "corewar/op.h"
 
-
 static void print_winner(vm_t *vm)
 {
     if (vm->last_live != NULL) {
@@ -42,14 +41,14 @@ void run_vm(vm_t *vm)
             dump_memory(vm);
             break;
         }
-        if (nb_cycle > 0 && nb_cycle % vm->cycle_to_die == 0) {
+        if (vm->cycle_to_die < 0 ||
+            (nb_cycle > 0 && nb_cycle % vm->cycle_to_die == 0)) {
             check_alive(vm);
         }
         if (vm->nbr_live >= NBR_LIVE) {
             vm->cycle_to_die -= CYCLE_DELTA;
             vm->nbr_live = 0;
         }
-
         run_cycle(vm);
         nb_cycle++;
     }
