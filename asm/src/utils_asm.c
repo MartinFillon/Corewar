@@ -18,7 +18,7 @@ int str_count(str_t *str, char c)
     return count;
 }
 
-int swap_endian(int val)
+int swap_endian_int(int val)
 {
     return (
         (val & 0x000000ff) << 24 | (val & 0x0000ff00) << 8 |

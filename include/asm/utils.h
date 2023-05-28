@@ -9,7 +9,7 @@
     #define UTILS_H_
     #include "my_str.h"
 
-int swap_endian(int little);
+int swap_endian_int(int little);
 
 int str_count(str_t *str, char c);
 

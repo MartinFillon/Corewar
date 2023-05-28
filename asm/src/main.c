@@ -16,6 +16,7 @@ static void free_champ(asm_t *champ)
     for (size_t i = 0; i < champ->labels->size; i++){
         free(champ->labels->data[i].label);
     }
+    free(champ->labels);
     for (size_t i = 0; i < champ->champ->size; i++){
         vec_free(champ->champ->data[i].params);
     }

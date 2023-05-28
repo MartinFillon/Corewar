@@ -74,7 +74,7 @@ static int manage_instruction(str_t *line, asm_t *assembler, str_t **buffer)
 
 static int check_special_case(str_t *line)
 {
-    for (size_t i = 0; i < AFF; i++) {
+    for (size_t i = 0; i <= AFF; i++) {
         if (my_strcmp(line->data, OP_NAME[i].name) == 0){
             return SUCCESS;
         }

@@ -41,7 +41,7 @@ static void exclude_instructions(
     vec_str_t *words = NULL;
     label_t label = {0};
 
-    for (size_t i = 0; i < AFF; i++){
+    for (size_t i = 0; i <= AFF; i++){
         if (check_for_label(line, i) == false){
             return;
         }

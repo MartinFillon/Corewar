@@ -115,6 +115,7 @@ def get_instrucion_params(f, instruction, main_frame):
     save_params.pack(pady=10, padx=10)
 
 
+
 def start_body(f):
     asm = tk.CTk()
     asm.geometry("900x900")
@@ -150,6 +151,7 @@ def start_body(f):
 
     asm_button = tk.CTkButton(
         master=main_frame, text="Submit", command=enter_instruction)
+
     asm_button.pack(pady=10, padx=10)
 
     asm.mainloop()
@@ -163,8 +165,10 @@ def start_header():
     frame = tk.CTkFrame(master=root)
     frame.pack(pady=50, padx=50, fill="both", expand=True)
 
+
     file_entry = tk.CTkEntry(
         master=frame, placeholder_text="Champion (filename)")
+
     file_entry.pack(pady=50, padx=10)
 
     label = tk.CTkLabel(master=frame, justify=tk.LEFT, text="HEADER")
@@ -191,6 +195,7 @@ def start_header():
 
     print("Creating file...")
     root.mainloop()
+
 
 
 start_header()

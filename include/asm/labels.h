@@ -8,7 +8,6 @@
 #ifndef LABELS_H_
     #define LABELS_H_
     #include "my_str.h"
-    #include "asm/asm.h"
 
 typedef struct label_s {
     str_t *label;
@@ -16,6 +15,8 @@ typedef struct label_s {
 } label_t;
 
 VEC_DEF(label_t, label)
+
+typedef struct asm_s asm_t;
 
 int parse_labels(vec_str_t *lines, asm_t *assembler);
 
