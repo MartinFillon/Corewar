@@ -70,10 +70,6 @@ void get_prog_size(str_t *champ, int *size)
             return;
         }
     }
-    // for (size_t i = 0; i < input->size; i++) {
-    //     printf("%s ", input->data[i]->data);
-    // }
-    // printf("\n");
     further_in_parameters(input, size);
     vec_free(input);
 }
