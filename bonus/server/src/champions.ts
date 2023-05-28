@@ -11,8 +11,18 @@ export const getChampions = (): Champion[] => {
   return champions.map((champ) => {
     let path = join(CHAMPS_DIR, champ);
 
-    let { name, comment } = corewarHeaderParser.readHeader(path);
+    let { name, comment, progSize } = corewarHeaderParser.readHeader(path);
 
-    return { name, comment, path };
+    return { name, comment, path, size: progSize, address: 0 };
   });
+};
+
+export const checkValidChampions = (champions: Champion[]) => {
+  const validChampions = getChampions();
+
+  for (let champion of champions) {
+    if (validChampions.find((c) => c.path === champion.path) === undefined) {
+      throw new Error("Invalid champion");
+    }
+  }
 };
