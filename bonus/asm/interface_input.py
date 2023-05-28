@@ -3,178 +3,117 @@ import customtkinter as tk
 tk.set_appearance_mode("dark")
 tk.set_default_color_theme("green")
 
+INSTRUCTIONS = [
+    [
+        "live", 1, [["T_DIR"]]
+    ],
+    [
+        "ld", 2, [["T_DIR", "T_IND"], ["T_REG"]]
+    ],
+    [
+        "st", 2, [["T_REG"], ["T_DIR", "T_IND"]]
+    ],
+    [
+        "add", 3, [["T_REG"], ["T_REG"], ["T_REG"]]
+    ],
+    [
+        "sub", 3, [["T_REG"], ["T_REG"], ["T_REG"]]],
+    [
+        "and", 3, [["T_REG", "T_DIR", "T_IND"], [
+            "T_REG", "T_IND", "T_DIR"], ["T_REG"]]
+    ],
+    [
+        "or", 3, [["T_REG", "T_DIR", "T_IND"], [
+            "T_REG", "T_IND", "T_DIR"], ["T_REG"]]
+    ],
+    [
+        "xor", 3, [["T_REG", "T_DIR", "T_IND"], [
+            "T_REG", "T_IND", "T_DIR"], ["T_REG"]]
+    ],
+    [
+        "zjmp", 1, [["T_DIR"]]
+    ],
+    [
+        "ldi", 3, [["T_REG", "T_DIR", "T_IND"], [
+            "T_REG", "T_DIR"], ["T_REG"]]
+    ],
+    [
+        "fork", 1, [["T_DIR"]]
+    ],
+    [
+        "lld", 2, [["T_DIR", "T_IND"], ["T_REG"]]
+    ],
+    [
+        "lldi", 3, [["T_REG", "T_DIR", "T_IND"], [
+            "T_REG", "T_DIR"], ["T_REG"]]
+    ],
+    [
+        "lfork", 1, [["T_DIR"]]
+    ],
+    [
+        "aff", 1, [["T_REG"]]
+    ],
+    [
+        "sti", 3, [["T_REG"], ["T_REG", "T_DIR", "T_IND"], [
+            "T_DIR", "T_REG"]]
+    ]
+]
+
+ARGUMENT_TYPES_MESSAGES = {
+    "T_REG": "Register (r?)",
+    "T_DIR": "Direct (%?)",
+    "T_IND": "Indirect (?)"
+}
+
+
 def is_instruction(instruction):
-    if (instruction == "live" or instruction == "zjmp" or instruction == "aff"):
+    for i in INSTRUCTIONS:
+        if instruction == i[0]:
+            return i
+    return 0
+
+def contains(array, value):
+    for i in array:
+        if i == value:
+            return True
+    return False
+
+def verify_parameter_value(value, type):
+    if (value[0] == "r" and contains(type, "T_REG")):
         return True
-    if (instruction == "fork" or instruction == "lfork"):
+    if (value[0] == "%" and contains(type, "T_DIR")):
         return True
-    if (instruction == "ld" or instruction == "lld"):
-        return True
-    if (instruction == "st" or instruction == "sti"):
-        return True
-    if (instruction == "add" or instruction == "sub"):
-        return True
-    if (instruction == "and" or instruction == "or" or instruction == "xor"):
-        return True
-    if (instruction == "ldi" or instruction == "lldi"):
+    if (value[0] != "%" and value[0] != "r" and contains(type, "T_IND")):
         return True
     return False
 
-def enter_parametre(f, main_frame, the_instruction):
+def set_parameter_entry(instruction, main_frame, instruction_index):
+    string = ""
+    for i in instruction[2][instruction_index]:
+        string += ARGUMENT_TYPES_MESSAGES[i]
+        string += " "
+    return tk.CTkEntry(master=main_frame, placeholder_text=string)
 
-    def direct(f):
-        direct_param = tk.CTkEntry(master=main_frame, placeholder_text="direct (%)")
-        direct_param.pack(pady=10, padx=10)
-        result = direct_param.get()
-        if result and result[0] == "%":
-            f.write(result)
-            print(result + " ")
+def get_instrucion_params(f, instruction, main_frame):
+    params = []
+    for i in range(instruction[1]):
+        params.append(set_parameter_entry(instruction, main_frame, i))
+    for i in range(instruction[1]):
+        params[i].pack(pady=10, padx=10)
 
-    def register(f):
-        register_param = tk.CTkEntry(master=main_frame, placeholder_text="register (r)")
-        register_param.pack(pady=10, padx=10)
-        result = register_param.get()
-        if result and result[0] == "r":
-            f.write(result)
-            print(result + " ")
+    def on_save_params():
+        for i in range(instruction[1]):
+            value = params[i].get()
+            print("value => {}", value)
+            if (verify_parameter_value(value, instruction[2][i]) == False):
+                print("Error: parameter value not valid")
+                return
+            f.write(value + "\t")
 
-    def inddirec(f):
-        inddirec_param = tk.CTkEntry(master=main_frame, placeholder_text="direct (%) or indirect")
-        inddirec_param.pack(pady=10, padx=10)
-        result = inddirec_param.get()
-        if result and result[0] == "%":
-            f.write(result)
-            print(result + " ")
+    save_params = tk.CTkButton(
+        master=main_frame, text="Save Params", command=on_save_params)
+    save_params.pack(pady=10, padx=10)
 
-    def regindirec(f):
-        regindirec_param = tk.CTkEntry(master=main_frame, placeholder_text="register (r) or indirect")
-        regindirec_param.pack(pady=10, padx=10)
-        result = regindirec_param.get()
-        if result and (result[0] == "r" or result[0] != "%"):
-            f.write(result)
-            print(result + " ")
-
-    def regdirec(f):
-        regdirec_param = tk.CTkEntry(master=main_frame, placeholder_text="register (r) or direct (%)")
-        regdirec_param.pack(pady=10, padx=10)
-        result = regdirec_param.get()
-        if result and (result[0] == "r" or result[0] == "%"):
-            f.write(result)
-            print(result + " ")
-
-    def any(f):
-        any_param = tk.CTkEntry(master=main_frame, placeholder_text="register (r), indirect or direct (%)")
-        any_param.pack(pady=10, padx=10)
-        f.write(any_param.get())
-        print(any_param.get() + " ")
-
-    def singles(f):
-        direct(f)
-        f.write("\n")
-
-    def aff(f):
-        register(f)
-        f.write("\n")
-
-    def arithmetics(f):
-        register(f)
-        f.write(", ")
-        register(f)
-        f.write(", ")
-        register(f)
-        f.write("\n")
-
-    def bitwise(f):
-        any(f)
-        f.write(", ")
-        any(f)
-        f.write(", ")
-        register(f)
-        f.write("\n")
-
-    def load(f):
-        inddirec(f)
-        f.write(", ")
-        register(f)
-        f.write("\n")
-
-    def st(f):
-        register(f)
-        f.write(", ")
-        regindirec(f)
-        f.write("\n")
-
-    def loadindex(f):
-        any(f)
-        f.write(", ")
-        regdirec(f)
-        f.write(", ")
-        register(f)
-        f.write("\n")
-
-    def sti(f):
-        register(f)
-        f.write(", ")
-        any(f)
-        f.write(", ")
-        regdirec(f)
-        f.write("\n")
-
-    if (the_instruction[-1] == ":"):
-        print(the_instruction)
-        f.write(the_instruction + "\n")
-    match the_instruction:
-        case "live":
-            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=singles(f))
-            subbutton.pack(pady=5, padx=5)
-        case "ld":
-            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=load(f))
-            subbutton.pack(pady=5, padx=5)
-        case "st":
-            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=st(f))
-            subbutton.pack(pady=5, padx=5)
-        case "add":
-            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=arithmetics(f))
-            subbutton.pack(pady=5, padx=5)
-        case "sub":
-            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=arithmetics(f))
-            subbutton.pack(pady=5, padx=5)
-        case "and":
-            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=bitwise(f))
-            subbutton.pack(pady=5, padx=5)
-        case "or":
-            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=bitwise(f))
-            subbutton.pack(pady=5, padx=5)
-        case "xor":
-            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=bitwise(f))
-            subbutton.pack(pady=5, padx=5)
-        case "zjmp":
-            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=singles(f))
-            subbutton.pack(pady=5, padx=5)
-        case "ldi":
-            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=loadindex(f))
-            subbutton.pack(pady=5, padx=5)
-        case "sti":
-            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=sti(f))
-            subbutton.pack(pady=5, padx=5)
-        case "fork":
-            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=singles(f))
-            subbutton.pack(pady=5, padx=5)
-        case "lld":
-            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=load(f))
-            subbutton.pack(pady=5, padx=5)
-        case "lldi":
-            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=loadindex(f))
-            subbutton.pack(pady=5, padx=5)
-        case "lfork":
-            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=singles(f))
-            subbutton.pack(pady=5, padx=5)
-        case "aff":
-            subbutton = tk.CTkButton(master=main_frame, text="Enter", command=aff(f))
-            subbutton.pack(pady=5, padx=5)
-        case _:
-            if (the_instruction[-1] != ":"):
-                print("Invalid Instruction or label (add : for label)")
 
 def start_body(f):
     asm = tk.CTk()
@@ -187,26 +126,34 @@ def start_body(f):
     label = tk.CTkLabel(master=main_frame, justify=tk.LEFT, text="BODY")
     label.pack(pady=10, padx=10)
 
-    instruction = tk.CTkEntry(master=main_frame, placeholder_text="instruction")
+    instruction = tk.CTkEntry(
+        master=main_frame, placeholder_text="instruction")
     instruction.pack(pady=10, padx=10)
 
     def enter_instruction():
+        f.write("\n")
         the_instruction = instruction.get()
-        if is_instruction(the_instruction) == True:
+        print("Instruction: " + the_instruction)
+        inst = is_instruction(the_instruction)
+        if inst == 0:
+            print("Error: instruction not found")
+            return
+        if inst != 0:
             f.write(the_instruction + "\t")
             print(the_instruction + "\t")
 
-        if (the_instruction[-1] == ":" or is_instruction(the_instruction) == True):
-            textlab = tk.CTkLabel(master=main_frame, justify=tk.LEFT, text=the_instruction)
+        if (the_instruction[-1] == ":" or inst != 0):
+            textlab = tk.CTkLabel(
+                master=main_frame, justify=tk.LEFT, text=the_instruction)
             textlab.pack(pady=10, padx=10)
+        get_instrucion_params(f, inst, main_frame)
 
-        add_param = tk.CTkButton(master=main_frame, text="Enter Parametre", command=enter_parametre(f, main_frame, the_instruction))
-        add_param.pack(pady=5, padx=5)
-
-    asm_button = tk.CTkButton(master=main_frame, text="Submit", command=enter_instruction)
+    asm_button = tk.CTkButton(
+        master=main_frame, text="Submit", command=enter_instruction)
     asm_button.pack(pady=10, padx=10)
 
     asm.mainloop()
+
 
 def start_header():
     root = tk.CTk()
@@ -216,7 +163,8 @@ def start_header():
     frame = tk.CTkFrame(master=root)
     frame.pack(pady=50, padx=50, fill="both", expand=True)
 
-    file_entry = tk.CTkEntry(master=frame, placeholder_text="Champion (filename)")
+    file_entry = tk.CTkEntry(
+        master=frame, placeholder_text="Champion (filename)")
     file_entry.pack(pady=50, padx=10)
 
     label = tk.CTkLabel(master=frame, justify=tk.LEFT, text="HEADER")
@@ -243,6 +191,7 @@ def start_header():
 
     print("Creating file...")
     root.mainloop()
+
 
 start_header()
 print("File created!")
