@@ -5,7 +5,7 @@
 ## Makefile for corewar
 ##
 
-CC	=	gcc
+CC	?=	gcc
 
 SRC = 	src/main.c								\
 		src/utils.c								\
