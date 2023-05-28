@@ -10,127 +10,108 @@
 
 #include "asm/asm.h"
 #include "asm/header.h"
+#include "asm/body.h"
 #include "asm/utils.h"
 
-void redirect_all_std(void)
-{
-    cr_redirect_stdout();
-    cr_redirect_stderr();
-}
-
-Test(big_endian, util, .init = redirect_all_std)
+Test(big_endian, util)
 {
     int nbr = 0x12345678;
     swap_endian_int(nbr);
     cr_assert(0x78563412);
 }
 
-Test(count_char, util, .init = redirect_all_std)
+Test(count_char, util)
 {
     str_t *str = str_create("thisismystring");
     str_count(str, 'i');
     cr_assert(3);
 }
 
-Test(size_prog_nocb, header, .init = redirect_all_std)
+Test(size_prog_nocb, header)
 {
     header_t header = {0};
     str_t *str = str_create("zjmp %:live");
     get_prog_size(str, &header.prog_size);
-    cr_assert(header.prog_size == 3);
+    cr_assert_eq(header.prog_size, 3);
 }
 
-Test(size_prog_lfork, header, .init = redirect_all_std)
+Test(size_prog_lfork, header)
 {
     header_t header = {0};
     str_t *str = str_create("lfork %:live");
     get_prog_size(str, &header.prog_size);
-    cr_assert(header.prog_size == 3);
+    cr_assert_eq(header.prog_size, 3);
 }
 
-Test(size_prog_fork, header, .init = redirect_all_std)
+Test(size_prog_fork, header)
 {
     header_t header = {0};
     str_t *str = str_create("fork %:live");
     get_prog_size(str, &header.prog_size);
-    cr_assert(header.prog_size == 3);
+    cr_assert_eq(header.prog_size, 3);
 }
 
-Test(size_prog_ez, header, .init = redirect_all_std)
+Test(size_prog_ez, header)
 {
     header_t header = {0};
     str_t *str = str_create("live %1");
     get_prog_size(str, &header.prog_size);
-    cr_assert(header.prog_size == 5);
+    cr_assert_eq(header.prog_size, 5);
 }
 
-Test(size_prog, header, .init = redirect_all_std)
+Test(size_prog, header)
 {
     header_t header = {0};
     str_t *str = str_create("ld %100, r4");
     get_prog_size(str, &header.prog_size);
-    cr_assert(header.prog_size == 7);
+    cr_assert_eq(header.prog_size, 7);
 }
 
-Test(size_prog_comment, header, .init = redirect_all_std)
+Test(size_prog_comment, header)
 {
     header_t header = {0};
     str_t *str = str_create("ld    %100, r4 #comment");
     get_prog_size(str, &header.prog_size);
-    cr_assert(header.prog_size == 7);
+    cr_assert_eq(header.prog_size, 7);
 }
 
-Test(size_prog_label, header, .init = redirect_all_std)
+Test(size_prog_label, header)
 {
     header_t header = {0};
     str_t *str = str_create("ok:");
     get_prog_size(str, &header.prog_size);
-    cr_assert(header.prog_size == 0);
+    cr_assert_eq(header.prog_size, 0);
 }
 
-// Test(header_name, header, .init = redirect_all_std)
+// Test(header_name, header)
 // {
 //     header_t header = {0};
 //     parse_header("abel.s", &header);
-//     cr_assert(header.prog_name == "Abel");
+//     cr_assert_str_eq(header.prog_name, "Abel");
 // }
 
-// Test(header_comment, header, .init = redirect_all_std)
+// Test(header_comment, header)
 // {
 //     header_t header = {0};
 //     parse_header("abel.s", &header);
-//     cr_assert(header.comment == "L'amer noir.");
+//     cr_assert_str_eq(header.comment, "L'amer noir.");
 // }
 
-Test(header_wrong_file, errbase, .init = redirect_all_std)
+Test(header_wrong_file, errbase)
 {
     header_t header = {0};
     parse_header("champions/abel.cor", &header);
     cr_assert(ERROR);
 }
 
-Test(wrong_file, errbase, .init = redirect_all_std)
+Test(wrong_file, errbase)
 {
     asm_t champ;
     launch_parser(&champ, "no_file.cor");
     cr_assert(ERROR);
 }
 
-Test(parse_body, errbase, .init = redirect_all_std)
-{
-    asm_t champ;
-    str_t *line = str_create("live %1\nlive %2\n");
-    vec_str_t *body = str_split(line, STR("\n"));
-    str_t *buffer = str_create("");
-    str_t *expected = str_create("");
-    parse_body(body, &champ, &buffer);
-    str_cadd(&expected, 0x01);
-    get_direct_int(DIR_SIZE, 1, &expected);
-    get_direct_int(DIR_SIZE, 2, &expected);
-    cr_assert(buffer == expected);
-}
-
-Test(direct_index, params, .init = redirect_all_std)
+Test(direct_index, params)
 {
     str_t *buffer = str_create("");
     str_t *expected = str_create("");
@@ -139,5 +120,31 @@ Test(direct_index, params, .init = redirect_all_std)
     str_cadd(&expected, (3 / 65536) % 256);
     str_cadd(&expected, (3 / 256) % 256);
     str_cadd(&expected, 3 / 256);
-    cr_assert(buffer == expected);
+    cr_assert_str_eq(buffer->data, expected->data);
 }
+
+// Test(direct_neg_index, params)
+// {
+//     int nbr = -3;
+//     str_t *buffer = str_create("");
+//     str_t *expected = str_create("");
+//     get_direct_int(DIR_SIZE, nbr, &buffer);
+//     nbr = 4294967296 + nbr;
+//     str_cadd(&expected, nbr / (65536 * 256));
+//     str_cadd(&expected, (nbr / 65536) % 256);
+//     str_cadd(&expected, (nbr / 256) % 256);
+//     str_cadd(&expected, nbr / 256);
+//     cr_assert_str_eq(buffer->data, expected->data);
+// }
+
+Test(indirect_index, params)
+{
+    str_t *buffer = str_create("");
+    str_t *expected = str_create("");
+    get_indirect(3, &buffer);
+    str_cadd(&expected, (3 / 256));
+    str_cadd(&expected, 3 % 256);
+    cr_assert_str_eq(buffer->data, expected->data);
+}
+
+
