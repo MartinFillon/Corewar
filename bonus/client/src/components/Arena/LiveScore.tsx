@@ -46,9 +46,10 @@ const LiveScoreItem = ({ fighter, fighters }: LiveScoreItemProps) => (
 type LiveScoreProps = {
   fighters: Fighter[];
   nbCycles: number;
+  cycleToDie: number;
 };
 
-const LiveScore = ({ fighters, nbCycles }: LiveScoreProps) => (
+const LiveScore = ({ fighters, nbCycles, cycleToDie }: LiveScoreProps) => (
   <div className="collapse w-full fixed bottom-0 bg-base-300 collapse-arrow">
     <input type="checkbox" defaultChecked />
 
@@ -57,8 +58,14 @@ const LiveScore = ({ fighters, nbCycles }: LiveScoreProps) => (
     </h2>
 
     <div className="collapse-content">
-      <div className="text-lg text-center mb-4">
-        cycles: <kbd className="kbd kbd-sm mr-2">{nbCycles}</kbd>
+      <div className="flex items-center justify-center mb-4">
+        <div className="text-lg">
+          cycles: <kbd className="kbd kbd-sm mr-2">{nbCycles}</kbd>
+        </div>
+
+        <div className="text-lg">
+          cycle to die: <kbd className="kbd kbd-sm mr-2">{cycleToDie}</kbd>
+        </div>
       </div>
 
       <div className="flex flex-wrap px-4 justify-center">
